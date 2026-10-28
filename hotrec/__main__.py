@@ -5,4 +5,5 @@ import sys
 
 from hotrec.cli import main
 
-sys.exit(main())
+if __name__ == "__main__":
+    sys.exit(main())

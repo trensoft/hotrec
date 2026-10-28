@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 TrenSoft
+# SPDX-License-Identifier: GPL-3.0-or-later
 """What the translatable strings in the source are, and what a template (.pot) holds.
 
 stdlib only. ``tools/i18n.sh check`` and ``tests/test_i18n_source.py`` use it, so that the two
