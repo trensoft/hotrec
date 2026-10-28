@@ -1,0 +1,150 @@
+# Japanese translation of hotrec.
+# This file is distributed under the same license as the hotrec package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hotrec\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"PO-Revision-Date: 2026-10-29 00:00+0000\n"
+"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: hotrec/cli.py
+msgid "Could not set the keyboard shortcuts"
+msgstr "キーボードショートカットを設定できませんでした"
+
+#: hotrec/cli.py
+msgid "Keyboard shortcuts are set"
+msgstr "キーボードショートカットを設定しました"
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F9: screen and sound. Ctrl+Shift+F10: screen only. "
+"Ctrl+Shift+F11: sound only. Ctrl+Shift+F12: pause or resume. Any of the "
+"first three stops and saves the recording."
+msgstr ""
+"Ctrl+Shift+F9: 画面と音声。Ctrl+Shift+F10: 画面のみ。Ctrl+Shift+F11: 音声の"
+"み。Ctrl+Shift+F12: 一時停止または再開。最初の3つのどれかで録画を停止して保存"
+"します。"
+
+#: hotrec/indicator.py
+msgid "Paused"
+msgstr "一時停止中"
+
+#: hotrec/indicator.py
+msgid "Resume"
+msgstr "再開"
+
+#: hotrec/indicator.py
+msgid "Recording"
+msgstr "録画中"
+
+#: hotrec/indicator.py
+msgid "Pause"
+msgstr "一時停止"
+
+#: hotrec/indicator.py
+msgid "Stop and save"
+msgstr "停止して保存"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not a safe place for the state of the recording"
+msgstr "%s は録画の状態を置く場所として安全ではありません"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "録音する音声出力が見つかりませんでした"
+
+#: hotrec/recorder.py
+msgid "Could not start the recording"
+msgstr "録画を開始できませんでした"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not create the folder %s"
+msgstr "フォルダー %s を作成できませんでした"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not installed"
+msgstr "%s がインストールされていません"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s did not start"
+msgstr "%s が起動しませんでした"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not start the recording (log: %s)"
+msgstr "録画を開始できませんでした (ログ: %s)"
+
+#: hotrec/recorder.py
+msgid "Recording saved"
+msgstr "録画を保存しました"
+
+#: hotrec/recorder.py
+msgid "The recording may be incomplete"
+msgstr "録画が不完全な可能性があります"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen and sound"
+msgstr "画面と音声を録画"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen only"
+msgstr "画面のみを録画"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record sound only"
+msgstr "音声のみを録音"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Pause or resume recording"
+msgstr "録画を一時停止または再開"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Hotrec"
+msgstr "Hotrec"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+msgid "Record the screen and the sound of the desktop with keyboard shortcuts"
+msgstr "キーボードショートカットでデスクトップの画面と音声を録画します"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Screen and sound recorder with keyboard shortcuts"
+msgstr "キーボードショートカットで操作する画面・音声レコーダー"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"One key records the screen and the sound of the desktop, another only the "
+"screen, another only the sound as an MP3. The same key stops and saves the "
+"recording; a fourth key pauses it and resumes it."
+msgstr ""
+"1つのキーでデスクトップの画面と音声を、別のキーで画面のみを、もう1つのキーで"
+"音声のみを MP3 で録画します。同じキーで録画を停止して保存し、4つ目のキーで一"
+"時停止と再開ができます。"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The keys work in every window, also on Wayland. A red dot in the top bar "
+"shows that a recording is running, a yellow one that it is paused."
+msgstr ""
+"キーはどのウィンドウでも、Wayland でも動作します。上部バーの赤い点は録画中、"
+"黄色い点は一時停止中を示します。"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The screen is recorded by the graphics hardware. The folder, the file format "
+"and the bit rates are set in a plain settings file."
+msgstr ""
+"画面はグラフィックスハードウェアで録画されます。フォルダー、ファイル形式、"
+"ビットレートは簡単な設定ファイルで指定します。"

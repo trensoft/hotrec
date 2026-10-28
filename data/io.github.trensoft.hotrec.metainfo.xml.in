@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.trensoft.hotrec</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>Hotrec</name>
+  <summary>Screen and sound recorder with keyboard shortcuts</summary>
+  <developer id="io.github.trensoft">
+    <name translate="no">TrenSoft</name>
+  </developer>
+  <description>
+    <p>One key records the screen and the sound of the desktop, another only the screen, another only the sound as an MP3. The same key stops and saves the recording; a fourth key pauses it and resumes it.</p>
+    <p>The keys work in every window, also on Wayland. A red dot in the top bar shows that a recording is running, a yellow one that it is paused.</p>
+    <p>The screen is recorded by the graphics hardware. The folder, the file format and the bit rates are set in a plain settings file.</p>
+  </description>
+  <launchable type="desktop-id">io.github.trensoft.hotrec.desktop</launchable>
+  <provides>
+    <binary>hotrec</binary>
+  </provides>
+  <categories>
+    <category>AudioVideo</category>
+    <category>Recorder</category>
+  </categories>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="0.1.0" date="2026-10-29"/>
+  </releases>
+</component>

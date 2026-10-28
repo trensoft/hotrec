@@ -1,0 +1,151 @@
+# Finnish translation of hotrec.
+# This file is distributed under the same license as the hotrec package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hotrec\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"PO-Revision-Date: 2026-10-29 00:00+0000\n"
+"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Language-Team: Finnish\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: hotrec/cli.py
+msgid "Could not set the keyboard shortcuts"
+msgstr "Pikanäppäimiä ei voitu asettaa"
+
+#: hotrec/cli.py
+msgid "Keyboard shortcuts are set"
+msgstr "Pikanäppäimet on asetettu"
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F9: screen and sound. Ctrl+Shift+F10: screen only. "
+"Ctrl+Shift+F11: sound only. Ctrl+Shift+F12: pause or resume. Any of the "
+"first three stops and saves the recording."
+msgstr ""
+"Ctrl+Vaihto+F9: näyttö ja ääni. Ctrl+Vaihto+F10: vain näyttö. "
+"Ctrl+Vaihto+F11: vain ääni. Ctrl+Vaihto+F12: tauko tai jatka. Mikä tahansa "
+"kolmesta ensimmäisestä pysäyttää ja tallentaa tallenteen."
+
+#: hotrec/indicator.py
+msgid "Paused"
+msgstr "Tauolla"
+
+#: hotrec/indicator.py
+msgid "Resume"
+msgstr "Jatka"
+
+#: hotrec/indicator.py
+msgid "Recording"
+msgstr "Tallennetaan"
+
+#: hotrec/indicator.py
+msgid "Pause"
+msgstr "Tauko"
+
+#: hotrec/indicator.py
+msgid "Stop and save"
+msgstr "Pysäytä ja tallenna"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not a safe place for the state of the recording"
+msgstr "%s ei ole turvallinen paikka tallennuksen tilalle"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "Tallennettavaa äänilähtöä ei löytynyt"
+
+#: hotrec/recorder.py
+msgid "Could not start the recording"
+msgstr "Tallennusta ei voitu aloittaa"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not create the folder %s"
+msgstr "Kansiota %s ei voitu luoda"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not installed"
+msgstr "%s ei ole asennettu"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s did not start"
+msgstr "%s ei käynnistynyt"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not start the recording (log: %s)"
+msgstr "Tallennusta ei voitu aloittaa (loki: %s)"
+
+#: hotrec/recorder.py
+msgid "Recording saved"
+msgstr "Tallenne tallennettu"
+
+#: hotrec/recorder.py
+msgid "The recording may be incomplete"
+msgstr "Tallenne voi olla puutteellinen"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen and sound"
+msgstr "Tallenna näyttö ja ääni"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen only"
+msgstr "Tallenna vain näyttö"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record sound only"
+msgstr "Tallenna vain ääni"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Pause or resume recording"
+msgstr "Keskeytä tai jatka tallennusta"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Hotrec"
+msgstr "Hotrec"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+msgid "Record the screen and the sound of the desktop with keyboard shortcuts"
+msgstr "Tallentaa työpöydän näytön ja äänen pikanäppäimillä"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Screen and sound recorder with keyboard shortcuts"
+msgstr "Näytön ja äänen tallennin pikanäppäimillä"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"One key records the screen and the sound of the desktop, another only the "
+"screen, another only the sound as an MP3. The same key stops and saves the "
+"recording; a fourth key pauses it and resumes it."
+msgstr ""
+"Yksi näppäin tallentaa työpöydän näytön ja äänen, toinen vain näytön, kolmas "
+"vain äänen MP3-tiedostona. Sama näppäin pysäyttää ja tallentaa tallenteen; "
+"neljäs keskeyttää sen ja jatkaa sitä."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The keys work in every window, also on Wayland. A red dot in the top bar "
+"shows that a recording is running, a yellow one that it is paused."
+msgstr ""
+"Näppäimet toimivat jokaisessa ikkunassa, myös Waylandissa. Punainen piste "
+"yläpalkissa kertoo, että tallennus on käynnissä, keltainen että se on "
+"tauolla."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The screen is recorded by the graphics hardware. The folder, the file format "
+"and the bit rates are set in a plain settings file."
+msgstr ""
+"Näytön tallentaa näytönohjain. Kansio, tiedostomuoto ja bittinopeudet "
+"asetetaan yksinkertaisessa asetustiedostossa."

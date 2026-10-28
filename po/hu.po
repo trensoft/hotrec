@@ -1,0 +1,150 @@
+# Hungarian translation of hotrec.
+# This file is distributed under the same license as the hotrec package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hotrec\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"PO-Revision-Date: 2026-10-29 00:00+0000\n"
+"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Language-Team: Hungarian\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: hotrec/cli.py
+msgid "Could not set the keyboard shortcuts"
+msgstr "Nem sikerült beállítani a billentyűparancsokat"
+
+#: hotrec/cli.py
+msgid "Keyboard shortcuts are set"
+msgstr "A billentyűparancsok be vannak állítva"
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F9: screen and sound. Ctrl+Shift+F10: screen only. "
+"Ctrl+Shift+F11: sound only. Ctrl+Shift+F12: pause or resume. Any of the "
+"first three stops and saves the recording."
+msgstr ""
+"Ctrl+Shift+F9: képernyő és hang. Ctrl+Shift+F10: csak a képernyő. "
+"Ctrl+Shift+F11: csak a hang. Ctrl+Shift+F12: szünet vagy folytatás. Az első "
+"három bármelyike leállítja és menti a felvételt."
+
+#: hotrec/indicator.py
+msgid "Paused"
+msgstr "Szünetel"
+
+#: hotrec/indicator.py
+msgid "Resume"
+msgstr "Folytatás"
+
+#: hotrec/indicator.py
+msgid "Recording"
+msgstr "Felvétel"
+
+#: hotrec/indicator.py
+msgid "Pause"
+msgstr "Szünet"
+
+#: hotrec/indicator.py
+msgid "Stop and save"
+msgstr "Leállítás és mentés"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not a safe place for the state of the recording"
+msgstr "A(z) %s nem biztonságos hely a felvétel állapotának"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "Nem található a felveendő hangkimenet"
+
+#: hotrec/recorder.py
+msgid "Could not start the recording"
+msgstr "A felvétel nem indult el"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not create the folder %s"
+msgstr "A(z) %s mappa nem hozható létre"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not installed"
+msgstr "A(z) %s nincs telepítve"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s did not start"
+msgstr "A(z) %s nem indult el"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not start the recording (log: %s)"
+msgstr "A felvétel nem indult el (napló: %s)"
+
+#: hotrec/recorder.py
+msgid "Recording saved"
+msgstr "A felvétel mentve"
+
+#: hotrec/recorder.py
+msgid "The recording may be incomplete"
+msgstr "A felvétel hiányos lehet"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen and sound"
+msgstr "Képernyő és hang felvétele"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen only"
+msgstr "Csak a képernyő felvétele"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record sound only"
+msgstr "Csak a hang felvétele"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Pause or resume recording"
+msgstr "A felvétel szüneteltetése vagy folytatása"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Hotrec"
+msgstr "Hotrec"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+msgid "Record the screen and the sound of the desktop with keyboard shortcuts"
+msgstr "Az asztal képernyőjének és hangjának felvétele billentyűparancsokkal"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Screen and sound recorder with keyboard shortcuts"
+msgstr "Képernyő- és hangfelvevő billentyűparancsokkal"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"One key records the screen and the sound of the desktop, another only the "
+"screen, another only the sound as an MP3. The same key stops and saves the "
+"recording; a fourth key pauses it and resumes it."
+msgstr ""
+"Az egyik billentyű az asztal képernyőjét és hangját veszi fel, a másik csak "
+"a képernyőt, a harmadik csak a hangot MP3-ként. Ugyanaz a billentyű "
+"leállítja és menti a felvételt; a negyedik szünetelteti, majd folytatja."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The keys work in every window, also on Wayland. A red dot in the top bar "
+"shows that a recording is running, a yellow one that it is paused."
+msgstr ""
+"A billentyűk minden ablakban működnek, Waylanden is. A felső sávban a piros "
+"pont azt jelzi, hogy felvétel fut, a sárga azt, hogy szünetel."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The screen is recorded by the graphics hardware. The folder, the file format "
+"and the bit rates are set in a plain settings file."
+msgstr ""
+"A képernyőt a grafikus hardver rögzíti. A mappát, a fájlformátumot és a "
+"bitrátákat egy egyszerű beállításfájl tartalmazza."

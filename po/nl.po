@@ -1,0 +1,151 @@
+# Dutch translation of hotrec.
+# This file is distributed under the same license as the hotrec package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hotrec\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"PO-Revision-Date: 2026-10-29 00:00+0000\n"
+"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Language-Team: Dutch\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: hotrec/cli.py
+msgid "Could not set the keyboard shortcuts"
+msgstr "De sneltoetsen konden niet worden ingesteld"
+
+#: hotrec/cli.py
+msgid "Keyboard shortcuts are set"
+msgstr "De sneltoetsen zijn ingesteld"
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F9: screen and sound. Ctrl+Shift+F10: screen only. "
+"Ctrl+Shift+F11: sound only. Ctrl+Shift+F12: pause or resume. Any of the "
+"first three stops and saves the recording."
+msgstr ""
+"Ctrl+Shift+F9: scherm en geluid. Ctrl+Shift+F10: alleen scherm. "
+"Ctrl+Shift+F11: alleen geluid. Ctrl+Shift+F12: pauzeren of hervatten. Elk "
+"van de eerste drie stopt en bewaart de opname."
+
+#: hotrec/indicator.py
+msgid "Paused"
+msgstr "Gepauzeerd"
+
+#: hotrec/indicator.py
+msgid "Resume"
+msgstr "Hervatten"
+
+#: hotrec/indicator.py
+msgid "Recording"
+msgstr "Opname loopt"
+
+#: hotrec/indicator.py
+msgid "Pause"
+msgstr "Pauzeren"
+
+#: hotrec/indicator.py
+msgid "Stop and save"
+msgstr "Stoppen en opslaan"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not a safe place for the state of the recording"
+msgstr "%s is geen veilige plek voor de status van de opname"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "De op te nemen geluidsuitgang is niet gevonden"
+
+#: hotrec/recorder.py
+msgid "Could not start the recording"
+msgstr "De opname kon niet worden gestart"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not create the folder %s"
+msgstr "De map %s kon niet worden aangemaakt"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not installed"
+msgstr "%s is niet geïnstalleerd"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s did not start"
+msgstr "%s is niet gestart"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not start the recording (log: %s)"
+msgstr "De opname kon niet worden gestart (logboek: %s)"
+
+#: hotrec/recorder.py
+msgid "Recording saved"
+msgstr "Opname opgeslagen"
+
+#: hotrec/recorder.py
+msgid "The recording may be incomplete"
+msgstr "De opname is mogelijk onvolledig"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen and sound"
+msgstr "Scherm en geluid opnemen"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen only"
+msgstr "Alleen scherm opnemen"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record sound only"
+msgstr "Alleen geluid opnemen"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Pause or resume recording"
+msgstr "Opname pauzeren of hervatten"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Hotrec"
+msgstr "Hotrec"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+msgid "Record the screen and the sound of the desktop with keyboard shortcuts"
+msgstr "Neemt het scherm en het geluid van het bureaublad op met sneltoetsen"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Screen and sound recorder with keyboard shortcuts"
+msgstr "Scherm- en geluidsrecorder met sneltoetsen"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"One key records the screen and the sound of the desktop, another only the "
+"screen, another only the sound as an MP3. The same key stops and saves the "
+"recording; a fourth key pauses it and resumes it."
+msgstr ""
+"Eén toets neemt het scherm en het geluid van het bureaublad op, een andere "
+"alleen het scherm, een derde alleen het geluid als MP3. Dezelfde toets stopt "
+"en bewaart de opname; een vierde pauzeert en hervat haar."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The keys work in every window, also on Wayland. A red dot in the top bar "
+"shows that a recording is running, a yellow one that it is paused."
+msgstr ""
+"De toetsen werken in elk venster, ook onder Wayland. Een rode stip in de "
+"bovenbalk toont dat een opname loopt, een gele dat ze gepauzeerd is."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The screen is recorded by the graphics hardware. The folder, the file format "
+"and the bit rates are set in a plain settings file."
+msgstr ""
+"Het scherm wordt opgenomen door de grafische hardware. De map, het "
+"bestandsformaat en de bitsnelheden stel je in met een eenvoudig "
+"instellingenbestand."

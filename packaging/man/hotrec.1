@@ -1,0 +1,99 @@
+.TH HOTREC 1 "2026-10-29" "hotrec 0.1.0" "User Commands"
+.SH NAME
+hotrec \- record the screen and the sound of a GNOME desktop with keyboard shortcuts
+.SH SYNOPSIS
+.B hotrec
+.I COMMAND
+.br
+.B hotrec shortcuts
+.RB { install | remove | status }
+.RB [ \-\-command
+.IR PATH ]
+.SH DESCRIPTION
+.B hotrec
+records the screen and the sound of the desktop (video, H.264 from the graphics hardware, with
+\fBgpu\-screen\-recorder\fR in portal mode) or the sound alone (MP3, with \fBffmpeg\fR). It is
+meant to be run by keyboard shortcuts, which work in every window also on Wayland.
+.PP
+There is one recording at a time. A recording command starts a recording when nothing is
+recording, and stops and saves the running one otherwise, whichever kind that one is. While a
+recording runs, a red dot in the top bar shows it (a yellow one while it is paused); the dot needs
+the AppIndicator extension of GNOME Shell.
+.SH COMMANDS
+.TP
+.B video\-audio
+Record the screen and the sound (the sound output of the desktop).
+.TP
+.B video
+Record the screen only.
+.TP
+.B audio
+Record the sound output of the desktop only, as an MP3 file.
+.TP
+.B pause
+Pause the running recording, or resume it. Nothing happens when nothing is recording.
+.TP
+.B stop
+Stop and save the running recording. Nothing happens when nothing is recording.
+.TP
+.B status
+Print what is recording. Exit status 0 when a recording runs, 1 when not.
+.TP
+.B setup
+Set the keyboard shortcuts (as \fBshortcuts install\fR) and say so in a notification. This is what
+the launcher does.
+.TP
+.B shortcuts install
+Add the four GNOME keyboard shortcuts below, next to the ones that exist. Fails, and changes
+nothing, if one of the keys is used by another custom shortcut.
+.TP
+.B shortcuts remove
+Remove them again.
+.TP
+.B shortcuts status
+Show which of them are set.
+.TP
+.B indicator
+The dot in the top bar. It is started by a recording and ends with it.
+.SH KEYS
+.TP
+.B Ctrl+Shift+F9
+video\-audio
+.TP
+.B Ctrl+Shift+F10
+video
+.TP
+.B Ctrl+Shift+F11
+audio
+.TP
+.B Ctrl+Shift+F12
+pause
+.PP
+The keys run \fBhotrec\fR from the PATH. \fB\-\-command\fR names another command (a checkout's
+\fBrun.sh\fR, for instance).
+.SH FILES
+.TP
+.I ~/.config/hotrec.conf
+The settings (\fB$XDG_CONFIG_HOME\fR is honoured). Written on the first run; if the old
+\fB~/.config/felvetel.conf\fR exists, its values are taken over once. Keys, one per line:
+\fBFOLDER\fR (default: a Hotrec folder in the Videos folder; \fB$HOME\fR and a leading \fB~\fR
+expand), \fBCONTAINER\fR (\fBmkv\fR, the default, plays back even when a recording was cut short,
+or \fBmp4\fR), \fBVIDEO_KBPS\fR (12000), \fBFPS\fR (30), \fBAAC_KBPS\fR (160, the sound of a video
+recording), \fBMP3_KBPS\fR (192, a sound\-only recording). The file is read, never run; a wrong
+value is reported in the log and replaced by the default.
+.TP
+.I $XDG_RUNTIME_DIR/hotrec/
+What runs now (\fBstate.json\fR), the log of the recorder (\fBrecorder.log\fR) and of the dot.
+.SH ENVIRONMENT
+.TP
+.B HOTREC_LOCALEDIR
+The directory of the compiled catalogs, when they are not in the system one.
+.SH EXIT STATUS
+0 on success, 1 when a command fails (a recording that did not start or may be incomplete, the
+shortcuts that could not be set), 2 for a command line that is not understood.
+.SH REQUIREMENTS
+\fBgpu\-screen\-recorder\fR and \fBffmpeg\fR (with MP3 support) on the PATH, \fBpactl\fR and
+\fBnotify\-send\fR, \fBgsettings\fR for the shortcuts, GTK 3 with PyGObject and an AppIndicator
+library for the dot. The video encoder is the graphics hardware (NVENC, VA\-API).
+.SH SEE ALSO
+\fBgpu\-screen\-recorder\fR(1), \fBffmpeg\fR(1)

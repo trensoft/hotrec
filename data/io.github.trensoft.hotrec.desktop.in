@@ -1,0 +1,28 @@
+[Desktop Entry]
+Type=Application
+Name=Hotrec
+Comment=Record the screen and the sound of the desktop with keyboard shortcuts
+Exec=hotrec setup
+TryExec=hotrec
+Icon=io.github.trensoft.hotrec
+Terminal=false
+StartupNotify=false
+Categories=AudioVideo;Recorder;GNOME;GTK;
+Keywords=record;screen;screencast;sound;audio;webinar;
+Actions=video-audio;video;audio;pause;
+
+[Desktop Action video-audio]
+Name=Record screen and sound
+Exec=hotrec video-audio
+
+[Desktop Action video]
+Name=Record screen only
+Exec=hotrec video
+
+[Desktop Action audio]
+Name=Record sound only
+Exec=hotrec audio
+
+[Desktop Action pause]
+Name=Pause or resume recording
+Exec=hotrec pause

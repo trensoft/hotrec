@@ -1,0 +1,151 @@
+# Maltese translation of hotrec.
+# This file is distributed under the same license as the hotrec package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hotrec\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"PO-Revision-Date: 2026-10-29 00:00+0000\n"
+"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Language-Team: Maltese\n"
+"Language: mt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==0 || (n%100>1 && n%100<11) ? "
+"1 : (n%100>10 && n%100<20) ? 2 : 3);\n"
+
+#: hotrec/cli.py
+msgid "Could not set the keyboard shortcuts"
+msgstr "Ma stajtx jiġu ssettjati x-shortcuts tat-tastiera"
+
+#: hotrec/cli.py
+msgid "Keyboard shortcuts are set"
+msgstr "Ix-shortcuts tat-tastiera huma ssettjati"
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F9: screen and sound. Ctrl+Shift+F10: screen only. "
+"Ctrl+Shift+F11: sound only. Ctrl+Shift+F12: pause or resume. Any of the "
+"first three stops and saves the recording."
+msgstr ""
+"Ctrl+Shift+F9: skrin u ħoss. Ctrl+Shift+F10: skrin biss. Ctrl+Shift+F11: "
+"ħoss biss. Ctrl+Shift+F12: waqqaf jew kompli. Kwalunkwe waħda mill-ewwel "
+"tlieta twaqqaf u żżomm ir-reġistrazzjoni."
+
+#: hotrec/indicator.py
+msgid "Paused"
+msgstr "Waqfa"
+
+#: hotrec/indicator.py
+msgid "Resume"
+msgstr "Kompli"
+
+#: hotrec/indicator.py
+msgid "Recording"
+msgstr "Qed jirreġistra"
+
+#: hotrec/indicator.py
+msgid "Pause"
+msgstr "Waqqaf"
+
+#: hotrec/indicator.py
+msgid "Stop and save"
+msgstr "Waqqaf u ssejvja"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not a safe place for the state of the recording"
+msgstr "%s mhuwiex post sigur għall-istat tar-reġistrazzjoni"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "L-output tal-ħoss li għandu jiġi rreġistrat ma nstabx"
+
+#: hotrec/recorder.py
+msgid "Could not start the recording"
+msgstr "Ir-reġistrazzjoni ma setgħetx tibda"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not create the folder %s"
+msgstr "Il-folder %s ma setax jinħoloq"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not installed"
+msgstr "%s mhuwiex installat"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s did not start"
+msgstr "%s ma bediex"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not start the recording (log: %s)"
+msgstr "Ir-reġistrazzjoni ma setgħetx tibda (log: %s)"
+
+#: hotrec/recorder.py
+msgid "Recording saved"
+msgstr "Ir-reġistrazzjoni ssejvjat"
+
+#: hotrec/recorder.py
+msgid "The recording may be incomplete"
+msgstr "Ir-reġistrazzjoni tista' tkun mhux kompluta"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen and sound"
+msgstr "Irreġistra skrin u ħoss"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen only"
+msgstr "Irreġistra skrin biss"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record sound only"
+msgstr "Irreġistra ħoss biss"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Pause or resume recording"
+msgstr "Waqqaf jew kompli r-reġistrazzjoni"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Hotrec"
+msgstr "Hotrec"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+msgid "Record the screen and the sound of the desktop with keyboard shortcuts"
+msgstr "Jirreġistra l-iskrin u l-ħoss tad-desktop bi shortcuts tat-tastiera"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Screen and sound recorder with keyboard shortcuts"
+msgstr "Reġistratur tal-iskrin u tal-ħoss bi shortcuts tat-tastiera"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"One key records the screen and the sound of the desktop, another only the "
+"screen, another only the sound as an MP3. The same key stops and saves the "
+"recording; a fourth key pauses it and resumes it."
+msgstr ""
+"Ċavetta waħda tirreġistra l-iskrin u l-ħoss tad-desktop, oħra l-iskrin biss, "
+"oħra l-ħoss biss bħala MP3. L-istess ċavetta twaqqaf u żżomm ir-"
+"reġistrazzjoni; raba' ċavetta twaqqafha u tkompliha."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The keys work in every window, also on Wayland. A red dot in the top bar "
+"shows that a recording is running, a yellow one that it is paused."
+msgstr ""
+"Iċ-ċwievet jaħdmu f'kull tieqa, anke fuq Wayland. Punt aħmar fil-bar ta' fuq "
+"juri li r-reġistrazzjoni għaddejja, wieħed isfar li hija waqfa."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The screen is recorded by the graphics hardware. The folder, the file format "
+"and the bit rates are set in a plain settings file."
+msgstr ""
+"L-iskrin jiġi rreġistrat mill-hardware grafiku. Il-folder, il-format tal-"
+"fajl u r-rati tal-bits jiġu ssettjati f'fajl tas-settings sempliċi."

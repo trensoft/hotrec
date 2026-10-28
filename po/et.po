@@ -1,0 +1,150 @@
+# Estonian translation of hotrec.
+# This file is distributed under the same license as the hotrec package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hotrec\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"PO-Revision-Date: 2026-10-29 00:00+0000\n"
+"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Language-Team: Estonian\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: hotrec/cli.py
+msgid "Could not set the keyboard shortcuts"
+msgstr "Kiirklahve ei õnnestunud seada"
+
+#: hotrec/cli.py
+msgid "Keyboard shortcuts are set"
+msgstr "Kiirklahvid on seatud"
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F9: screen and sound. Ctrl+Shift+F10: screen only. "
+"Ctrl+Shift+F11: sound only. Ctrl+Shift+F12: pause or resume. Any of the "
+"first three stops and saves the recording."
+msgstr ""
+"Ctrl+Shift+F9: ekraan ja heli. Ctrl+Shift+F10: ainult ekraan. "
+"Ctrl+Shift+F11: ainult heli. Ctrl+Shift+F12: peata või jätka. Mis tahes "
+"esimesest kolmest peatab ja salvestab lindistuse."
+
+#: hotrec/indicator.py
+msgid "Paused"
+msgstr "Peatatud"
+
+#: hotrec/indicator.py
+msgid "Resume"
+msgstr "Jätka"
+
+#: hotrec/indicator.py
+msgid "Recording"
+msgstr "Lindistamine"
+
+#: hotrec/indicator.py
+msgid "Pause"
+msgstr "Peata"
+
+#: hotrec/indicator.py
+msgid "Stop and save"
+msgstr "Lõpeta ja salvesta"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not a safe place for the state of the recording"
+msgstr "%s ei ole lindistuse oleku jaoks turvaline koht"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "Lindistatavat heliväljundit ei leitud"
+
+#: hotrec/recorder.py
+msgid "Could not start the recording"
+msgstr "Lindistamist ei õnnestunud alustada"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not create the folder %s"
+msgstr "Kausta %s ei õnnestunud luua"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not installed"
+msgstr "%s ei ole paigaldatud"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s did not start"
+msgstr "%s ei käivitunud"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not start the recording (log: %s)"
+msgstr "Lindistamist ei õnnestunud alustada (logi: %s)"
+
+#: hotrec/recorder.py
+msgid "Recording saved"
+msgstr "Lindistus salvestatud"
+
+#: hotrec/recorder.py
+msgid "The recording may be incomplete"
+msgstr "Lindistus võib olla poolik"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen and sound"
+msgstr "Lindista ekraan ja heli"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen only"
+msgstr "Lindista ainult ekraan"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record sound only"
+msgstr "Lindista ainult heli"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Pause or resume recording"
+msgstr "Peata või jätka lindistamist"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Hotrec"
+msgstr "Hotrec"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+msgid "Record the screen and the sound of the desktop with keyboard shortcuts"
+msgstr "Lindistab töölaua ekraani ja heli kiirklahvidega"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Screen and sound recorder with keyboard shortcuts"
+msgstr "Ekraani- ja helilindistaja kiirklahvidega"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"One key records the screen and the sound of the desktop, another only the "
+"screen, another only the sound as an MP3. The same key stops and saves the "
+"recording; a fourth key pauses it and resumes it."
+msgstr ""
+"Üks klahv lindistab töölaua ekraani ja heli, teine ainult ekraani, kolmas "
+"ainult heli MP3-na. Sama klahv peatab lindistuse ja salvestab selle; neljas "
+"peatab ajutiselt ja jätkab."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The keys work in every window, also on Wayland. A red dot in the top bar "
+"shows that a recording is running, a yellow one that it is paused."
+msgstr ""
+"Klahvid töötavad igas aknas, ka Waylandis. Punane täpp ülaribal näitab, et "
+"lindistus käib, kollane, et see on peatatud."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The screen is recorded by the graphics hardware. The folder, the file format "
+"and the bit rates are set in a plain settings file."
+msgstr ""
+"Ekraani lindistab graafikariistvara. Kaust, failivorming ja bitikiirused "
+"seatakse lihtsas seadistusfailis."

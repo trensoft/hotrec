@@ -1,0 +1,146 @@
+# Chinese (Traditional) translation of hotrec.
+# This file is distributed under the same license as the hotrec package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hotrec\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"PO-Revision-Date: 2026-10-29 00:00+0000\n"
+"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Language-Team: Chinese (Traditional)\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: hotrec/cli.py
+msgid "Could not set the keyboard shortcuts"
+msgstr "無法設定鍵盤快速鍵"
+
+#: hotrec/cli.py
+msgid "Keyboard shortcuts are set"
+msgstr "鍵盤快速鍵已設定"
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F9: screen and sound. Ctrl+Shift+F10: screen only. "
+"Ctrl+Shift+F11: sound only. Ctrl+Shift+F12: pause or resume. Any of the "
+"first three stops and saves the recording."
+msgstr ""
+"Ctrl+Shift+F9：螢幕和聲音。Ctrl+Shift+F10：僅螢幕。Ctrl+Shift+F11：僅聲音。"
+"Ctrl+Shift+F12：暫停或繼續。前三個中的任何一個都會停止並儲存錄製。"
+
+#: hotrec/indicator.py
+msgid "Paused"
+msgstr "已暫停"
+
+#: hotrec/indicator.py
+msgid "Resume"
+msgstr "繼續"
+
+#: hotrec/indicator.py
+msgid "Recording"
+msgstr "正在錄製"
+
+#: hotrec/indicator.py
+msgid "Pause"
+msgstr "暫停"
+
+#: hotrec/indicator.py
+msgid "Stop and save"
+msgstr "停止並儲存"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not a safe place for the state of the recording"
+msgstr "%s 不是存放錄製狀態的安全位置"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "找不到要錄製的聲音輸出"
+
+#: hotrec/recorder.py
+msgid "Could not start the recording"
+msgstr "無法開始錄製"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not create the folder %s"
+msgstr "無法建立資料夾 %s"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not installed"
+msgstr "未安裝 %s"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s did not start"
+msgstr "%s 未能啟動"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not start the recording (log: %s)"
+msgstr "無法開始錄製（記錄檔：%s）"
+
+#: hotrec/recorder.py
+msgid "Recording saved"
+msgstr "錄製已儲存"
+
+#: hotrec/recorder.py
+msgid "The recording may be incomplete"
+msgstr "錄製可能不完整"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen and sound"
+msgstr "錄製螢幕和聲音"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen only"
+msgstr "僅錄製螢幕"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record sound only"
+msgstr "僅錄製聲音"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Pause or resume recording"
+msgstr "暫停或繼續錄製"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Hotrec"
+msgstr "Hotrec"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+msgid "Record the screen and the sound of the desktop with keyboard shortcuts"
+msgstr "使用鍵盤快速鍵錄製桌面的螢幕和聲音"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Screen and sound recorder with keyboard shortcuts"
+msgstr "具鍵盤快速鍵的螢幕與聲音錄製工具"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"One key records the screen and the sound of the desktop, another only the "
+"screen, another only the sound as an MP3. The same key stops and saves the "
+"recording; a fourth key pauses it and resumes it."
+msgstr ""
+"一個按鍵錄製桌面的螢幕和聲音，另一個按鍵僅錄製螢幕，第三個按鍵僅將聲音錄製為 "
+"MP3。同一個按鍵停止並儲存錄製；第四個按鍵暫停並繼續錄製。"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The keys work in every window, also on Wayland. A red dot in the top bar "
+"shows that a recording is running, a yellow one that it is paused."
+msgstr ""
+"這些按鍵在任何視窗中都有效，在 Wayland 下也一樣。頂端列中的紅點表示正在錄製，"
+"黃點表示已暫停。"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The screen is recorded by the graphics hardware. The folder, the file format "
+"and the bit rates are set in a plain settings file."
+msgstr "螢幕由圖形硬體錄製。資料夾、檔案格式和位元率在一個簡單的設定檔中設定。"

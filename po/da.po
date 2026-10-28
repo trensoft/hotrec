@@ -1,0 +1,150 @@
+# Danish translation of hotrec.
+# This file is distributed under the same license as the hotrec package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hotrec\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"PO-Revision-Date: 2026-10-29 00:00+0000\n"
+"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Language-Team: Danish\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: hotrec/cli.py
+msgid "Could not set the keyboard shortcuts"
+msgstr "Tastaturgenvejene kunne ikke indstilles"
+
+#: hotrec/cli.py
+msgid "Keyboard shortcuts are set"
+msgstr "Tastaturgenvejene er indstillet"
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F9: screen and sound. Ctrl+Shift+F10: screen only. "
+"Ctrl+Shift+F11: sound only. Ctrl+Shift+F12: pause or resume. Any of the "
+"first three stops and saves the recording."
+msgstr ""
+"Ctrl+Skift+F9: skærm og lyd. Ctrl+Skift+F10: kun skærm. Ctrl+Skift+F11: kun "
+"lyd. Ctrl+Skift+F12: pause eller genoptag. En af de første tre stopper og "
+"gemmer optagelsen."
+
+#: hotrec/indicator.py
+msgid "Paused"
+msgstr "På pause"
+
+#: hotrec/indicator.py
+msgid "Resume"
+msgstr "Genoptag"
+
+#: hotrec/indicator.py
+msgid "Recording"
+msgstr "Optager"
+
+#: hotrec/indicator.py
+msgid "Pause"
+msgstr "Pause"
+
+#: hotrec/indicator.py
+msgid "Stop and save"
+msgstr "Stop og gem"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not a safe place for the state of the recording"
+msgstr "%s er ikke et sikkert sted for optagelsens tilstand"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "Lydudgangen, der skal optages, blev ikke fundet"
+
+#: hotrec/recorder.py
+msgid "Could not start the recording"
+msgstr "Optagelsen kunne ikke startes"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not create the folder %s"
+msgstr "Mappen %s kunne ikke oprettes"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not installed"
+msgstr "%s er ikke installeret"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s did not start"
+msgstr "%s startede ikke"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not start the recording (log: %s)"
+msgstr "Optagelsen kunne ikke startes (log: %s)"
+
+#: hotrec/recorder.py
+msgid "Recording saved"
+msgstr "Optagelsen er gemt"
+
+#: hotrec/recorder.py
+msgid "The recording may be incomplete"
+msgstr "Optagelsen er muligvis ufuldstændig"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen and sound"
+msgstr "Optag skærm og lyd"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen only"
+msgstr "Optag kun skærmen"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record sound only"
+msgstr "Optag kun lyden"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Pause or resume recording"
+msgstr "Sæt optagelsen på pause eller genoptag den"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Hotrec"
+msgstr "Hotrec"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+msgid "Record the screen and the sound of the desktop with keyboard shortcuts"
+msgstr "Optag skrivebordets skærm og lyd med tastaturgenveje"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Screen and sound recorder with keyboard shortcuts"
+msgstr "Skærm- og lydoptager med tastaturgenveje"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"One key records the screen and the sound of the desktop, another only the "
+"screen, another only the sound as an MP3. The same key stops and saves the "
+"recording; a fourth key pauses it and resumes it."
+msgstr ""
+"Én tast optager skrivebordets skærm og lyd, en anden kun skærmen, en tredje "
+"kun lyden som MP3. Den samme tast stopper og gemmer optagelsen; en fjerde "
+"sætter den på pause og genoptager den."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The keys work in every window, also on Wayland. A red dot in the top bar "
+"shows that a recording is running, a yellow one that it is paused."
+msgstr ""
+"Tasterne virker i alle vinduer, også under Wayland. En rød prik i den "
+"øverste bjælke viser, at en optagelse kører, en gul at den er på pause."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The screen is recorded by the graphics hardware. The folder, the file format "
+"and the bit rates are set in a plain settings file."
+msgstr ""
+"Skærmen optages af grafikhardwaren. Mappen, filformatet og bitraterne "
+"indstilles i en simpel indstillingsfil."

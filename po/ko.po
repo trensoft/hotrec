@@ -1,0 +1,150 @@
+# Korean translation of hotrec.
+# This file is distributed under the same license as the hotrec package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hotrec\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"PO-Revision-Date: 2026-10-29 00:00+0000\n"
+"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Language-Team: Korean\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: hotrec/cli.py
+msgid "Could not set the keyboard shortcuts"
+msgstr "키보드 단축키를 설정할 수 없습니다"
+
+#: hotrec/cli.py
+msgid "Keyboard shortcuts are set"
+msgstr "키보드 단축키가 설정되었습니다"
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F9: screen and sound. Ctrl+Shift+F10: screen only. "
+"Ctrl+Shift+F11: sound only. Ctrl+Shift+F12: pause or resume. Any of the "
+"first three stops and saves the recording."
+msgstr ""
+"Ctrl+Shift+F9: 화면과 소리. Ctrl+Shift+F10: 화면만. Ctrl+Shift+F11: 소리만. "
+"Ctrl+Shift+F12: 일시 중지 또는 계속. 처음 세 개 중 아무 키나 누르면 녹화를 멈"
+"추고 저장합니다."
+
+#: hotrec/indicator.py
+msgid "Paused"
+msgstr "일시 중지됨"
+
+#: hotrec/indicator.py
+msgid "Resume"
+msgstr "계속"
+
+#: hotrec/indicator.py
+msgid "Recording"
+msgstr "녹화 중"
+
+#: hotrec/indicator.py
+msgid "Pause"
+msgstr "일시 중지"
+
+#: hotrec/indicator.py
+msgid "Stop and save"
+msgstr "중지하고 저장"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not a safe place for the state of the recording"
+msgstr "%s은(는) 녹화 상태를 두기에 안전한 위치가 아닙니다"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "녹음할 소리 출력을 찾을 수 없습니다"
+
+#: hotrec/recorder.py
+msgid "Could not start the recording"
+msgstr "녹화를 시작할 수 없습니다"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not create the folder %s"
+msgstr "%s 폴더를 만들 수 없습니다"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not installed"
+msgstr "%s이(가) 설치되어 있지 않습니다"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s did not start"
+msgstr "%s이(가) 시작되지 않았습니다"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not start the recording (log: %s)"
+msgstr "녹화를 시작할 수 없습니다 (로그: %s)"
+
+#: hotrec/recorder.py
+msgid "Recording saved"
+msgstr "녹화를 저장했습니다"
+
+#: hotrec/recorder.py
+msgid "The recording may be incomplete"
+msgstr "녹화가 불완전할 수 있습니다"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen and sound"
+msgstr "화면과 소리 녹화"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen only"
+msgstr "화면만 녹화"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record sound only"
+msgstr "소리만 녹음"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Pause or resume recording"
+msgstr "녹화 일시 중지 또는 계속"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Hotrec"
+msgstr "Hotrec"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+msgid "Record the screen and the sound of the desktop with keyboard shortcuts"
+msgstr "키보드 단축키로 데스크톱의 화면과 소리를 녹화합니다"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Screen and sound recorder with keyboard shortcuts"
+msgstr "키보드 단축키로 쓰는 화면·소리 녹화기"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"One key records the screen and the sound of the desktop, another only the "
+"screen, another only the sound as an MP3. The same key stops and saves the "
+"recording; a fourth key pauses it and resumes it."
+msgstr ""
+"키 하나는 데스크톱의 화면과 소리를, 다른 키는 화면만, 또 다른 키는 소리만 MP3"
+"로 녹화합니다. 같은 키가 녹화를 멈추고 저장하며, 네 번째 키는 일시 중지하고 "
+"계속합니다."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The keys work in every window, also on Wayland. A red dot in the top bar "
+"shows that a recording is running, a yellow one that it is paused."
+msgstr ""
+"키는 모든 창에서, Wayland에서도 작동합니다. 상단 표시줄의 빨간 점은 녹화 중, "
+"노란 점은 일시 중지임을 나타냅니다."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The screen is recorded by the graphics hardware. The folder, the file format "
+"and the bit rates are set in a plain settings file."
+msgstr ""
+"화면은 그래픽 하드웨어가 녹화합니다. 폴더, 파일 형식, 비트레이트는 간단한 설"
+"정 파일에서 정합니다."

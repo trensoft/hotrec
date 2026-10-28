@@ -1,0 +1,151 @@
+# Serbian translation of hotrec.
+# This file is distributed under the same license as the hotrec package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hotrec\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"PO-Revision-Date: 2026-10-29 00:00+0000\n"
+"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Language-Team: Serbian\n"
+"Language: sr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: hotrec/cli.py
+msgid "Could not set the keyboard shortcuts"
+msgstr "Пречице на тастатури нису могле да се подесе"
+
+#: hotrec/cli.py
+msgid "Keyboard shortcuts are set"
+msgstr "Пречице на тастатури су подешене"
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F9: screen and sound. Ctrl+Shift+F10: screen only. "
+"Ctrl+Shift+F11: sound only. Ctrl+Shift+F12: pause or resume. Any of the "
+"first three stops and saves the recording."
+msgstr ""
+"Ctrl+Shift+F9: екран и звук. Ctrl+Shift+F10: само екран. Ctrl+Shift+F11: "
+"само звук. Ctrl+Shift+F12: паузирај или настави. Било која од прве три "
+"зауставља и чува снимак."
+
+#: hotrec/indicator.py
+msgid "Paused"
+msgstr "Паузирано"
+
+#: hotrec/indicator.py
+msgid "Resume"
+msgstr "Настави"
+
+#: hotrec/indicator.py
+msgid "Recording"
+msgstr "Снимање"
+
+#: hotrec/indicator.py
+msgid "Pause"
+msgstr "Паузирај"
+
+#: hotrec/indicator.py
+msgid "Stop and save"
+msgstr "Заустави и сачувај"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not a safe place for the state of the recording"
+msgstr "%s није безбедно место за стање снимања"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "Звучни излаз за снимање није пронађен"
+
+#: hotrec/recorder.py
+msgid "Could not start the recording"
+msgstr "Снимање није могло да почне"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not create the folder %s"
+msgstr "Фасцикла %s није могла да се направи"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not installed"
+msgstr "%s није инсталиран"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s did not start"
+msgstr "%s није покренут"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not start the recording (log: %s)"
+msgstr "Снимање није могло да почне (дневник: %s)"
+
+#: hotrec/recorder.py
+msgid "Recording saved"
+msgstr "Снимак је сачуван"
+
+#: hotrec/recorder.py
+msgid "The recording may be incomplete"
+msgstr "Снимак је можда непотпун"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen and sound"
+msgstr "Сними екран и звук"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen only"
+msgstr "Сними само екран"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record sound only"
+msgstr "Сними само звук"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Pause or resume recording"
+msgstr "Паузирај или настави снимање"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Hotrec"
+msgstr "Hotrec"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+msgid "Record the screen and the sound of the desktop with keyboard shortcuts"
+msgstr "Снима екран и звук радне површине помоћу пречица на тастатури"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Screen and sound recorder with keyboard shortcuts"
+msgstr "Снимач екрана и звука са пречицама на тастатури"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"One key records the screen and the sound of the desktop, another only the "
+"screen, another only the sound as an MP3. The same key stops and saves the "
+"recording; a fourth key pauses it and resumes it."
+msgstr ""
+"Један тастер снима екран и звук радне површине, други само екран, трећи само "
+"звук као MP3. Исти тастер зауставља и чува снимак; четврти га паузира и "
+"наставља."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The keys work in every window, also on Wayland. A red dot in the top bar "
+"shows that a recording is running, a yellow one that it is paused."
+msgstr ""
+"Тастери раде у сваком прозору, и у Wayland-у. Црвена тачка на горњој траци "
+"показује да снимање траје, жута да је паузирано."
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The screen is recorded by the graphics hardware. The folder, the file format "
+"and the bit rates are set in a plain settings file."
+msgstr ""
+"Екран снима графички хардвер. Фасцикла, формат датотеке и брзине битова "
+"подешавају се у једноставној датотеци подешавања."

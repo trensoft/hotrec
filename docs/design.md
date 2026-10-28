@@ -1,0 +1,60 @@
+# How Hotrec works
+
+One command per key press, no daemon. `hotrec <mode>` is a short-lived process that looks at what
+is running, acts, and leaves; the recorder it started keeps running on its own.
+
+## State
+
+`$XDG_RUNTIME_DIR/hotrec/` (else `/tmp/hotrec-<uid>`, made mode 0700 and refused if it is not a
+directory of ours), files:
+
+- `state.json`: `pid`, `started` (the start time of that pid from `/proc/<pid>/stat`), `mode`,
+  `file`, `paused`. Written whole and renamed into place.
+- `lock`: held (`flock`) for the length of a command, so two quick key presses cannot both start
+  a recording: the second one finds the first one's recording and stops it.
+- `recorder.log`, `indicator.log`: output of the recorder and of the dot (not followed through
+  symlinks); `indicator.lock`: the one dot.
+
+A recording is "running" only if the pid exists, is not a zombie, **and has the start time that was
+written**. A pid that the kernel gave to another process is not the recorder, and is never signalled.
+A state whose process is gone (the portal dialog was cancelled, the recorder crashed, reboot) is
+removed and the next key starts a new recording.
+
+## Modes
+
+| Mode | Program | Pause | Stop |
+|---|---|---|---|
+| `video-audio`, `video` | `gpu-screen-recorder -w portal -restore-portal-session yes -f FPS -k h264 -encoder gpu -bm cbr -q KBPS [-a default_output -ac aac -ab KBPS] -o FILE` | SIGUSR2 (the recorder toggles) | SIGINT |
+| `audio` | `ffmpeg -n -f pulse -i <default sink>.monitor -c:a libmp3lame -b:a KBPS FILE` | SIGSTOP / SIGCONT | SIGINT |
+
+Starting: the recorder is a new session (`start_new_session`), its output goes to `recorder.log`.
+If it is gone within 1.5 s the user gets a notification with the log path, and no state is written.
+A missing program is named ("gpu-screen-recorder is not installed"). The sound-only mode needs the
+default sink from `pactl get-default-sink`.
+
+Stopping: a paused recording is sent SIGCONT first (a stopped process cannot see SIGINT), then
+SIGINT; the recorder writes the end of the file. After 20 s SIGTERM, after 5 s more SIGKILL, and the
+notification says the recording may be incomplete. A stop that leaves no file is reported the same
+way, never as "saved".
+
+The container is `mkv` by default: a recording that is cut short (power loss, a kill) still plays;
+`mp4` written by an interrupted recorder does not on the FFmpeg 7.1 of EPEL 10.
+
+## Shortcuts
+
+`hotrec shortcuts install` writes four custom keybindings under
+`/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/hotrec-<mode>/`
+(`name`, `command`, `binding`) with `gsettings`, and adds the paths to the list key. It reads the
+list first and keeps the entries of others, refuses when another custom entry uses one of the keys
+(nothing is changed), writes the list last, and does nothing the second time. Keys of GNOME's own
+(non-custom) shortcuts are not checked.
+
+## The dot
+
+`hotrec indicator` (started by a recording, one at a time) shows `...-recording` or `...-paused`
+(red or yellow) and a menu; it polls the state twice a second and quits when nothing records.
+GTK 3 and an AppIndicator library (Ayatana first, then the old one) are imported only here.
+
+## Settings and languages
+
+See `hotrec/config.py` and `docs/translations.md`. The log and `--help` are English.

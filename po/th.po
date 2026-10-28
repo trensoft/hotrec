@@ -1,0 +1,148 @@
+# Thai translation of hotrec.
+# This file is distributed under the same license as the hotrec package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: hotrec\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"PO-Revision-Date: 2026-10-29 00:00+0000\n"
+"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Language-Team: Thai\n"
+"Language: th\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: hotrec/cli.py
+msgid "Could not set the keyboard shortcuts"
+msgstr "ไม่สามารถตั้งค่าแป้นพิมพ์ลัดได้"
+
+#: hotrec/cli.py
+msgid "Keyboard shortcuts are set"
+msgstr "ตั้งค่าแป้นพิมพ์ลัดแล้ว"
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F9: screen and sound. Ctrl+Shift+F10: screen only. "
+"Ctrl+Shift+F11: sound only. Ctrl+Shift+F12: pause or resume. Any of the "
+"first three stops and saves the recording."
+msgstr ""
+"Ctrl+Shift+F9: หน้าจอและเสียง Ctrl+Shift+F10: เฉพาะหน้าจอ Ctrl+Shift+F11: "
+"เฉพาะเสียง Ctrl+Shift+F12: หยุดชั่วคราวหรือทำต่อ "
+"แป้นใดแป้นหนึ่งในสามแป้นแรกจะหยุดและบันทึกการบันทึก"
+
+#: hotrec/indicator.py
+msgid "Paused"
+msgstr "หยุดชั่วคราว"
+
+#: hotrec/indicator.py
+msgid "Resume"
+msgstr "ทำต่อ"
+
+#: hotrec/indicator.py
+msgid "Recording"
+msgstr "กำลังบันทึก"
+
+#: hotrec/indicator.py
+msgid "Pause"
+msgstr "หยุดชั่วคราว"
+
+#: hotrec/indicator.py
+msgid "Stop and save"
+msgstr "หยุดและบันทึก"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not a safe place for the state of the recording"
+msgstr "%s ไม่ใช่ที่ปลอดภัยสำหรับเก็บสถานะการบันทึก"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "ไม่พบเอาต์พุตเสียงที่จะบันทึก"
+
+#: hotrec/recorder.py
+msgid "Could not start the recording"
+msgstr "ไม่สามารถเริ่มการบันทึกได้"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not create the folder %s"
+msgstr "ไม่สามารถสร้างโฟลเดอร์ %s ได้"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s is not installed"
+msgstr "ยังไม่ได้ติดตั้ง %s"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "%s did not start"
+msgstr "%s ไม่เริ่มทำงาน"
+
+#: hotrec/recorder.py
+#, python-format
+msgid "Could not start the recording (log: %s)"
+msgstr "ไม่สามารถเริ่มการบันทึกได้ (บันทึกการทำงาน: %s)"
+
+#: hotrec/recorder.py
+msgid "Recording saved"
+msgstr "บันทึกการบันทึกแล้ว"
+
+#: hotrec/recorder.py
+msgid "The recording may be incomplete"
+msgstr "การบันทึกอาจไม่สมบูรณ์"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen and sound"
+msgstr "บันทึกหน้าจอและเสียง"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record screen only"
+msgstr "บันทึกเฉพาะหน้าจอ"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record sound only"
+msgstr "บันทึกเฉพาะเสียง"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Pause or resume recording"
+msgstr "หยุดการบันทึกชั่วคราวหรือทำต่อ"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Hotrec"
+msgstr "Hotrec"
+
+#: data/io.github.trensoft.hotrec.desktop.in
+msgid "Record the screen and the sound of the desktop with keyboard shortcuts"
+msgstr "บันทึกหน้าจอและเสียงของเดสก์ท็อปด้วยแป้นพิมพ์ลัด"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid "Screen and sound recorder with keyboard shortcuts"
+msgstr "เครื่องบันทึกหน้าจอและเสียงด้วยแป้นพิมพ์ลัด"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"One key records the screen and the sound of the desktop, another only the "
+"screen, another only the sound as an MP3. The same key stops and saves the "
+"recording; a fourth key pauses it and resumes it."
+msgstr ""
+"แป้นหนึ่งบันทึกหน้าจอและเสียงของเดสก์ท็อป อีกแป้นบันทึกเฉพาะหน้าจอ แป้นที่สามบันทึกเฉพาะเสียงเป็น "
+"MP3 แป้นเดียวกันจะหยุดและบันทึกการบันทึก ส่วนแป้นที่สี่จะหยุดชั่วคราวและทำต่อ"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The keys work in every window, also on Wayland. A red dot in the top bar "
+"shows that a recording is running, a yellow one that it is paused."
+msgstr ""
+"แป้นทำงานได้ในทุกหน้าต่าง รวมถึงบน Wayland จุดสีแดงบนแถบด้านบนแสดงว่ากำลังบันทึก "
+"จุดสีเหลืองแสดงว่าหยุดชั่วคราว"
+
+#: data/io.github.trensoft.hotrec.metainfo.xml.in
+msgid ""
+"The screen is recorded by the graphics hardware. The folder, the file format "
+"and the bit rates are set in a plain settings file."
+msgstr ""
+"หน้าจอถูกบันทึกโดยฮาร์ดแวร์กราฟิก โฟลเดอร์ รูปแบบไฟล์ และบิตเรตตั้งค่าในไฟล์การตั้งค่าแบบง่าย"
