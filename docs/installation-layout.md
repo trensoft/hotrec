@@ -1,6 +1,6 @@
 # Installation layout (for the package)
 
-The spec and the packaging are not in this repository. This is what the tree offers.
+The RPM specs are in `packaging/fedora/` and the COPR source-RPM builder in `.copr/Makefile`. This is what the tree offers them.
 
 ## Python part
 
@@ -41,8 +41,8 @@ Names are the Fedora ones and are **not checked against EPEL 10**:
 The program never calls Flatpak, and there is no software encoder, because the Fedora FFmpeg has no software H.264
 encoder to use.
 
-## Not in the tree, on purpose
+## Version and CI
 
-No spec, no `.copr/`, no CI workflow, no remote. Version `0.1.0` is in `pyproject.toml`,
+No CI workflow. Version `0.1.0` is in `pyproject.toml`,
 `hotrec/__init__.py`, the metainfo release and the manual page (`tests/test_packaging.py` keeps
 them equal).

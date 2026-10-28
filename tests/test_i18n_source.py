@@ -54,8 +54,14 @@ def test_the_word_cpu_is_nowhere_in_what_the_user_sees_or_reads():
     or the documentation (tests may name it, to prove it is refused)."""
     found = []
     roots = [REPO / "hotrec", REPO / "data", REPO / "po", REPO / "docs", REPO / "packaging"]
+    # The spec of gpu-screen-recorder is another package: it says why that program has no software
+    # encoder here, which is a fact about it, not text of Hotrec.
+    other_package = REPO / "packaging" / "fedora" / "gpu-screen-recorder.spec"
     files = [REPO / "README.md"] + [
-        p for root in roots for p in root.rglob("*") if p.is_file() and p.suffix != ".mo"
+        p
+        for root in roots
+        for p in root.rglob("*")
+        if p.is_file() and p.suffix != ".mo" and p != other_package
     ]
     for path in files:
         text = path.read_text(encoding="utf-8", errors="replace")
