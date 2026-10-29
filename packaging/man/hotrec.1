@@ -1,4 +1,4 @@
-.TH HOTREC 1 "2026-10-29" "hotrec 0.1.1" "User Commands"
+.TH HOTREC 1 "2026-10-29" "hotrec 0.1.2" "User Commands"
 .SH NAME
 hotrec \- record the screen and the sound of a GNOME desktop with keyboard shortcuts
 .SH SYNOPSIS
@@ -66,7 +66,14 @@ shortcut holds one of the keys, so that the notification is not repeated at ever
 failure is tried again at the next login. A second \fBautostart\fR exits at once.
 .TP
 .B indicator
-The dot in the top bar. It is started by a recording and ends with it.
+The dot in the top bar. It is started by a recording and ends with it. Its menu starts with the
+four keyboard shortcuts as GNOME has them, in grey.
+.PP
+The dot that \fBautostart\fR keeps has \fBSet keyboard shortcuts...\fR in its menu: a window with a
+field for each shortcut (click it, press the new keys, Escape gives up) and \fBSave\fR. The keys
+are written as \fBshortcuts install\fR writes them: a key that another custom shortcut uses is
+refused, and nothing of other programs is overwritten. A letter alone is refused as a shortcut; a
+function key may stand alone.
 .SH KEYS
 .TP
 .B Ctrl+Shift+F9

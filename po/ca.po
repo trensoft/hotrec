@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Catalan\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "No s'han pogut definir les dreceres de teclat"
 
@@ -52,6 +52,34 @@ msgstr "Pausa"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "Atura i desa"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "Defineix les dreceres de teclat..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "Dreceres de teclat"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Feu clic en un camp i premeu les tecles noves. Esc cancel·la."
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "Desa"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "Premeu les tecles..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Useu Ctrl, Alt o Super juntament amb la tecla."
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Dues dreceres tenen les mateixes tecles."
 
 #: hotrec/recorder.py
 #, python-format

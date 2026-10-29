@@ -45,6 +45,6 @@ encoder to use.
 
 ## Version and CI
 
-No CI workflow. Version `0.1.1` is in `pyproject.toml`,
+No CI workflow. Version `0.1.2` is in `pyproject.toml`,
 `hotrec/__init__.py`, the metainfo release and the manual page (`tests/test_packaging.py` keeps
 them equal).

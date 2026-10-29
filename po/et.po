@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Estonian\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Kiirklahve ei õnnestunud seada"
 
@@ -52,6 +52,34 @@ msgstr "Peata"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "Lõpeta ja salvesta"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "Määra kiirklahvid..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "Kiirklahvid"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Klõpsake väljal ja vajutage uusi klahve. Esc tühistab."
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "Salvesta"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "Vajutage klahve..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Kasutage klahviga koos Ctrl-, Alt- või Super-klahvi."
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Kahel kiirklahvil on samad klahvid."
 
 #: hotrec/recorder.py
 #, python-format

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Czech\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Klávesové zkratky se nepodařilo nastavit"
 
@@ -52,6 +52,34 @@ msgstr "Pozastavit"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "Zastavit a uložit"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "Nastavit klávesové zkratky..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "Klávesové zkratky"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Klepněte na pole a stiskněte nové klávesy. Esc zruší."
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "Uložit"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "Stiskněte klávesy..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Použijte Ctrl, Alt nebo Super spolu s klávesou."
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Dvě zkratky mají stejné klávesy."
 
 #: hotrec/recorder.py
 #, python-format

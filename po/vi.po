@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Vietnamese\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Không thể đặt phím tắt"
 
@@ -52,6 +52,34 @@ msgstr "Tạm dừng"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "Dừng và lưu"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "Đặt phím tắt..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "Phím tắt"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Nhấp vào một ô rồi nhấn các phím mới. Esc để hủy."
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "Lưu"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "Nhấn các phím..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Dùng Ctrl, Alt hoặc Super cùng với phím."
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Hai phím tắt có cùng tổ hợp phím."
 
 #: hotrec/recorder.py
 #, python-format

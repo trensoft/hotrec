@@ -335,3 +335,125 @@ def test_the_done_marker_is_under_the_state_home():
     assert str(sc.done_marker({"XDG_STATE_HOME": "rel", "HOME": "/h"})) == (
         "/h/.local/state/hotrec/shortcuts-installed"
     )
+
+
+# --- key combinations ------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("text", "canonical", "label"),
+    [
+        ("<Primary><Shift>F9", "<Primary><Shift>F9", "Ctrl+Shift+F9"),
+        ("<Control><Shift>f10", "<Primary><Shift>F10", "Ctrl+Shift+F10"),
+        ("<Shift><Ctrl>F11", "<Primary><Shift>F11", "Ctrl+Shift+F11"),
+        ("<Mod1><Primary>R", "<Primary><Alt>r", "Ctrl+Alt+R"),
+        ("<Mod4>space", "<Super>space", "Super+Space"),
+        ("F8", "F8", "F8"),
+        ("<Primary>Return", "<Primary>Return", "Ctrl+Return"),
+    ],
+)
+def test_one_spelling_for_the_same_keys(text, canonical, label):
+    assert sc.canonical_accelerator(text) == canonical
+    assert sc.accelerator_label(text) == label
+
+
+@pytest.mark.parametrize("text", ["", "   ", "disabled", "<Primary>", "<Primary> F9", "a b"])
+def test_what_is_no_key_combination(text):
+    assert sc.canonical_accelerator(text) is None
+    assert sc.accelerator_problem(text) == "keys"
+    assert sc.accelerator_label(text) == text
+
+
+def test_same_accelerator_compares_keys_not_text():
+    assert sc.same_accelerator("<Control><Shift>f9", "<Primary><Shift>F9")
+    assert sc.same_accelerator("<Primary><Alt>R", "<Mod1><Control>r")
+    assert not sc.same_accelerator("<Primary><Shift>F9", "<Primary>F9")
+    assert not sc.same_accelerator("<Primary>F9", "<Primary>F10")
+    assert not sc.same_accelerator("", "")
+    assert not sc.same_accelerator("disabled", "disabled")
+
+
+@pytest.mark.parametrize(
+    ("text", "problem"),
+    [
+        ("a", "modifier"),
+        ("<Shift>a", "modifier"),
+        ("<Shift>Tab", "modifier"),
+        ("Escape", "modifier"),
+        ("F1", None),
+        ("<Shift>F5", None),
+        ("<Primary>a", None),
+        ("<Alt>Tab", None),
+        ("<Super>space", None),
+        ("<Primary><Shift>F9", None),
+    ],
+)
+def test_a_letter_alone_is_no_shortcut(text, problem):
+    assert sc.accelerator_problem(text) == problem
+
+
+def test_bindings_are_what_gnome_has():
+    g = Gsettings()
+    shortcuts = make(g)
+    assert shortcuts.bindings() == {s.slug: None for s in sc.SHORTCUTS}
+    shortcuts.install({"audio": "<Primary><Alt>a"})
+    assert shortcuts.bindings() == {
+        "video-audio": "<Primary><Shift>F9",
+        "video": "<Primary><Shift>F10",
+        "audio": "<Primary><Alt>a",
+        "pause": "<Primary><Shift>F12",
+    }
+
+
+def test_bindings_without_gsettings_is_the_same_clear_error():
+    shortcuts = sc.Shortcuts("hotrec", run=Gsettings(), which=lambda name: None)
+    with pytest.raises(sc.ShortcutError):
+        shortcuts.bindings()
+
+
+def test_install_with_keys_changes_an_installed_shortcut_and_keeps_the_rest():
+    g = Gsettings()
+    shortcuts = make(g)
+    shortcuts.install()
+    lines = shortcuts.install({"video": "<Super>F2", "pause": "<Control><Alt>p"})
+    assert lines == [
+        "Ctrl+Shift+F9  hotrec video-audio",
+        "Super+F2  hotrec video",
+        "Ctrl+Shift+F11  hotrec audio",
+        "Ctrl+Alt+P  hotrec pause",
+    ]
+    assert g.entries[(sc.path_of(sc.SHORTCUTS[1]), "binding")] == "<Super>F2"
+    assert g.entries[(sc.path_of(sc.SHORTCUTS[3]), "binding")] == "<Primary><Alt>p"
+    assert len(sc.parse_list(g.listing)) == 4
+
+
+def test_install_with_keys_that_are_no_keys_changes_nothing():
+    g = Gsettings()
+    with pytest.raises(sc.ShortcutError, match="not a key combination"):
+        make(g).install({"video": "nonsense with spaces"})
+    with pytest.raises(sc.ShortcutError, match="no shortcut called"):
+        make(g).install({"nothing": "<Primary>F2"})
+    assert g.calls == []
+
+
+def test_install_refuses_two_shortcuts_on_the_same_keys_before_touching_gnome():
+    g = Gsettings()
+    with pytest.raises(sc.ShortcutError, match="same keys"):
+        make(g).install({"video": "<Control><Shift>f9"})
+    assert g.calls == []
+
+
+def test_a_foreign_key_is_a_conflict_whatever_its_spelling():
+    other = sc.PATH_PREFIX + "custom0/"
+    for spelling in ("<Control><Shift>f9", "<Shift><Primary>F9", "<Primary><Shift>F9"):
+        g = Gsettings("['%s']" % other, {(other, "binding"): spelling})
+        with pytest.raises(sc.ShortcutConflict):
+            make(g).install()
+        assert not any(c[1] in ("set", "reset") for c in g.calls)
+
+
+def test_a_foreign_key_on_a_key_we_leave_is_no_conflict():
+    other = sc.PATH_PREFIX + "custom0/"
+    g = Gsettings("['%s']" % other, {(other, "binding"): "<Primary><Shift>F9"})
+    make(g).install({"video-audio": "<Primary><Shift>F2"})  # F9 is free once we do not take it
+    assert g.entries[(sc.path_of(sc.SHORTCUTS[0]), "binding")] == "<Primary><Shift>F2"

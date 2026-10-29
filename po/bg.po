@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Bulgarian\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Клавишните комбинации не можаха да бъдат зададени"
 
@@ -52,6 +52,34 @@ msgstr "Пауза"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "Спиране и запазване"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "Задаване на клавишни комбинации..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "Клавишни комбинации"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Щракнете върху поле, после натиснете новите клавиши. Esc отменя."
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "Запазване"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "Натиснете клавишите..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Използвайте Ctrl, Alt или Super заедно с клавиша."
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Две клавишни комбинации имат едни и същи клавиши."
 
 #: hotrec/recorder.py
 #, python-format

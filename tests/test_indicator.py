@@ -6,9 +6,27 @@ logic; whether the real ones draw the dot is a check on a real desktop)."""
 
 import fcntl
 import sys
+import types
+
+import pytest
 
 from hotrec import APP_ID, indicator
 from hotrec import recorder as rec
+from hotrec import shortcuts as sc
+
+
+@pytest.fixture(autouse=True)
+def no_real_gsettings(monkeypatch):
+    """The dot reads the keys from GNOME; a test never asks the machine it runs on."""
+    monkeypatch.setattr(indicator, "_key_source", lambda: KeySource({}))
+
+
+class KeySource:
+    def __init__(self, bindings):
+        self.bindings_now = bindings
+
+    def bindings(self):
+        return dict(self.bindings_now)
 
 
 def test_view_for_each_state():
@@ -37,6 +55,19 @@ class Item:
         self.label = label
         self.handlers = {}
         self.sensitive = True
+        self.no_show_all = False
+        self.visible = True
+        self.separator = False
+
+    def set_no_show_all(self, value):
+        self.no_show_all = value
+        self.visible = not value  # show_all leaves it hidden until it is shown
+
+    def show(self):
+        self.visible = True
+
+    def hide(self):
+        self.visible = False
 
     def set_sensitive(self, value):
         self.sensitive = value
@@ -50,11 +81,20 @@ class Item:
 
 class Menu:
     def __init__(self):
-        self.items = []
+        self.all = []
         self.shown = False
 
+    @property
+    def items(self):
+        """The commands of the menu: not the grey key lines at the top, not the separators."""
+        return [i for i in self.all if not i.no_show_all and not i.separator]
+
+    @property
+    def key_lines(self):
+        return [i for i in self.all if i.no_show_all]
+
     def append(self, item):
-        self.items.append(item)
+        self.all.append(item)
 
     def show_all(self):
         self.shown = True
@@ -106,6 +146,11 @@ class Toolkit:
 
     def MenuItem(self, label=""):
         return Item(label)
+
+    def SeparatorMenuItem(self):
+        item = Item()
+        item.separator = True
+        return item
 
     def timeout_add(self, milliseconds, function):
         self.timer = (milliseconds, function)
@@ -219,8 +264,9 @@ def test_a_resident_dot_stays_while_nothing_records_and_offers_the_three_modes(
         "Record sound only",
         "Pause",
         "Stop and save",
+        "Set keyboard shortcuts...",
     ]
-    assert [item.sensitive for item in dot.menu.items] == [True, True, True, False, False]
+    assert [item.sensitive for item in dot.menu.items] == [True, True, True, False, False, True]
     assert not toolkit.quit_called  # nothing recording does not end a resident dot
     assert dot.icons[-1] == (APP_ID + "-symbolic", "Hotrec")
     for item in dot.menu.items[:3]:
@@ -247,7 +293,8 @@ def test_a_resident_dot_while_recording_cannot_start_another(tmp_path):
     recorder = StubRecorder(tmp_path, rec.State(1, 2, "video", "/f"))
     toolkit = Toolkit([], recorder)
     indicator.run(recorder, toolkit.triple(), resident=True)
-    assert [i.sensitive for i in toolkit.indicator.menu.items] == [False, False, False, True, True]
+    sensitive = [i.sensitive for i in toolkit.indicator.menu.items]
+    assert sensitive == [False, False, False, True, True, True]  # the last: the keys window
     assert toolkit.indicator.args[1] == APP_ID + "-recording"
 
 
@@ -261,3 +308,136 @@ def test_a_second_resident_dot_exits_at_once(tmp_path):
         assert toolkit.indicator is None
     finally:
         holder.close()
+
+
+def keys_of(g_bindings):
+    return {s.slug: g_bindings.get(s.slug) for s in sc.SHORTCUTS}
+
+
+def test_the_top_of_the_menu_lists_the_keys_grey_and_not_clickable(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        indicator,
+        "_key_source",
+        lambda: KeySource(
+            keys_of(
+                {
+                    "video-audio": "<Primary><Shift>F9",
+                    "video": "<Control><Shift>f10",
+                    "audio": "<Primary><Alt>r",
+                    "pause": "<Super>F12",
+                }
+            )
+        ),
+    )
+    recorder = StubRecorder(tmp_path, None)
+    toolkit = Toolkit([], recorder)
+    indicator.run(recorder, toolkit.triple(), resident=True)
+    menu = toolkit.indicator.menu
+    assert menu.all[:4] == menu.key_lines  # at the top
+    assert [i.label for i in menu.key_lines] == [
+        "Ctrl+Shift+F9 - Record screen and sound",
+        "Ctrl+Shift+F10 - Record screen only",
+        "Ctrl+Alt+R - Record sound only",
+        "Super+F12 - Pause or resume recording",
+    ]
+    assert all(not i.sensitive and i.visible for i in menu.key_lines)
+    assert all("activate" not in i.handlers for i in menu.key_lines)
+    assert menu.all[4].separator
+
+
+def test_the_key_lines_are_there_in_the_dot_of_a_recording_too(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        indicator, "_key_source", lambda: KeySource(keys_of({"pause": "<Primary><Shift>F12"}))
+    )
+    recorder = StubRecorder(tmp_path, rec.State(1, 2, "video", "/f"))
+    toolkit = Toolkit([], recorder)
+    indicator.run(recorder, toolkit.triple())
+    menu = toolkit.indicator.menu
+    assert [i.label for i in menu.items] == ["Pause", "Stop and save"]  # no keys window here
+    assert [(i.label, i.visible) for i in menu.key_lines] == [
+        ("", False),
+        ("", False),
+        ("", False),
+        ("Ctrl+Shift+F12 - Pause or resume recording", True),
+    ]
+
+
+def test_without_gnome_settings_the_key_lines_are_hidden_not_a_failure(tmp_path, monkeypatch):
+    class Gone:
+        def bindings(self):
+            raise sc.ShortcutError("gsettings not found")
+
+    monkeypatch.setattr(indicator, "_key_source", Gone)
+    recorder = StubRecorder(tmp_path, None)
+    toolkit = Toolkit([], recorder)
+    assert indicator.run(recorder, toolkit.triple(), resident=True) == 0
+    assert not any(i.visible for i in toolkit.indicator.menu.key_lines)
+
+
+def test_the_key_lines_follow_a_change_in_the_gnome_settings(tmp_path, monkeypatch):
+    source = KeySource(keys_of({"video": "<Primary><Shift>F10"}))
+    monkeypatch.setattr(indicator, "_key_source", lambda: source)
+    recorder = StubRecorder(tmp_path, None)
+    states = [None] * indicator.KEYS_REREAD_TICKS
+    toolkit = Toolkit(states, recorder)
+    original = toolkit.main
+
+    def main():
+        source.bindings_now = keys_of({"video": "<Primary><Alt>v"})
+        original()
+
+    toolkit.main = main
+    indicator.run(recorder, toolkit.triple(), resident=True)
+    assert toolkit.indicator.menu.key_lines[1].label == "Ctrl+Alt+V - Record screen only"
+
+
+def test_the_keys_item_opens_one_window_and_shows_it_again_while_it_is_open(tmp_path, monkeypatch):
+    class Window:
+        closed = False
+        presented = 0
+
+        def present(self):
+            self.presented += 1
+
+    opened = []
+
+    def open_window(*args):
+        opened.append((args, Window()))
+        return opened[-1][1]
+
+    fake_gdk = object()
+    monkeypatch.setitem(
+        sys.modules,
+        "gi",
+        types.SimpleNamespace(repository=None, require_version=lambda name, version: None),
+    )
+    monkeypatch.setitem(sys.modules, "gi.repository", types.SimpleNamespace(Gdk=fake_gdk))
+    monkeypatch.setattr(indicator.keys_window, "open_window", open_window)
+    recorder = StubRecorder(tmp_path, None)
+    toolkit = Toolkit([], recorder)
+    indicator.run(recorder, toolkit.triple(), resident=True)
+    item = toolkit.indicator.menu.items[-1]
+    assert item.label == "Set keyboard shortcuts..."
+    item.handlers["activate"](item)
+    args, window = opened[0]
+    assert args[0] is toolkit.Gtk and args[1] is fake_gdk
+    assert args[2] is indicator._key_source and args[3] is indicator._installer
+    assert args[5] == APP_ID
+    item.handlers["activate"](item)
+    assert len(opened) == 1 and window.presented == 1  # the open window comes forward
+    window.closed = True
+    item.handlers["activate"](item)
+    assert len(opened) == 2  # a closed one is replaced
+
+
+def test_the_installer_needs_hotrec_on_the_path(monkeypatch):
+    monkeypatch.setattr(indicator.shutil, "which", lambda name: None)
+    with pytest.raises(sc.ShortcutError):
+        indicator._installer()
+    monkeypatch.setattr(indicator.shutil, "which", lambda name: "/usr/bin/" + name)
+    assert indicator._installer().command == "/usr/bin/hotrec"
+
+
+def test_key_lines_skip_a_shortcut_without_keys():
+    lines = indicator.key_lines(KeySource(keys_of({"audio": "<Primary><Shift>F11"})))
+    assert lines == [None, None, "Ctrl+Shift+F11 - Record sound only", None]

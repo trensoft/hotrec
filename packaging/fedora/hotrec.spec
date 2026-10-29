@@ -1,7 +1,7 @@
 %global appid io.github.trensoft.hotrec
 
 Name:           hotrec
-Version:        0.1.1
+Version:        0.1.2
 Release:        1%{?dist}
 Summary:        Screen and audio recorder for GNOME on Wayland, with global keys and a tray indicator
 # The LICENSE file is the GPL-3.0 text; every .py carries SPDX-License-Identifier: GPL-3.0-or-later.
@@ -89,6 +89,11 @@ test -x %{buildroot}%{_bindir}/hotrec
 %{_mandir}/man1/hotrec.1*
 
 %changelog
+* Thu Oct 29 2026 TrenSoft <143960729+trensoft@users.noreply.github.com> - 0.1.2-1
+- The menu of the tray indicator lists the keyboard shortcuts as GNOME has them (grey, not clickable) and has
+  "Set keyboard shortcuts...": a small window to choose the four key combinations, saved into the GNOME custom
+  keybindings by the same code as "hotrec setup" (a key of another program is never overwritten)
+
 * Thu Oct 29 2026 TrenSoft <143960729+trensoft@users.noreply.github.com> - 0.1.1-1
 - Autostart entry in /etc/xdg/autostart: "hotrec autostart" sets the keyboard shortcuts once per user at login and keeps
   the tray indicator running (one instance); the prototype's felvetel shortcuts are replaced by the Hotrec ones

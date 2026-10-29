@@ -7,8 +7,10 @@ The menu has Pause/Resume and Stop and save. Started by a recording, the process
 the recording does: when the state says nothing is recording any more (stopped, or the recorder
 died), it quits. Started at login (``hotrec autostart``, ``resident=True``) it stays, shows the
 Hotrec icon while nothing records, and has the three ways to start a recording in its menu too.
-There is only ever one: a second one exits at once. It needs the AppIndicator extension of GNOME
-Shell for the dot to show.
+At the top of the menu, grey, are the keyboard shortcuts as GNOME has them now ("Ctrl+Shift+F9 -
+Record screen and sound"); the resident one also has "Set keyboard shortcuts..." (the window in
+``keys_window``). There is only ever one: a second one exits at once. It needs the AppIndicator
+extension of GNOME Shell for the dot to show.
 
 GTK 3 and an AppIndicator library are loaded when the dot starts, not at import, so everything
 else in Hotrec (and the tests) works without them. Two libraries provide the same API; the
@@ -19,15 +21,22 @@ from __future__ import annotations
 
 import fcntl
 import logging
+import shutil
 import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Optional, Tuple
+from typing import Any, List, Optional, Tuple
 
-from hotrec import APP_ID, _
+from hotrec import APP_ID, _, keys_window
 from hotrec.recorder import MODES, Recorder, State
-from hotrec.shortcuts import shortcut_names
+from hotrec.shortcuts import (
+    SHORTCUTS,
+    ShortcutError,
+    Shortcuts,
+    accelerator_label,
+    shortcut_names,
+)
 
 _LOG = logging.getLogger(__name__)
 
@@ -35,6 +44,7 @@ ICON_RECORDING = APP_ID + "-recording"
 ICON_PAUSED = APP_ID + "-paused"
 ICON_IDLE = APP_ID + "-symbolic"
 REFRESH_MILLISECONDS = 500
+KEYS_REREAD_TICKS = 120  # the shortcut list at the top is read again every minute
 
 
 @dataclass(frozen=True)
@@ -78,6 +88,37 @@ def _load_toolkit() -> Tuple[Any, Any, Any]:
     from gi.repository import GLib, Gtk  # type: ignore
 
     return Gtk, GLib, AppIndicator
+
+
+def _key_source() -> Shortcuts:
+    """What reads the keys the shortcuts have now (the command is not used for reading)."""
+    return Shortcuts("hotrec")
+
+
+def _installer() -> Shortcuts:
+    """What writes the keys: they run ``hotrec`` from the PATH, as ``hotrec setup`` does."""
+    command = shutil.which("hotrec")
+    if not command:
+        raise ShortcutError("hotrec is not on the PATH")
+    return Shortcuts(command)
+
+
+def key_lines(source: Optional[Shortcuts] = None) -> List[Optional[str]]:
+    """One line per shortcut for the top of the menu, "Ctrl+Shift+F9 - Record screen and sound",
+    from the keys as GNOME has them now; ``None`` for a shortcut that has no keys (or when they
+    cannot be read: GNOME's settings are not there)."""
+    try:
+        bindings = (source or _key_source()).bindings()
+    except ShortcutError as error:
+        _LOG.info("cannot read the shortcuts: %s", error)
+        return [None] * len(SHORTCUTS)
+    names = shortcut_names()
+    return [
+        "%s - %s" % (accelerator_label(bindings[s.slug]), names[s.slug])
+        if bindings.get(s.slug)
+        else None
+        for s in SHORTCUTS
+    ]
 
 
 def _spawn(*args: str) -> None:
@@ -133,6 +174,14 @@ def run(
     indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
     menu = Gtk.Menu()
+    key_items = []
+    for _shortcut in SHORTCUTS:  # the keys, grey: they are information, not commands
+        item = Gtk.MenuItem(label="")
+        item.set_sensitive(False)
+        item.set_no_show_all(True)
+        menu.append(item)
+        key_items.append(item)
+    menu.append(Gtk.SeparatorMenuItem())
     start_items = []
     if resident:
         names = shortcut_names()
@@ -147,8 +196,38 @@ def run(
     stop_item.connect("activate", lambda *_args: _spawn("stop"))
     menu.append(pause_item)
     menu.append(stop_item)
+    keys_item = None
+    if resident:
+        menu.append(Gtk.SeparatorMenuItem())
+        keys_item = Gtk.MenuItem(label=_("Set keyboard shortcuts..."))
+        menu.append(keys_item)
     menu.show_all()
     indicator.set_menu(menu)
+
+    def show_keys() -> None:
+        for item, text in zip(key_items, key_lines()):
+            item.set_label(text or "")
+            if text:
+                item.show()
+            else:
+                item.hide()
+
+    settings = None
+
+    def open_settings(*_args: Any) -> None:
+        nonlocal settings
+        if settings is not None and not settings.closed:
+            settings.present()
+            return
+        import gi  # type: ignore[import-not-found]
+
+        gi.require_version("Gdk", "3.0")
+        from gi.repository import Gdk  # type: ignore
+
+        settings = keys_window.open_window(Gtk, Gdk, _key_source, _installer, show_keys, APP_ID)
+
+    if keys_item is not None:
+        keys_item.connect("activate", open_settings)
 
     def show(current: Optional[View]) -> None:
         recording = current is not None
@@ -161,7 +240,13 @@ def run(
             for item in start_items:
                 item.set_sensitive(not recording)
 
+    ticks = 0
+
     def refresh() -> bool:
+        nonlocal ticks
+        ticks += 1
+        if ticks % KEYS_REREAD_TICKS == 0:  # the keys can be changed in the GNOME settings too
+            show_keys()
         current = view(recorder.status())
         if current is None and not resident:
             Gtk.main_quit()
@@ -169,6 +254,7 @@ def run(
         show(current)
         return True
 
+    show_keys()
     if resident:
         show(view(recorder.status()))
     GLib.timeout_add(REFRESH_MILLISECONDS, refresh)

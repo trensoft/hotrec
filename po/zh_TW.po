@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Chinese (Traditional)\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "無法設定鍵盤快速鍵"
 
@@ -51,6 +51,34 @@ msgstr "暫停"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "停止並儲存"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "設定鍵盤快速鍵..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "鍵盤快速鍵"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "點選一個欄位，然後按下新的按鍵。按 Esc 取消。"
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "儲存"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "請按下按鍵..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "請將 Ctrl、Alt 或 Super 與按鍵一起使用。"
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "有兩個快速鍵使用了相同的按鍵。"
 
 #: hotrec/recorder.py
 #, python-format

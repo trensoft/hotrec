@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Romanian\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Nu s-au putut seta scurtăturile de tastatură"
 
@@ -53,6 +53,34 @@ msgstr "Pauză"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "Oprește și salvează"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "Setează scurtăturile de tastatură..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "Scurtături de tastatură"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Faceți clic pe un câmp, apoi apăsați tastele noi. Esc anulează."
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "Salvează"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "Apăsați tastele..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Folosiți Ctrl, Alt sau Super împreună cu tasta."
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Două scurtături au aceleași taste."
 
 #: hotrec/recorder.py
 #, python-format

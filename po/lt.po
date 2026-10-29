@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Lithuanian\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "(n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Nepavyko nustatyti spartaus klavišų"
 
@@ -53,6 +53,34 @@ msgstr "Pristabdyti"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "Sustabdyti ir išsaugoti"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "Nustatyti sparčiuosius klavišus..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "Spartieji klavišai"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Spustelėkite lauką, tada paspauskite naujus klavišus. Esc atšaukia."
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "Įrašyti"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "Paspauskite klavišus..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Naudokite Ctrl, Alt arba Super kartu su klavišu."
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Du spartieji klavišai turi tuos pačius klavišus."
 
 #: hotrec/recorder.py
 #, python-format

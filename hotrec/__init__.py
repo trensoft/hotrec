@@ -14,4 +14,5 @@ _ = gettext.gettext
 
 APP_ID = "io.github.trensoft.hotrec"
 APP_NAME = "Hotrec"
-__version__ = "0.1.1"
+__version__ = "0.1.2"
+DEVELOPER = "TrenSoft"  # the maker, shown as "<version> by TrenSoft" in the shortcuts window

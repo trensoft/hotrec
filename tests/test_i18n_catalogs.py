@@ -118,6 +118,35 @@ def test_the_key_names_in_the_notification_survive(lang):
                 assert key in msgstr, (lang, key)
 
 
+@pytest.mark.parametrize("lang", LANGS)
+def test_the_key_names_in_the_shortcuts_window_survive(lang):
+    """The keys are named as they are printed on the keyboard, whatever the language."""
+    for msgid, msgstr, _f in entries(PO / ("%s.po" % lang)):
+        if msgid.startswith("Use Ctrl, Alt or Super"):
+            for key in ("Ctrl", "Alt", "Super"):
+                assert key in msgstr, (lang, key)
+        if msgid.startswith("Click a field"):
+            assert ("Échap" if lang == "fr" else "Esc") in msgstr, lang  # the French key cap
+            assert "Escape" not in msgstr, lang
+
+
+@pytest.mark.parametrize("lang", LANGS)
+def test_the_shortcuts_window_and_menu_are_translated(lang):
+    translated = {m: s for m, s, _f in entries(PO / ("%s.po" % lang))}
+    for msgid in (
+        "Set keyboard shortcuts...",
+        "Keyboard shortcuts",
+        "Click a field, then press the new keys. Escape cancels.",
+        "Save",
+        "Press the keys...",
+        "Use Ctrl, Alt or Super together with the key.",
+        "Two of the shortcuts have the same keys.",
+    ):
+        assert translated[msgid], (lang, msgid)
+    assert translated["Set keyboard shortcuts..."].endswith("...")
+    assert translated["Press the keys..."].endswith("...")
+
+
 SAME_AS_ENGLISH = {"Hotrec"}
 PAUSE_IS_PAUSE = {"de", "fr", "da", "nb"}
 

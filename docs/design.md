@@ -78,6 +78,25 @@ symbolic icon, the three start entries are usable and Pause and Stop are greyed;
 runs it is the other way round. The lock makes a second dot, resident or not, exit at once.
 GTK 3 and an AppIndicator library (Ayatana first, then the old one) are imported only here.
 
+The top of the menu holds four grey lines, "Ctrl+Shift+F9 - Record screen and sound", read from
+GNOME (`Shortcuts.bindings()`) when the dot starts, after the window below saved, and every
+minute (`KEYS_REREAD_TICKS`); a shortcut without keys, or GNOME's settings missing, leaves its line
+hidden. The resident dot has "Set keyboard shortcuts..." at the bottom.
+
+## The shortcuts window
+
+`hotrec/keys_window.py` (GTK 3, opened from the resident dot, one at a time): a row per shortcut, a
+button with its keys; a click waits for the next key combination (the keyboard is grabbed for the
+wait, so the keys the shell already owns, such as the shortcut being changed, reach the window),
+Escape gives up. A bare letter is refused; the function keys may stand alone. Save calls
+`Shortcuts.install(keys)`, the code of `hotrec setup`, with the new accelerators: a key of another
+custom keybinding is a `ShortcutConflict` (compared as keys, not as text, so `<Control>f9` equals
+`<Primary>F9`) and nothing is written; two of ours with the same keys are refused before GNOME is
+touched. Shortcuts that are not installed yet show the default keys (Ctrl+Shift+F9 to F12), which
+is what Save would set; `hotrec autostart` installs exactly these, so the first window shows them
+as they are. At the bottom right: "0.1.2 by TrenSoft" (not translated), as in the settings window of
+Slideshow Lock. There is no separate About window.
+
 ## Settings and languages
 
 See `hotrec/config.py` and `docs/translations.md`. The log and `--help` are English.

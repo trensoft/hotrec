@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Maltese\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==0 || (n%100>1 && n%100<11) ? "
 "1 : (n%100>10 && n%100<20) ? 2 : 3);\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Ma stajtx jiġu ssettjati x-shortcuts tat-tastiera"
 
@@ -53,6 +53,34 @@ msgstr "Waqqaf"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "Waqqaf u ssejvja"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "Issettja x-shortcuts tat-tastiera..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "Shortcuts tat-tastiera"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Ikklikkja fuq qasam, imbagħad agħfas it-tasti l-ġodda. Esc jikkanċella."
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "Ssejvja"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "Agħfas it-tasti..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Uża Ctrl, Alt jew Super flimkien mat-tasta."
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Tnejn mix-shortcuts għandhom l-istess tasti."
 
 #: hotrec/recorder.py
 #, python-format

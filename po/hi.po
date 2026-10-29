@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Hindi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "कीबोर्ड शॉर्टकट सेट नहीं किए जा सके"
 
@@ -52,6 +52,34 @@ msgstr "रोकें"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "रोकें और सहेजें"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "कीबोर्ड शॉर्टकट सेट करें..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "कीबोर्ड शॉर्टकट"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "किसी फ़ील्ड पर क्लिक करें, फिर नई कुंजियाँ दबाएँ। Esc रद्द करता है।"
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "सहेजें"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "कुंजियाँ दबाएँ..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "कुंजी के साथ Ctrl, Alt या Super का उपयोग करें।"
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "दो शॉर्टकट की कुंजियाँ एक जैसी हैं।"
 
 #: hotrec/recorder.py
 #, python-format

@@ -30,7 +30,7 @@ import shutil
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import Callable, Dict, FrozenSet, List, Mapping, Optional, Sequence, Tuple
 
 from hotrec import APP_ID, _
 
@@ -60,6 +60,83 @@ SHORTCUTS = (
     Shortcut("audio", "<Primary><Shift>F11", "Ctrl+Shift+F11"),
     Shortcut("pause", "<Primary><Shift>F12", "Ctrl+Shift+F12"),
 )
+
+
+# How the modifiers of an accelerator are spelled, by every name GTK and GNOME use for them.
+_MODIFIER_NAMES = {
+    "primary": "Primary",
+    "control": "Primary",
+    "ctrl": "Primary",
+    "shift": "Shift",
+    "alt": "Alt",
+    "mod1": "Alt",
+    "super": "Super",
+    "mod4": "Super",
+}
+_MODIFIER_ORDER = ("Primary", "Shift", "Alt", "Super")
+_LABEL_NAMES = {"Primary": "Ctrl", "Shift": "Shift", "Alt": "Alt", "Super": "Super"}
+_ACCELERATOR = re.compile(r"((?:<[^<>\s]+>)*)([^<>\s]+)")
+_FUNCTION_KEY = re.compile(r"F([1-9]|1[0-9]|2[0-4])", re.IGNORECASE)
+
+
+def _parse_accelerator(text: str) -> Optional[Tuple[FrozenSet[str], str]]:
+    """``(modifiers, key)`` of an accelerator in GTK notation, or ``None`` when it is not one
+    (empty, ``disabled``, no key). The modifiers have one spelling (``Primary`` for Ctrl), so
+    ``<Control><Shift>f9`` and ``<Primary><Shift>F9`` come out the same."""
+    match = _ACCELERATOR.fullmatch(text.strip())
+    if not match or match.group(2).lower() == "disabled":
+        return None
+    modifiers = set()
+    for name in re.findall(r"<([^<>]+)>", match.group(1)):
+        modifiers.add(_MODIFIER_NAMES.get(name.lower(), name))
+    key = match.group(2)
+    if len(key) == 1:
+        key = key.lower()
+    elif _FUNCTION_KEY.fullmatch(key):
+        key = key.upper()
+    return frozenset(modifiers), key
+
+
+def canonical_accelerator(text: str) -> Optional[str]:
+    """The accelerator in one spelling, ``<Primary><Shift>F9``; ``None`` when it is not one."""
+    parsed = _parse_accelerator(text)
+    if parsed is None:
+        return None
+    modifiers, key = parsed
+    ordered = [m for m in _MODIFIER_ORDER if m in modifiers]
+    ordered += sorted(modifiers - set(_MODIFIER_ORDER))
+    return "".join("<%s>" % m for m in ordered) + key
+
+
+def same_accelerator(left: str, right: str) -> bool:
+    """Whether two accelerators are the same keys, however they are spelled."""
+    a, b = _parse_accelerator(left), _parse_accelerator(right)
+    return a is not None and b is not None and (a[0], a[1].lower()) == (b[0], b[1].lower())
+
+
+def accelerator_label(text: str) -> str:
+    """What a person reads: ``<Primary><Shift>F9`` is ``Ctrl+Shift+F9``. Text that is not an
+    accelerator comes back as it is."""
+    parsed = _parse_accelerator(text)
+    if parsed is None:
+        return text
+    modifiers, key = parsed
+    names = [_LABEL_NAMES[m] for m in _MODIFIER_ORDER if m in modifiers]
+    names += sorted(modifiers - set(_MODIFIER_ORDER))
+    return "+".join(names + [key[0].upper() + key[1:]])
+
+
+def accelerator_problem(text: str) -> Optional[str]:
+    """Why a key combination is no good as a recording shortcut, or ``None``. ``"keys"``: not a
+    key combination at all; ``"modifier"``: a bare key (a letter would take it from every
+    program), only the function keys may stand alone."""
+    parsed = _parse_accelerator(text)
+    if parsed is None:
+        return "keys"
+    modifiers, key = parsed
+    if modifiers & {"Primary", "Alt", "Super"} or _FUNCTION_KEY.fullmatch(key):
+        return None
+    return "modifier"
 
 
 def shortcut_names() -> Dict[str, str]:
@@ -186,10 +263,14 @@ class Shortcuts:
         return found
 
     def conflicts(
-        self, existing: Sequence[str], ignore: Sequence[str] = ()
+        self,
+        existing: Sequence[str],
+        ignore: Sequence[str] = (),
+        wanted: Optional[Mapping[str, str]] = None,
     ) -> List[Tuple[Shortcut, str]]:
         """Our keys that another custom keybinding already uses: ``(ours, that entry's path)``.
-        ``ignore`` are the entries about to be replaced."""
+        ``ignore`` are the entries about to be replaced; ``wanted`` is the accelerator of each
+        slug (default: the default keys)."""
         ours = {path_of(s) for s in SHORTCUTS}
         found = []
         for path in existing:
@@ -197,24 +278,56 @@ class Shortcuts:
                 continue
             binding = self._entry(path, "binding")
             for shortcut in SHORTCUTS:
-                if binding and binding.lower() == shortcut.accelerator.lower():
+                keys = (wanted or {}).get(shortcut.slug, shortcut.accelerator)
+                if binding and same_accelerator(binding, keys):
                     found.append((shortcut, path))
         return found
 
-    def install(self) -> List[str]:
+    def bindings(self) -> Dict[str, Optional[str]]:
+        """The keys of each of our shortcuts now, as ``gsettings`` holds them (``None``: not
+        installed, or no key in the entry)."""
+        self._need_gsettings()
+        existing = self._get_list()
+        result: Dict[str, Optional[str]] = {}
+        for s in SHORTCUTS:
+            binding = self._entry(path_of(s), "binding") if path_of(s) in existing else ""
+            result[s.slug] = binding or None
+        return result
+
+    def _wanted(self, keys: Optional[Mapping[str, str]]) -> Dict[str, str]:
+        """The accelerator of each slug: the default, or the one in ``keys``. A key that is no
+        accelerator, or one used by two of ours, is a ``ShortcutError``."""
+        wanted = {s.slug: s.accelerator for s in SHORTCUTS}
+        for slug, text in (keys or {}).items():
+            if slug not in wanted:
+                raise ShortcutError("no shortcut called %r" % slug)
+            canonical = canonical_accelerator(text)
+            if canonical is None:
+                raise ShortcutError("%r is not a key combination" % text)
+            wanted[slug] = canonical
+        labels = [accelerator_label(text) for text in wanted.values()]
+        if len(set(labels)) != len(labels):
+            raise ShortcutError("two shortcuts have the same keys")
+        return wanted
+
+    def install(self, keys: Optional[Mapping[str, str]] = None) -> List[str]:
         """Add the four shortcuts and replace the prototype's keys (``self.replaced`` says which).
-        Returns the lines to show; raises ``ShortcutError`` when gsettings fails, and
-        ``ShortcutConflict`` when another custom keybinding already uses one of the keys (nothing
-        is changed then)."""
+        ``keys`` maps a slug to the accelerator it should have (default: Ctrl+Shift+F9 to F12),
+        so a shortcut that is already there gets the new keys. Returns the lines to show; raises
+        ``ShortcutError`` when gsettings fails or the keys are no good, and ``ShortcutConflict``
+        when another custom keybinding already uses one of the keys (nothing is changed then)."""
+        wanted_keys = self._wanted(keys)
         self._need_gsettings()
         existing = self._get_list()
         old = self.legacy(existing)
         old_paths = [path for path, _command in old]
-        clash = self.conflicts(existing, old_paths)
+        clash = self.conflicts(existing, old_paths, wanted_keys)
         if clash:
             raise ShortcutConflict(
                 "already used by another custom keybinding: %s"
-                % ", ".join("%s (%s)" % (s.keys, path) for s, path in clash)
+                % ", ".join(
+                    "%s (%s)" % (accelerator_label(wanted_keys[s.slug]), path) for s, path in clash
+                )
             )
         names = shortcut_names()
         for shortcut in SHORTCUTS:
@@ -222,7 +335,7 @@ class Shortcuts:
             self._set(["set", target, "name", gvariant_string(names[shortcut.slug])])
             line = "%s %s" % (shlex.quote(self.command), shortcut.slug)
             self._set(["set", target, "command", gvariant_string(line)])
-            self._set(["set", target, "binding", gvariant_string(shortcut.accelerator)])
+            self._set(["set", target, "binding", gvariant_string(wanted_keys[shortcut.slug])])
         wanted = [path for path in existing if path not in old_paths]
         for shortcut in SHORTCUTS:
             if path_of(shortcut) not in wanted:
@@ -233,7 +346,11 @@ class Shortcuts:
             for key in ("name", "command", "binding"):
                 self._set(["reset", "%s:%s" % (ENTRY_SCHEMA, path), key])
         self.replaced = [command for _path, command in old]
-        return ["%s  %s %s" % (s.keys, shlex.quote(self.command), s.slug) for s in SHORTCUTS]
+        return [
+            "%s  %s %s"
+            % (accelerator_label(wanted_keys[s.slug]), shlex.quote(self.command), s.slug)
+            for s in SHORTCUTS
+        ]
 
     def remove(self) -> List[str]:
         """Take the four shortcuts out. Returns the paths that were removed."""

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Croatian\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Prečace tipkovnice nije bilo moguće postaviti"
 
@@ -53,6 +53,34 @@ msgstr "Pauziraj"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "Zaustavi i spremi"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "Postavi prečace tipkovnice..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "Prečaci tipkovnice"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Kliknite polje, zatim pritisnite nove tipke. Esc poništava."
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "Spremi"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "Pritisnite tipke..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Koristite Ctrl, Alt ili Super zajedno s tipkom."
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Dva prečaca imaju iste tipke."
 
 #: hotrec/recorder.py
 #, python-format

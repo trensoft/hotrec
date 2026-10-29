@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Filipino\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1 && n != 2 && n != 3 && (n%10 == 4 "
 "|| n%10 == 6 || n%10 == 9));\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Hindi maitakda ang mga keyboard shortcut"
 
@@ -53,6 +53,34 @@ msgstr "I-pause"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "Ihinto at i-save"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "Itakda ang mga keyboard shortcut..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "Mga keyboard shortcut"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Mag-click sa isang field, saka pindutin ang mga bagong key. Kinakansela ng Esc."
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "I-save"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "Pindutin ang mga key..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Gamitin ang Ctrl, Alt, o Super kasama ng key."
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Dalawang shortcut ang may parehong key."
 
 #: hotrec/recorder.py
 #, python-format

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Latvian\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Neizdevās iestatīt tastatūras īsinājumtaustiņus"
 
@@ -52,6 +52,34 @@ msgstr "Pauzēt"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "Apturēt un saglabāt"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "Iestatīt tastatūras īsinājumtaustiņus..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "Tastatūras īsinājumtaustiņi"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Noklikšķiniet uz lauka un nospiediet jaunos taustiņus. Esc atceļ."
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "Saglabāt"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "Nospiediet taustiņus..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Izmantojiet Ctrl, Alt vai Super kopā ar taustiņu."
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Diviem īsinājumtaustiņiem ir vieni un tie paši taustiņi."
 
 #: hotrec/recorder.py
 #, python-format

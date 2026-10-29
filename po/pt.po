@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Portuguese\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Não foi possível definir os atalhos de teclado"
 
@@ -52,6 +52,34 @@ msgstr "Pausar"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "Parar e guardar"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "Definir atalhos de teclado..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "Atalhos de teclado"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Clique num campo e prima as novas teclas. Esc cancela."
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "Guardar"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "Prima as teclas..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Use Ctrl, Alt ou Super juntamente com a tecla."
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Dois atalhos têm as mesmas teclas."
 
 #: hotrec/recorder.py
 #, python-format

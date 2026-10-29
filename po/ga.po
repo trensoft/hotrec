@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Irish\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n==2 ? 1 : 2;\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Níorbh fhéidir na aicearraí méarchláir a shocrú"
 
@@ -52,6 +52,34 @@ msgstr "Sos"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "Stop agus sábháil"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "Socraigh aicearraí méarchláir..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "Aicearraí méarchláir"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Cliceáil ar réimse, ansin brúigh na heochracha nua. Cealaíonn Esc."
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "Sábháil"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "Brúigh na heochracha..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Úsáid Ctrl, Alt nó Super in éineacht leis an eochair."
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Tá na heochracha céanna ag dhá aicearra."
 
 #: hotrec/recorder.py
 #, python-format

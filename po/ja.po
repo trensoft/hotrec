@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Japanese\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "キーボードショートカットを設定できませんでした"
 
@@ -52,6 +52,34 @@ msgstr "一時停止"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "停止して保存"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "キーボードショートカットを設定..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "キーボードショートカット"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "欄をクリックしてから、新しいキーを押してください。Esc で取り消します。"
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "保存"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "キーを押してください..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "キーと一緒に Ctrl、Alt、または Super を使ってください。"
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "2 つのショートカットが同じキーになっています。"
 
 #: hotrec/recorder.py
 #, python-format

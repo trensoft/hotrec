@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 00:00+0000\n"
+"POT-Creation-Date: 2026-10-29 11:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Korean\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: hotrec/cli.py
+#: hotrec/cli.py hotrec/keys_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "키보드 단축키를 설정할 수 없습니다"
 
@@ -52,6 +52,34 @@ msgstr "일시 중지"
 #: hotrec/indicator.py
 msgid "Stop and save"
 msgstr "중지하고 저장"
+
+#: hotrec/indicator.py
+msgid "Set keyboard shortcuts..."
+msgstr "키보드 단축키 설정..."
+
+#: hotrec/keys_window.py
+msgid "Keyboard shortcuts"
+msgstr "키보드 단축키"
+
+#: hotrec/keys_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "필드를 클릭한 다음 새 키를 누르세요. Esc를 누르면 취소됩니다."
+
+#: hotrec/keys_window.py
+msgid "Save"
+msgstr "저장"
+
+#: hotrec/keys_window.py
+msgid "Press the keys..."
+msgstr "키를 누르세요..."
+
+#: hotrec/keys_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "키와 함께 Ctrl, Alt 또는 Super를 사용하세요."
+
+#: hotrec/keys_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "두 단축키가 같은 키를 사용합니다."
 
 #: hotrec/recorder.py
 #, python-format
