@@ -437,6 +437,14 @@ def test_two_quick_key_presses_start_one_recording_not_two(world, env):
 # -- encoder failures (0.1.3) ---------------------------------------------------------------
 
 VAAPI_LOG = "gsr error: gsr_video_encoder_vaapi_start: vaInitialize failed\n"
+# What a working VA-API prints to stderr on every start (libva's default level is info).
+LIBVA_INFO_LOG = (
+    "libva info: VA-API version 1.22.0\n"
+    "libva info: Trying to open /usr/lib64/dri/iHD_drv_video.so\n"
+    "libva info: Found init function __vaDriverInit_1_22\n"
+    "libva info: va_openDriver() returns 0\n"
+    "gsr info: using h264 encoder\n"
+)
 
 
 def test_a_vaapi_failure_at_the_start_names_the_missing_driver(world, env):
@@ -496,6 +504,31 @@ def test_a_cancelled_screen_choice_ends_quietly(world, env):
     world.remove_process(state.pid)
     assert recorder.read_state() is None
     assert world.notes == []
+
+
+def test_a_recorder_that_dies_after_a_working_vaapi_start_ends_quietly(world, env):
+    recorder = start(world, env, rec.VIDEO)  # crash, OOM kill, logout: not the encoder
+    state = recorder.read_state()
+    (Path(env["XDG_RUNTIME_DIR"]) / "hotrec" / "recorder.log").write_text(LIBVA_INFO_LOG)
+    world.remove_process(state.pid)
+    assert recorder.read_state() is None
+    assert world.notes == []
+
+
+def test_a_start_that_fails_after_libva_info_lines_gives_the_log_not_the_driver(world, env):
+    world.fail_start = True
+    world.log_text = LIBVA_INFO_LOG + "gsr error: no screen was selected\n"
+    recorder = world.recorder(env)
+    assert recorder.toggle(rec.VIDEO) == 1
+    assert world.notes[0][1].startswith("Could not start the recording (log: ")
+
+
+def test_the_driver_is_named_when_the_error_follows_libva_info_lines(world, env):
+    world.fail_start = True
+    world.log_text = LIBVA_INFO_LOG + VAAPI_LOG
+    recorder = world.recorder(env)
+    assert recorder.toggle(rec.VIDEO) == 1
+    assert "intel-media-driver" in world.notes[0][1]
 
 
 def test_a_sound_recording_that_dies_ends_quietly(world, env):
@@ -592,6 +625,7 @@ def test_a_folder_with_home_in_it_expands(world, env):
         "libva error: /usr/lib64/dri/iHD_drv_video.so init failed",
         "gsr error: could not create the VA-API display",
         "gsr error: vaapi: no device",
+        "gsr error: your gpu does not support h264 video encoding. Install intel-media-driver",
     ],
 )
 def test_every_way_the_vaapi_driver_shows_itself_names_the_driver(line):
@@ -599,14 +633,28 @@ def test_every_way_the_vaapi_driver_shows_itself_names_the_driver(line):
 
 
 @pytest.mark.parametrize(
-    "line", ["nvenc: failed", "CUDA error", "no encoder found", "encoding failed"]
+    "line",
+    [
+        "gsr error: nvenc: failed",
+        "gsr error: CUDA error",
+        "gsr warning: no encoder found",
+        "gsr error: encoding failed",
+    ],
 )
 def test_the_other_encoder_words_get_the_general_text(line):
     assert rec.encoder_problem(line).startswith("The video encoder did not start.")
 
 
 @pytest.mark.parametrize(
-    "log", ["", "cancelled by the user\n", "gsr error: no screen was selected"]
+    "log",
+    [
+        "",
+        "cancelled by the user\n",
+        "gsr error: no screen was selected",
+        LIBVA_INFO_LOG,
+        "no encoder found\nvaInitialize failed\n",  # the words alone, not on an error line
+        "  note: gsr error: vaInitialize failed\n",  # an error in the middle of a line
+    ],
 )
 def test_other_logs_are_no_encoder_problem(log):
     assert rec.encoder_problem(log) is None

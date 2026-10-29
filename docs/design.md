@@ -29,7 +29,8 @@ removed and the next key starts a new recording.
 
 Starting: the recorder is a new session (`start_new_session`), its output goes to `recorder.log`.
 If it is gone within 1.5 s the user gets a notification with the log path, and no state is written.
-When the end of the log shows an encoder failure (`vaInitialize failed` and other VA-API words: the VA-API
+When the end of the log shows an encoder failure on an error line (one that starts with `gsr error:`,
+`gsr warning:` or `libva error:`; the `libva info:` lines of a working VA-API do not count) (`vaInitialize failed` and other VA-API words: the VA-API
 driver is missing, with the package named, `intel-media-driver`; `nvenc`, `cuda`, `encoder`: a general
 encoder message) the notification says that instead. With the portal the encoder starts only after the
 screen is chosen, so the recorder can also end well after the start: `read_state` finds the pid gone,

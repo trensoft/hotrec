@@ -56,10 +56,16 @@ KILL_WAIT_SECONDS = 5.0
 _TICK = 0.1
 
 
-# What the recorder prints when the graphics hardware cannot encode video. ``vaInitialize failed``
-# is the VA-API driver missing (an Intel laptop without intel-media-driver); the rest is any other
-# word of an encoder failure.
-_VAAPI_WORDS = ("vainitialize", "libva", "va-api", "vaapi")
+# What the recorder prints when the graphics hardware cannot encode video. Only the lines that
+# are errors count: gpu-screen-recorder starts all of its lines with ``gsr error:`` or
+# ``gsr warning:``, libva its failures with ``libva error:``. A working VA-API prints
+# ``libva info:`` lines (version, the driver it opened) on every start, and those must not look
+# like a failure. ``vaInitialize failed`` is the VA-API driver missing (an Intel laptop without
+# intel-media-driver); ``your gpu does not support`` is gpu-screen-recorder's own sentence for a
+# codec the driver cannot do, which names that package; the rest is any other word of an encoder
+# failure.
+_ERROR_PREFIXES = ("gsr error:", "gsr warning:", "libva error:")
+_VAAPI_WORDS = ("vainitialize", "libva", "va-api", "vaapi", "your gpu does not support")
 _ENCODER_WORDS = ("nvenc", "cuda", "encoder", "encoding")
 _LOG_TAIL_BYTES = 8192
 
@@ -67,8 +73,10 @@ _LOG_TAIL_BYTES = 8192
 def encoder_problem(log_text: str) -> Optional[str]:
     """What to tell the user when the video recorder's log (its last lines) shows that the
     encoder did not start: what is missing, in the user's language. ``None`` when the log does
-    not look like an encoder failure (a cancelled screen choice, say)."""
-    text = log_text.lower()
+    not look like an encoder failure (a cancelled screen choice, a working VA-API's info lines)."""
+    text = "\n".join(
+        line for line in log_text.lower().splitlines() if line.lstrip().startswith(_ERROR_PREFIXES)
+    )
     if any(word in text for word in _VAAPI_WORDS):
         return _(
             "The VA-API video driver is missing or does not work. "
