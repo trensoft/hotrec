@@ -21,7 +21,7 @@ import shutil
 import sys
 from typing import List, Optional
 
-from hotrec import _, __version__, i18n
+from hotrec import _, __version__, i18n, shellext
 from hotrec.recorder import AUDIO, MODES, VIDEO, VIDEO_AUDIO, Recorder
 from hotrec.shortcuts import ShortcutConflict, ShortcutError, Shortcuts, done_marker
 
@@ -119,7 +119,10 @@ def _do_autostart(recorder: Recorder) -> int:
 
     The marker is written when the shortcuts are set and also when another program holds one of
     the keys (a person has to decide, and a notification at every login would only nag); any other
-    failure (gsettings not up yet) is tried again at the next login. The dot starts either way."""
+    failure (gsettings not up yet) is tried again at the next login. The dot starts either way.
+
+    The Shell extension of the dot over a fullscreen video (``shellext``) is switched on the same
+    way, once, when its package is installed."""
     marker = done_marker()
     if not marker.exists():
         error = _set_shortcuts(recorder)
@@ -129,6 +132,10 @@ def _do_autostart(recorder: Recorder) -> int:
                 marker.write_text("%s\n" % __version__, encoding="utf-8")
             except OSError as problem:
                 _LOG.warning("[autostart] cannot write %s: %s", marker, problem)
+    try:
+        shellext.offer(recorder.notify)
+    except Exception as problem:  # an extra must never keep the dot from starting
+        _LOG.error("[autostart] the dot extension: %s", problem)
     from hotrec import indicator
 
     return indicator.run(recorder, resident=True)

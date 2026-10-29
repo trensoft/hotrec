@@ -19,6 +19,7 @@ Python dependencies (PyGObject comes from the distribution). `%pyproject_install
 | `/usr/share/icons/hicolor/scalable/status/io.github.trensoft.hotrec-recording.svg` | red dot (lit half of the blink) |
 | `/usr/share/icons/hicolor/scalable/status/io.github.trensoft.hotrec-recording-off.svg` | dark red ring (dark half of the blink) |
 | `/usr/share/icons/hicolor/scalable/status/io.github.trensoft.hotrec-paused.svg` | yellow dot |
+| `/usr/share/gnome-shell/extensions/hotrec-dot@trensoft.github.io/{metadata.json,extension.js,logic.js}` | the Shell extension, `gnome-shell/`; in the subpackage `hotrec-gnome-shell-extension` |
 | `/usr/share/locale/<lang>/LC_MESSAGES/io.github.trensoft.hotrec.mo` x 40 | `po/*.po` (`po/LINGUAS`) |
 | `/usr/share/man/man1/hotrec.1` | `packaging/man/hotrec.1` |
 | `/etc/xdg/autostart/io.github.trensoft.hotrec-autostart.desktop` | `data/*-autostart.desktop` (`SYSCONFDIR`, default `/etc`; `%config(noreplace)`) |
@@ -47,6 +48,6 @@ encoder to use.
 
 ## Version and CI
 
-No CI workflow. Version `0.1.3` is in `pyproject.toml`,
+No CI workflow. Version `0.1.4` is in `pyproject.toml`,
 `hotrec/__init__.py`, the metainfo release and the manual page (`tests/test_packaging.py` keeps
 them equal).

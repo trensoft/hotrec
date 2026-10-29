@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 13:57+0000\n"
+"POT-Creation-Date: 2026-10-29 17:06+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Hindi\n"
@@ -161,6 +161,14 @@ msgstr "रिकॉर्डिंग सहेजी गई"
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "रिकॉर्डिंग अधूरी हो सकती है"
+
+#: hotrec/shellext.py
+msgid ""
+"The blinking red dot over a fullscreen video is on. If you do not see it "
+"yet, log out and in once. You can turn it off in the Extensions app."
+msgstr ""
+"फ़ुलस्क्रीन वीडियो के ऊपर झपकने वाला लाल बिंदु चालू है। यदि यह अभी नहीं दिख रहा है, तो "
+"एक बार लॉग आउट करके फिर लॉग इन करें। इसे आप एक्सटेंशन ऐप में बंद कर सकते हैं।"
 
 #: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
 msgid "Record screen and sound"

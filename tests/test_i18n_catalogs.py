@@ -178,6 +178,19 @@ def test_the_driver_package_and_the_names_survive_in_the_notification(lang):
     assert "VA-API" in translated[NEW_IN_013[1]] and "NVENC" in translated[NEW_IN_013[1]], lang
 
 
+DOT_EXTENSION_TEXT = (
+    "The blinking red dot over a fullscreen video is on. If you do not see it yet, "
+    "log out and in once. You can turn it off in the Extensions app."
+)
+
+
+@pytest.mark.parametrize("lang", LANGS)
+def test_the_dot_extension_notification_is_translated(lang):
+    """0.1.4: the one text of ``hotrec autostart`` switching the Shell extension on."""
+    translated = {m: s for m, s, f in entries(PO / ("%s.po" % lang)) if "fuzzy" not in f}
+    assert translated.get(DOT_EXTENSION_TEXT), lang
+
+
 SAME_AS_ENGLISH = {"Hotrec"}
 PAUSE_IS_PAUSE = {"de", "fr", "da", "nb"}
 DEFAULT_IS_DEFAULT = {"fil"}  # the word Filipino desktops use

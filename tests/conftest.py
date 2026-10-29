@@ -30,6 +30,8 @@ def env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Dict[str, str]:
         "HOME": str(home),
         "XDG_CONFIG_HOME": str(home / ".config"),
         "XDG_RUNTIME_DIR": str(runtime),
+        "XDG_DATA_HOME": str(home / ".local" / "share"),
+        "XDG_DATA_DIRS": str(tmp_path / "usr-share"),  # no Shell extension of the developer's
     }
     for name in ("LANGUAGE", "LC_ALL", "LC_MESSAGES", "HOTREC_LOCALEDIR", "XDG_STATE_HOME"):
         monkeypatch.delenv(name, raising=False)

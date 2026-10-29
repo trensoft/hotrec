@@ -1,0 +1,8 @@
+{
+  "uuid": "hotrec-dot@trensoft.github.io",
+  "name": "Hotrec recording dot",
+  "description": "A blinking red dot above everything, even a fullscreen video, while Hotrec records. Reads the state file of Hotrec; shows nothing otherwise.",
+  "shell-version": ["47", "48", "49"],
+  "url": "https://github.com/trensoft/hotrec",
+  "version-name": "0.1.4"
+}

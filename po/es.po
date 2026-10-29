@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 13:57+0000\n"
+"POT-Creation-Date: 2026-10-29 17:06+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Spanish\n"
@@ -161,6 +161,15 @@ msgstr "Grabación guardada"
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "Es posible que la grabación esté incompleta"
+
+#: hotrec/shellext.py
+msgid ""
+"The blinking red dot over a fullscreen video is on. If you do not see it "
+"yet, log out and in once. You can turn it off in the Extensions app."
+msgstr ""
+"El punto rojo parpadeante sobre un vídeo a pantalla completa está activado. "
+"Si todavía no lo ve, cierre sesión y vuelva a iniciarla una vez. Puede "
+"desactivarlo en la aplicación Extensiones."
 
 #: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
 msgid "Record screen and sound"

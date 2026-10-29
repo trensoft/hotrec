@@ -155,7 +155,7 @@ def press(window):
 def test_the_version_line_is_the_version_and_the_maker():
     assert keys_window.version_text() == "%s by %s" % (__version__, DEVELOPER)
     assert keys_window.version_text().endswith(" by TrenSoft")
-    assert __version__ == "0.1.3"
+    assert __version__ == "0.1.4"
 
 
 def test_the_window_has_the_title_the_version_and_four_rows():

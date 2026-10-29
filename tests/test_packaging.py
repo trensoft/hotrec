@@ -155,6 +155,9 @@ def test_install_data_puts_every_file_where_the_package_expects_it(tmp_path):
     assert found == [
         "etc/xdg/autostart/%s-autostart.desktop" % APP_ID,
         "usr/share/applications/%s.desktop" % APP_ID,
+        "usr/share/gnome-shell/extensions/hotrec-dot@trensoft.github.io/extension.js",
+        "usr/share/gnome-shell/extensions/hotrec-dot@trensoft.github.io/logic.js",
+        "usr/share/gnome-shell/extensions/hotrec-dot@trensoft.github.io/metadata.json",
         "usr/share/icons/hicolor/scalable/apps/%s.svg" % APP_ID,
         "usr/share/icons/hicolor/scalable/status/%s-paused.svg" % APP_ID,
         "usr/share/icons/hicolor/scalable/status/%s-recording-off.svg" % APP_ID,
@@ -173,3 +176,99 @@ def test_install_data_puts_every_file_where_the_package_expects_it(tmp_path):
     for path in tmp_path.rglob("*"):
         if path.is_file():
             assert path.stat().st_mode & 0o777 == 0o644, path
+
+
+# -- the Shell extension (0.1.4) -------------------------------------------------------------
+
+EXTENSION = REPO / "gnome-shell" / "hotrec-dot@trensoft.github.io"
+
+
+def test_the_extension_metadata_is_what_gnome_shell_47_to_49_loads():
+    import json
+
+    meta = json.loads((EXTENSION / "metadata.json").read_text(encoding="utf-8"))
+    assert meta["uuid"] == EXTENSION.name
+    assert meta["shell-version"] == ["47", "48", "49"]
+    assert meta["version-name"] == __version__
+    assert {"name", "description"} <= set(meta)
+
+
+def test_the_extension_has_exactly_the_files_the_makefile_installs():
+    make = (REPO / "Makefile").read_text(encoding="utf-8")
+    listed = re.search(r"for f in ([\w. ]+); do", make).group(1).split()
+    assert sorted(listed) == sorted(p.name for p in EXTENSION.iterdir())
+
+
+def test_the_extension_reads_the_state_file_hotrec_writes(tmp_path):
+    """The two sides of the one contract: the field names of State and the directory name."""
+    from dataclasses import fields
+
+    from hotrec import recorder
+
+    logic = (EXTENSION / "logic.js").read_text(encoding="utf-8")
+    for field in fields(recorder.State):
+        if field.name != "file":  # the file name is not used by the dot
+            assert field.name in logic, field.name
+    assert "'state.json'" in logic and "STATE_DIR = 'hotrec'" in logic
+    runtime = tmp_path / "run"
+    runtime.mkdir(mode=0o700)
+    assert recorder.state_dir({"XDG_RUNTIME_DIR": str(runtime)}) == runtime / "hotrec"
+
+
+def test_the_extension_imports_only_what_the_shell_and_the_package_have():
+    text = (EXTENSION / "extension.js").read_text(encoding="utf-8")
+    imports = re.findall(r"from '([^']+)'", text)
+    assert sorted(imports) == sorted(
+        [
+            "gi://St",
+            "gi://Gio",
+            "gi://GLib",
+            "resource:///org/gnome/shell/extensions/extension.js",
+            "resource:///org/gnome/shell/ui/main.js",
+            "./logic.js",
+        ]
+    )
+    assert "trackFullscreen: false" in text  # the point of it: above a fullscreen window
+
+
+def test_the_spec_has_the_extension_subpackage_and_the_main_package_recommends_it():
+    spec = (REPO / "packaging/fedora/hotrec.spec").read_text(encoding="utf-8")
+    assert re.search(
+        r"^Recommends:\s+%\{name\}-gnome-shell-extension = %\{version\}-%\{release\}$",
+        spec,
+        re.MULTILINE,
+    )
+    assert not re.search(r"^Requires:\s+%\{name\}-gnome-shell-extension", spec, re.MULTILINE)
+    sub = spec.split("%package gnome-shell-extension", 1)[1].split("%description", 1)[0]
+    assert "BuildArch:      noarch" in sub
+    assert "Requires:       %{name} = %{version}-%{release}" in sub
+    assert "Requires:       gnome-shell >= 47" in sub
+    files = spec.split("\n%files gnome-shell-extension", 1)[1].split("\n%changelog", 1)[0]
+    assert "%{_datadir}/gnome-shell/extensions/" + EXTENSION.name + "/" in files
+    assert "%license LICENSE" in files
+    main = spec.split("\n%files -f", 1)[1].split("\n%files gnome-shell-extension", 1)[0]
+    assert "gnome-shell/extensions" not in main  # one owner for each file
+
+
+def test_the_changelog_names_the_subpackage_and_the_fallback():
+    spec = (REPO / "packaging/fedora/hotrec.spec").read_text(encoding="utf-8")
+    entry = spec.split("%changelog\n", 1)[1].split("\n\n", 1)[0]
+    assert "hotrec-gnome-shell-extension" in entry and "fallback" in entry
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node missing")
+def test_the_extension_passes_its_node_tests_against_a_fake_desktop():
+    probe = subprocess.run(
+        ["node", "-e", "process.exit(require('node:module').registerHooks ? 0 : 1)"],
+        capture_output=True,
+    )
+    if probe.returncode != 0:
+        pytest.skip("this node has no module.registerHooks (22.15 or newer)")
+    tests = sorted(str(p) for p in (REPO / "tests" / "js").glob("*.test.mjs"))
+    result = subprocess.run(
+        ["node", "--import", str(REPO / "tests/js/fake-gnome.mjs"), "--test", *tests],
+        capture_output=True,
+        text=True,
+        cwd=REPO,
+    )
+    assert result.returncode == 0, result.stdout[-3000:] + result.stderr[-1000:]

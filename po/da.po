@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 13:57+0000\n"
+"POT-Creation-Date: 2026-10-29 17:06+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Danish\n"
@@ -161,6 +161,15 @@ msgstr "Optagelsen er gemt"
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "Optagelsen er muligvis ufuldstændig"
+
+#: hotrec/shellext.py
+msgid ""
+"The blinking red dot over a fullscreen video is on. If you do not see it "
+"yet, log out and in once. You can turn it off in the Extensions app."
+msgstr ""
+"Den blinkende røde prik over en fuldskærmsvideo er slået til. Hvis du ikke "
+"kan se den endnu, skal du logge ud og ind igen én gang. Du kan slå den fra i "
+"appen Udvidelser."
 
 #: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
 msgid "Record screen and sound"

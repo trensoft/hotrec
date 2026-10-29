@@ -105,8 +105,36 @@ custom keybinding is a `ShortcutConflict` (compared as keys, not as text, so `<C
 `<Primary>F9`) and nothing is written; two of ours with the same keys are refused before GNOME is
 touched. Shortcuts that are not installed yet show the default keys (Ctrl+Shift+F9 to F12), which
 is what Save would set; `hotrec autostart` installs exactly these, so the first window shows them
-as they are. At the bottom right: "0.1.3 by TrenSoft" (not translated), as in the settings window of
+as they are. At the bottom right: "0.1.4 by TrenSoft" (not translated), as in the settings window of
 Slideshow Lock. There is no separate About window.
+
+## The dot over a fullscreen video (0.1.4)
+
+`gnome-shell/hotrec-dot@trensoft.github.io/` (GNOME Shell 47-49, ES module extension; subpackage
+`hotrec-gnome-shell-extension`, `Recommends:` of the main package). `extension.js` puts a `St.Widget` in
+`Main.layoutManager.addTopChrome` with `trackFullscreen: false`, `affectsInputRegion: false`, so it is
+above a fullscreen window and never takes a click; `logic.js` is the decision code without any GNOME API
+(tested with plain node, `tests/js/`, against a fake desktop).
+
+The signal is the state file Hotrec already keeps, `$XDG_RUNTIME_DIR/hotrec/state.json` (`pid`, `started`,
+`mode`, `file`, `paused`); no D-Bus name and no second file, so there is one source of truth and nothing
+for Hotrec to forget to write. The extension watches the directory with `Gio.FileMonitor` (the runtime
+directory until Hotrec has made its own). A recording counts only when `/proc/<pid>/stat` has the same start
+time as `started` and the process is not a zombie, the check `Recorder.is_alive` makes, so the state file a
+crashed recorder leaves behind does not leave a dot: while a dot is shown a 500 ms timer blinks it and runs
+that check again; with no dot there is no timer. Red and blinking = recording (also sound only), steady
+yellow = paused (gpu-screen-recorder writes no frames while paused), nothing otherwise.
+
+Switching it on: `hotrec/shellext.py`, called by `hotrec autostart` after the shortcuts. If the package is
+installed (`metadata.json` in a data directory) and the marker `dot-extension-offered` is not there, the
+UUID is added to `org.gnome.shell enabled-extensions` unless it is already there or in
+`disabled-extensions`, the marker is written and one notification says it; a running Shell loads a new
+extension at the next login, which the notification says. An extension the user turns off later is not
+turned on again. If `gsettings` fails nothing is written and the next login tries again.
+
+Not measured: a run in a real GNOME Shell, and whether the portal screen recording contains the dot (the
+monitor stream is the whole stage, so it probably does). If it does, the tray dot is the fallback: turn the
+extension off in the Extensions app.
 
 ## Settings and languages
 

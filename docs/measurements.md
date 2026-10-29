@@ -29,6 +29,14 @@
 - The dot on a real desktop: GTK 3 and AppIndicator are not installed in the test environment;
   only the logic around them is tested, against a stand-in. Whether the AppIndicator extension
   shows the icon, and the icon theme lookup of the two icon names, is unchecked.
+- The Shell extension (0.1.4) in a real GNOME Shell: it loads (GNOME 47-49), the dot shows above a
+  fullscreen video, blinks, goes when the recording ends. Tested: `logic.js` and `extension.js` under
+  node (`tests/js`) against a fake desktop that has the Shell, Gio and GLib calls the extension makes;
+  the real signatures of `addTopChrome`, `Gio.FileMonitor` and `St.Widget` were not compared with the
+  GNOME Shell 47 sources. Whether a portal screen recording contains the dot is not known (the monitor
+  stream is the whole stage, so probably): then the extension is switched off and the tray dot stays.
+  That `gsettings set org.gnome.shell enabled-extensions` makes a running Shell load a new extension
+  without a login is not measured either (the notification says a login may be needed).
 - The packages: the names in `docs/installation-layout.md` are not checked against EPEL 10 or
   Fedora, and nothing was built as an RPM.
 - Translations by a native speaker (none), RTL display of Arabic and Hebrew in a notification.

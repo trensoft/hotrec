@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 13:57+0000\n"
+"POT-Creation-Date: 2026-10-29 17:06+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Irish\n"
@@ -161,6 +161,15 @@ msgstr "Taifeadadh sábháilte"
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "D'fhéadfadh an taifeadadh a bheith neamhiomlán"
+
+#: hotrec/shellext.py
+msgid ""
+"The blinking red dot over a fullscreen video is on. If you do not see it "
+"yet, log out and in once. You can turn it off in the Extensions app."
+msgstr ""
+"Tá an dot dearg lasrach os cionn físeáin lánscáileáin casta air. Mura "
+"bhfeiceann tú go fóill é, logáil amach agus logáil isteach arís uair amháin. "
+"Is féidir leat é a mhúchadh san aip Extensions."
 
 #: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
 msgid "Record screen and sound"

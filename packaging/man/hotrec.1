@@ -1,4 +1,4 @@
-.TH HOTREC 1 "2026-10-29" "hotrec 0.1.3" "User Commands"
+.TH HOTREC 1 "2026-10-29" "hotrec 0.1.4" "User Commands"
 .SH NAME
 hotrec \- record the screen and the sound of a GNOME desktop with keyboard shortcuts
 .SH SYNOPSIS
@@ -63,7 +63,11 @@ keyboard shortcuts (as \fBshortcuts install\fR, with the same notification) and 
 \fB~/.local/state/hotrec/shortcuts\-installed\fR; then it stays as the dot in the top bar. Removing
 that file makes the next login set the shortcuts again. It also writes the file when another
 shortcut holds one of the keys, so that the notification is not repeated at every login; any other
-failure is tried again at the next login. A second \fBautostart\fR exits at once.
+failure is tried again at the next login. When the package \fBhotrec\-gnome\-shell\-extension\fR is
+installed it also adds the extension to the GNOME Shell extensions that are on, once (the file
+\fB~/.local/state/hotrec/dot\-extension\-offered\fR says it was done), and says so in a notification;
+the extension shows a dot over a fullscreen video and takes effect at the next login of the session.
+An extension the user turned off is not turned on again. A second \fBautostart\fR exits at once.
 .TP
 .B indicator
 The dot in the top bar. It is started by a recording and ends with it. Its menu starts with the

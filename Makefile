@@ -10,6 +10,8 @@ SYSCONFDIR ?= /etc
 APP_ID := io.github.trensoft.hotrec
 DATADIR := $(DESTDIR)$(PREFIX)/share
 ICONS := $(DATADIR)/icons/hicolor
+EXT_UUID := hotrec-dot@trensoft.github.io
+EXTDIR := $(DATADIR)/gnome-shell/extensions/$(EXT_UUID)
 
 .PHONY: install-data test lint
 install-data:
@@ -30,6 +32,8 @@ install-data:
 	  $(ICONS)/scalable/status/$(APP_ID)-paused.svg
 	install -Dpm 0644 data/icons/hicolor/symbolic/apps/$(APP_ID)-symbolic.svg \
 	  $(ICONS)/symbolic/apps/$(APP_ID)-symbolic.svg
+	for f in metadata.json extension.js logic.js; do \
+	  install -Dpm 0644 "gnome-shell/$(EXT_UUID)/$$f" "$(EXTDIR)/$$f" || exit 1; done
 	install -Dpm 0644 packaging/man/hotrec.1 $(DATADIR)/man/man1/hotrec.1
 	install -Dpm 0644 data/$(APP_ID)-autostart.desktop \
 	  $(DESTDIR)$(SYSCONFDIR)/xdg/autostart/$(APP_ID)-autostart.desktop

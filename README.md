@@ -46,6 +46,18 @@ replaced by the Hotrec ones; any other custom shortcut stays. To switch the auto
 `/etc/xdg/autostart/io.github.trensoft.hotrec-autostart.desktop` to `~/.config/autostart/` and add
 `Hidden=true`.
 
+The dot over a fullscreen video: the top bar, and the dot in it, are out of sight when a video plays
+fullscreen. The subpackage `hotrec-gnome-shell-extension` (GNOME Shell 47-49; `hotrec` recommends it,
+so `dnf` installs it with it) has a Shell extension that draws a blinking red dot in the top right
+corner, above everything, while Hotrec records (a steady yellow one while paused). It reads only the
+state file Hotrec keeps while it records, and runs no timer otherwise. `hotrec autostart` switches it
+on once per user at login (the GSettings key `org.gnome.shell enabled-extensions`) and says so in a
+notification; a running Shell learns about a new extension at the next login, so **log out and in
+once** after the install. To turn it off use the Extensions app: it is not turned on again (the file
+`~/.local/state/hotrec/dot-extension-offered` records that it was offered; delete it to be offered
+again). Whether the screen recording itself contains the dot has to be seen on the real machine: if
+it does, switch the extension off and rely on the tray dot.
+
 From a checkout, without installing: `./run.sh shortcuts install --command "$PWD/run.sh"`.
 
 ## Settings
