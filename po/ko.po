@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 17:06+0000\n"
+"POT-Creation-Date: 2026-10-29 17:10+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Korean\n"
@@ -161,6 +161,14 @@ msgstr "녹화를 저장했습니다"
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "녹화가 불완전할 수 있습니다"
+
+#: hotrec/shellext.py
+msgid ""
+"The blinking red dot over a fullscreen video is on. You can turn it off in "
+"the Extensions app."
+msgstr ""
+"전체 화면 동영상 위에 깜박이는 빨간 점이 켜져 있습니다. 확장 앱에서 끌 수 있"
+"습니다."
 
 #: hotrec/shellext.py
 msgid ""

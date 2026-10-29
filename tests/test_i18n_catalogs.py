@@ -184,11 +184,20 @@ DOT_EXTENSION_TEXT = (
 )
 
 
+DOT_EXTENSION_KNOWN_TEXT = (
+    "The blinking red dot over a fullscreen video is on. You can turn it off in the Extensions app."
+)
+
+
 @pytest.mark.parametrize("lang", LANGS)
-def test_the_dot_extension_notification_is_translated(lang):
-    """0.1.4: the one text of ``hotrec autostart`` switching the Shell extension on."""
+def test_the_dot_extension_notifications_are_translated(lang):
+    """0.1.4: the two texts of ``hotrec autostart`` switching the Shell extension on: with and
+    without the log out (the Shell already knows the extension)."""
     translated = {m: s for m, s, f in entries(PO / ("%s.po" % lang)) if "fuzzy" not in f}
     assert translated.get(DOT_EXTENSION_TEXT), lang
+    known = translated.get(DOT_EXTENSION_KNOWN_TEXT)
+    assert known and known != translated[DOT_EXTENSION_TEXT], lang
+    assert len(known) < len(translated[DOT_EXTENSION_TEXT]), lang
 
 
 SAME_AS_ENGLISH = {"Hotrec"}

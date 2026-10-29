@@ -12,13 +12,23 @@ from hotrec import shortcuts as sc
 class Gsettings:
     """Answers ``gsettings get|set`` for the two keys of org.gnome.shell."""
 
-    def __init__(self, enabled="@as []", disabled="@as []", fail_set=False, fail_get=None):
+    def __init__(
+        self, enabled="@as []", disabled="@as []", fail_set=False, fail_get=None, shell=None
+    ):
+        # ``shell``: what the running Shell answers to GetExtensionInfo (None: it is not asked)
+        self.shell = shell
+        self.asked = []
         self.values = {"enabled-extensions": enabled, "disabled-extensions": disabled}
         self.fail_set = fail_set
         self.fail_get = fail_get
         self.calls = []
 
     def __call__(self, args):
+        if args[0] == "gdbus":
+            self.asked.append(list(args))
+            if self.shell is None:
+                return 1, "no session bus"
+            return 0, self.shell + "\n"
         self.calls.append(list(args))
         assert args[0] == "gsettings" and args[2] == "org.gnome.shell"
         if args[1] == "get":
@@ -109,6 +119,89 @@ def test_the_first_time_it_is_enabled_and_the_user_is_told(package):
     assert summary == "Hotrec"
     assert "log out and in" in body and "Extensions app" in body
     assert shellext.offered_marker().read_text(encoding="utf-8") == __version__ + "\n"
+
+
+def info(state, uuid=shellext.UUID):
+    """What gdbus prints for GetExtensionInfo of an extension the Shell has loaded."""
+    return "({'uuid': <'%s'>, 'name': <'Hotrec'>, 'state': <%s>},)" % (uuid, state)
+
+
+NOT_KNOWN = "(@a{sv} {},)"  # as gdbus prints an empty dictionary
+
+
+def test_when_the_shell_knows_the_extension_the_user_is_not_asked_to_log_out(package):
+    gs, notes = Gsettings(shell=info("2.0")), Notes()
+    assert offer(gs, notes) is True
+    assert len(gs.sets()) == 1
+    ((summary, body),) = notes.notes
+    assert summary == "Hotrec"
+    assert "log out" not in body and "Extensions app" in body
+    assert body.startswith("The blinking red dot over a fullscreen video is on.")
+    assert shellext.offered_marker().exists()
+    assert gs.asked == [
+        [
+            "gdbus", "call", "--session",
+            "--dest", "org.gnome.Shell.Extensions",
+            "--object-path", "/org/gnome/Shell/Extensions",
+            "--method", "org.gnome.Shell.Extensions.GetExtensionInfo",
+            "hotrec-dot@trensoft.github.io",
+        ]
+    ]  # fmt: skip
+
+
+@pytest.mark.parametrize(
+    "answer",
+    [
+        NOT_KNOWN,  # the package came after the login: the Shell has never seen it
+        None,  # the Shell cannot be asked
+        info("3.0"),  # ERROR
+        info("4.0"),  # OUT_OF_DATE
+        info("99.0"),  # UNINSTALLED
+        "({'uuid': <'hotrec-dot@trensoft.github.io'>},)",  # no state to read
+        info("2.0", uuid="other@example.org"),  # somebody else's extension
+    ],
+)
+def test_in_every_other_case_the_user_is_asked_to_log_out(package, answer):
+    gs, notes = Gsettings(shell=answer), Notes()
+    assert offer(gs, notes) is True
+    assert len(gs.sets()) == 1  # it is still switched on, only the words differ
+    assert "log out and in" in notes.notes[0][1]
+
+
+@pytest.mark.parametrize("state", ["1.0", "2.0", "6.0", "7.0", "8.0", "double 2.0", "uint32 2"])
+def test_a_loaded_extension_in_any_working_state_counts_as_known(package, state):
+    gs, notes = Gsettings(shell=info(state)), Notes()
+    offer(gs, notes)
+    assert "log out" not in notes.notes[0][1]
+
+
+def test_without_gdbus_the_shell_is_not_asked(package):
+    gs, notes = Gsettings(shell=info("2.0")), Notes()
+    shellext.offer(
+        notes, run=gs, which=lambda name: None if name == "gdbus" else "/usr/bin/" + name
+    )
+    assert gs.asked == [] and "log out and in" in notes.notes[0][1]
+
+
+def test_an_answer_of_a_failed_call_is_not_believed():
+    assert (
+        shellext.shell_knows(lambda args: (1, info("2.0")), lambda name: "/usr/bin/gdbus") is False
+    )
+    assert (
+        shellext.shell_knows(lambda args: (0, info("2.0")), lambda name: "/usr/bin/gdbus") is True
+    )
+
+
+def test_the_shell_is_asked_before_the_setting_is_changed(package):
+    order = []
+    gs = Gsettings(shell=info("2.0"))
+
+    def run(args):
+        order.append(args[1] if args[0] == "gsettings" else "gdbus")
+        return gs(args)
+
+    shellext.offer(Notes(), run=run, which=lambda name: "/usr/bin/" + name)
+    assert order == ["get", "get", "gdbus", "set"]
 
 
 def test_an_empty_list_gets_just_ours(package):

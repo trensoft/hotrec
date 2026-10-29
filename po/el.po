@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 17:06+0000\n"
+"POT-Creation-Date: 2026-10-29 17:10+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Greek\n"
@@ -162,6 +162,14 @@ msgstr "Η εγγραφή αποθηκεύτηκε"
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "Η εγγραφή ίσως είναι ελλιπής"
+
+#: hotrec/shellext.py
+msgid ""
+"The blinking red dot over a fullscreen video is on. You can turn it off in "
+"the Extensions app."
+msgstr ""
+"Η κόκκινη αναβοσβήνουσα τελεία πάνω από ένα βίντεο πλήρους οθόνης είναι "
+"ενεργή. Μπορείτε να την απενεργοποιήσετε στην εφαρμογή Επεκτάσεις."
 
 #: hotrec/shellext.py
 msgid ""

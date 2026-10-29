@@ -121,7 +121,8 @@ test -x %{buildroot}%{_bindir}/hotrec
   that shows a blinking red dot above everything, also a fullscreen video, while Hotrec records (a steady yellow
   one while paused). It reads the state file Hotrec keeps; nothing runs while nothing records
 - "hotrec autostart" switches the extension on once per user (gsettings enabled-extensions) when the package is
-  installed, and says in a notification that a log out and in may be needed; an extension the user turned off is
+  installed, and says in a notification that a log out and in may be needed (not when the Shell already knows
+  the extension: then it is on at once); an extension the user turned off is
   left off. The tray dot stays: it is the fallback where the extension cannot be used
 
 * Thu Oct 29 2026 TrenSoft <143960729+trensoft@users.noreply.github.com> - 0.1.3-1

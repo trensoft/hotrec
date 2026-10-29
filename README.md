@@ -52,8 +52,9 @@ so `dnf` installs it with it) has a Shell extension that draws a blinking red do
 corner, above everything, while Hotrec records (a steady yellow one while paused). It reads only the
 state file Hotrec keeps while it records, and runs no timer otherwise. `hotrec autostart` switches it
 on once per user at login (the GSettings key `org.gnome.shell enabled-extensions`) and says so in a
-notification; a running Shell learns about a new extension at the next login, so **log out and in
-once** after the install. To turn it off use the Extensions app: it is not turned on again (the file
+notification. A running Shell learns about a new extension only at the next login: when the package
+was installed after the login, the notification says to **log out and in once**; when it was already
+there, the Shell knows the extension, takes the setting at once, and the notification does not ask for it. To turn it off use the Extensions app: it is not turned on again (the file
 `~/.local/state/hotrec/dot-extension-offered` records that it was offered; delete it to be offered
 again). Whether the screen recording itself contains the dot has to be seen on the real machine: if
 it does, switch the extension off and rely on the tray dot.

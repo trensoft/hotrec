@@ -8,20 +8,22 @@ The tray dot cannot be seen when a fullscreen window covers the top bar. The pac
 above everything, from the state file Hotrec keeps while it records. Hotrec only has to get the
 extension switched on, once per user: ``offer`` (called by ``hotrec autostart`` at login) adds it to
 the GSettings key ``org.gnome.shell enabled-extensions`` when the package is installed, and says so
-in one notification. A running Shell learns about a new extension at the next login, which the
-notification also says.
+in one notification. A running Shell learns about a new extension only at the next login: when the
+package came after the login the notification says so, but when the package was already there the
+Shell knows the extension, takes the new setting at once, and the notification asks for nothing.
 
 Once means once: the file ``offered_marker`` records that it was done (or that the user had the
 extension disabled on purpose), so an extension the user turns off in the Extensions app is not
 turned on again at every login. Removing that file offers it again.
 
-``gsettings`` is run through ``run`` so the tests can answer for it.
+``gsettings`` and ``gdbus`` are run through ``run`` so the tests can answer for them.
 """
 
 from __future__ import annotations
 
 import logging
 import os
+import re
 import shutil
 from pathlib import Path
 from typing import List, Mapping, Optional
@@ -35,6 +37,18 @@ UUID = "hotrec-dot@trensoft.github.io"
 SCHEMA = "org.gnome.shell"
 ENABLED_KEY = "enabled-extensions"
 DISABLED_KEY = "disabled-extensions"
+
+# org.gnome.Shell.Extensions.GetExtensionInfo answers an empty dictionary for an extension the
+# running Shell does not know; otherwise it has the ``state`` (the ExtensionState number).
+SHELL_EXTENSIONS = [
+    "gdbus", "call", "--session",
+    "--dest", "org.gnome.Shell.Extensions",
+    "--object-path", "/org/gnome/Shell/Extensions",
+    "--method", "org.gnome.Shell.Extensions.GetExtensionInfo",
+]  # fmt: skip
+# ENABLED, DISABLED, INITIALIZED, DISABLING, ENABLING: loaded and usable (not ERROR, OUT_OF_DATE,
+# DOWNLOADING or UNINSTALLED)
+LOADED_STATES = {1, 2, 6, 7, 8}
 
 
 def offered_marker(env: Optional[Mapping[str, str]] = None) -> Path:
@@ -63,6 +77,20 @@ def _get_list(run: Run, key: str) -> List[str]:
     if code != 0:
         raise ShortcutError("gsettings get %s %s: %s" % (SCHEMA, key, out.strip()))
     return parse_list(out)
+
+
+def shell_knows(run: Run = _run, which=shutil.which) -> bool:
+    """Whether the running Shell has loaded the extension: then a change of ``enabled-extensions``
+    switches it on at once. False when it does not (the package came after the login), when it is
+    broken or out of date, or when the Shell cannot be asked: the safe answer is "log out and in".
+    """
+    if not which("gdbus"):
+        return False
+    code, out = run(SHELL_EXTENSIONS + [UUID])
+    if code != 0 or UUID not in out:
+        return False
+    state = re.search(r"'state': <(?:double |uint32 |int32 )?(\d+)", out)
+    return bool(state) and int(state.group(1)) in LOADED_STATES
 
 
 def _remember(env: Optional[Mapping[str, str]]) -> None:
@@ -98,17 +126,22 @@ def offer(
     if UUID in enabled or UUID in disabled:
         _remember(env)
         return False
+    known = shell_knows(run, which)  # asked before the change: it is what decides the text
     code, out = run(["gsettings", "set", SCHEMA, ENABLED_KEY, gvariant_list(enabled + [UUID])])
     if code != 0:
         _LOG.warning("[dot-extension] gsettings set %s %s: %s", SCHEMA, ENABLED_KEY, out.strip())
         return False
     _remember(env)
-    notify(
-        APP_NAME,
-        _(
+    if known:
+        text = _(
+            "The blinking red dot over a fullscreen video is on. "
+            "You can turn it off in the Extensions app."
+        )
+    else:
+        text = _(
             "The blinking red dot over a fullscreen video is on. "
             "If you do not see it yet, log out and in once. "
             "You can turn it off in the Extensions app."
-        ),
-    )
+        )
+    notify(APP_NAME, text)
     return True

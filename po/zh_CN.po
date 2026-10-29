@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 17:06+0000\n"
+"POT-Creation-Date: 2026-10-29 17:10+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Chinese (Simplified)\n"
@@ -159,6 +159,12 @@ msgstr "录制已保存"
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "录制可能不完整"
+
+#: hotrec/shellext.py
+msgid ""
+"The blinking red dot over a fullscreen video is on. You can turn it off in "
+"the Extensions app."
+msgstr "全屏视频上方闪烁的红点已开启。您可以在“扩展”应用中将其关闭。"
 
 #: hotrec/shellext.py
 msgid ""
