@@ -12,7 +12,7 @@ keys here are GNOME's own custom shortcuts, so they work in every window.
 | Ctrl+Shift+F12 | pause, and resume |
 
 The same key stops and saves the recording that runs (any of F9, F10, F11 does, whichever started
-it). While a recording runs, a red dot in the top bar shows it, a yellow one that it is paused;
+it). While a recording runs, a red blinking dot in the top bar shows it, a yellow steady one that it is paused;
 its menu has Pause/Resume and Stop and save.
 
 At the top of that menu, in grey, are the four keys as GNOME has them now ("Ctrl+Shift+F9 - Record

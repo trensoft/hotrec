@@ -24,6 +24,8 @@ install-data:
 	install -Dpm 0644 data/icons/hicolor/scalable/apps/$(APP_ID).svg $(ICONS)/scalable/apps/$(APP_ID).svg
 	install -Dpm 0644 data/icons/hicolor/scalable/status/$(APP_ID)-recording.svg \
 	  $(ICONS)/scalable/status/$(APP_ID)-recording.svg
+	install -Dpm 0644 data/icons/hicolor/scalable/status/$(APP_ID)-recording-off.svg \
+	  $(ICONS)/scalable/status/$(APP_ID)-recording-off.svg
 	install -Dpm 0644 data/icons/hicolor/scalable/status/$(APP_ID)-paused.svg \
 	  $(ICONS)/scalable/status/$(APP_ID)-paused.svg
 	install -Dpm 0644 data/icons/hicolor/symbolic/apps/$(APP_ID)-symbolic.svg \

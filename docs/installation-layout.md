@@ -16,7 +16,8 @@ Python dependencies (PyGObject comes from the distribution). `%pyproject_install
 | `/usr/share/metainfo/io.github.trensoft.hotrec.metainfo.xml` | `data/*.metainfo.xml.in`, translated |
 | `/usr/share/icons/hicolor/scalable/apps/io.github.trensoft.hotrec.svg` | application icon |
 | `/usr/share/icons/hicolor/symbolic/apps/io.github.trensoft.hotrec-symbolic.svg` | symbolic icon |
-| `/usr/share/icons/hicolor/scalable/status/io.github.trensoft.hotrec-recording.svg` | red dot |
+| `/usr/share/icons/hicolor/scalable/status/io.github.trensoft.hotrec-recording.svg` | red dot (lit half of the blink) |
+| `/usr/share/icons/hicolor/scalable/status/io.github.trensoft.hotrec-recording-off.svg` | dark red ring (dark half of the blink) |
 | `/usr/share/icons/hicolor/scalable/status/io.github.trensoft.hotrec-paused.svg` | yellow dot |
 | `/usr/share/locale/<lang>/LC_MESSAGES/io.github.trensoft.hotrec.mo` x 40 | `po/*.po` (`po/LINGUAS`) |
 | `/usr/share/man/man1/hotrec.1` | `packaging/man/hotrec.1` |

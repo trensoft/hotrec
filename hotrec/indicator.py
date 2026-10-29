@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 TrenSoft
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-"""The dot in the top bar while a recording runs: red = recording, yellow = paused.
+"""The dot in the top bar while a recording runs: red and blinking = recording, yellow = paused.
 
 The menu has Pause/Resume and Stop and save. Started by a recording, the process lives as long as
 the recording does: when the state says nothing is recording any more (stopped, or the recorder
@@ -41,9 +41,10 @@ from hotrec.shortcuts import (
 _LOG = logging.getLogger(__name__)
 
 ICON_RECORDING = APP_ID + "-recording"
+ICON_RECORDING_OFF = APP_ID + "-recording-off"  # the dark half of the blinking red dot
 ICON_PAUSED = APP_ID + "-paused"
 ICON_IDLE = APP_ID + "-symbolic"
-REFRESH_MILLISECONDS = 500
+REFRESH_MILLISECONDS = 500  # also the blink: the red dot changes at every refresh
 KEYS_REREAD_TICKS = 120  # the shortcut list at the top is read again every minute
 
 
@@ -54,13 +55,14 @@ class View:
     pause_label: str  # the text of the first menu item
 
 
-def view(state: Optional[State]) -> Optional[View]:
-    """What the dot looks like for a state; ``None`` means the dot should go away."""
+def view(state: Optional[State], lit: bool = True) -> Optional[View]:
+    """What the dot looks like for a state; ``None`` means the dot should go away. A recording
+    blinks: ``lit`` False is the dark half. A paused one does not blink."""
     if state is None:
         return None
     if state.paused:
         return View(ICON_PAUSED, _("Paused"), _("Resume"))
-    return View(ICON_RECORDING, _("Recording"), _("Pause"))
+    return View(ICON_RECORDING if lit else ICON_RECORDING_OFF, _("Recording"), _("Pause"))
 
 
 def idle_view() -> View:
@@ -247,7 +249,7 @@ def run(
         ticks += 1
         if ticks % KEYS_REREAD_TICKS == 0:  # the keys can be changed in the GNOME settings too
             show_keys()
-        current = view(recorder.status())
+        current = view(recorder.status(), lit=ticks % 2 == 0)
         if current is None and not resident:
             Gtk.main_quit()
             return False

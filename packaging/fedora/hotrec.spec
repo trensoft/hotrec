@@ -90,6 +90,7 @@ test -x %{buildroot}%{_bindir}/hotrec
 %{_datadir}/icons/hicolor/scalable/apps/%{appid}.svg
 %{_datadir}/icons/hicolor/symbolic/apps/%{appid}-symbolic.svg
 %{_datadir}/icons/hicolor/scalable/status/%{appid}-recording.svg
+%{_datadir}/icons/hicolor/scalable/status/%{appid}-recording-off.svg
 %{_datadir}/icons/hicolor/scalable/status/%{appid}-paused.svg
 %{_mandir}/man1/hotrec.1*
 
@@ -98,6 +99,8 @@ test -x %{buildroot}%{_bindir}/hotrec
 - Recommends: intel-media-driver (the VA-API driver of Intel graphics, RPM Fusion nonfree; weak, never required)
 - When the video encoder does not start, or the recorder ends by itself because of it, a desktop notification
   says what is missing (the VA-API driver, intel-media-driver) instead of only writing to the log
+- The red dot in the top bar blinks while a recording runs (a new icon, hotrec-recording-off, is its dark half);
+  the yellow one of a paused recording stays steady
 - The settings window has a folder for video recordings and one for sound-only recordings (VIDEO_FOLDER and
   AUDIO_FOLDER); a folder that cannot be used falls back to FOLDER
 

@@ -37,6 +37,12 @@ def test_view_for_each_state():
         "Recording",
         "Pause",
     )
+    dark = indicator.view(rec.State(1, 2, "video", "/f"), lit=False)
+    assert (dark.icon, dark.description, dark.pause_label) == (
+        APP_ID + "-recording-off",
+        "Recording",
+        "Pause",
+    )
     paused = indicator.view(rec.State(1, 2, "video", "/f", paused=True))
     assert (paused.icon, paused.description, paused.pause_label) == (
         APP_ID + "-paused",
@@ -189,11 +195,23 @@ def test_the_dot_is_built_updated_and_quits_with_the_recording(tmp_path):
     pause_item, stop_item = dot.menu.items
     assert stop_item.label == "Stop and save"
     assert dot.icons == [
-        (APP_ID + "-recording", "Recording"),
+        (APP_ID + "-recording-off", "Recording"),  # the first refresh is the dark half
         (APP_ID + "-paused", "Paused"),
     ]
     assert pause_item.label == "Resume"  # the last label written while paused
     assert toolkit.quit_called and toolkit.timer[0] == 500
+
+
+def test_a_running_recording_blinks_and_a_paused_one_does_not(tmp_path):
+    running = rec.State(1, 2, "video", "/f")
+    paused = rec.State(1, 2, "video", "/f", paused=True)
+    recorder = StubRecorder(tmp_path, running)
+    toolkit = Toolkit([running] * 5 + [paused] * 3 + [None], recorder)
+    indicator.run(recorder, toolkit.triple())
+    dark, lit = APP_ID + "-recording-off", APP_ID + "-recording"
+    assert [icon for icon, _text in toolkit.indicator.icons] == (
+        [dark, lit, dark, lit, dark] + [APP_ID + "-paused"] * 3
+    )
 
 
 def test_the_menu_runs_the_commands(tmp_path, monkeypatch):
@@ -282,7 +300,7 @@ def test_a_resident_dot_follows_a_recording_and_back(tmp_path):
     dot = toolkit.indicator
     assert [icon for icon, _text in dot.icons] == [
         APP_ID + "-symbolic",  # the first look, nothing recording
-        APP_ID + "-recording",
+        APP_ID + "-recording-off",  # the first refresh is the dark half of the blink
         APP_ID + "-paused",
         APP_ID + "-symbolic",
     ]

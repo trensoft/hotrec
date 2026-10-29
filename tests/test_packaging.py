@@ -104,7 +104,7 @@ def test_the_version_is_one_number():
 
 def test_the_icons_the_code_names_exist():
     base = DATA / "icons" / "hicolor"
-    for name in (indicator.ICON_RECORDING, indicator.ICON_PAUSED):
+    for name in (indicator.ICON_RECORDING, indicator.ICON_RECORDING_OFF, indicator.ICON_PAUSED):
         svg = base / "scalable" / "status" / (name + ".svg")
         assert ET.parse(svg).getroot().tag.endswith("svg")
     assert indicator.ICON_RECORDING.startswith(APP_ID) and indicator.ICON_PAUSED.startswith(APP_ID)
@@ -116,6 +116,8 @@ def test_the_icons_the_code_names_exist():
     recording = (base / "scalable/status" / (indicator.ICON_RECORDING + ".svg")).read_text()
     paused = (base / "scalable/status" / (indicator.ICON_PAUSED + ".svg")).read_text()
     assert "#e01b24" in recording and "#f6d32d" in paused  # red = recording, yellow = paused
+    off = (base / "scalable/status" / (indicator.ICON_RECORDING_OFF + ".svg")).read_text()
+    assert "#e01b24" in off and 'fill="none"' in off  # the dark half is a red ring, not a dot
 
 
 def test_the_manual_page_covers_every_command_key_and_setting():
@@ -155,6 +157,7 @@ def test_install_data_puts_every_file_where_the_package_expects_it(tmp_path):
         "usr/share/applications/%s.desktop" % APP_ID,
         "usr/share/icons/hicolor/scalable/apps/%s.svg" % APP_ID,
         "usr/share/icons/hicolor/scalable/status/%s-paused.svg" % APP_ID,
+        "usr/share/icons/hicolor/scalable/status/%s-recording-off.svg" % APP_ID,
         "usr/share/icons/hicolor/scalable/status/%s-recording.svg" % APP_ID,
         "usr/share/icons/hicolor/symbolic/apps/%s-symbolic.svg" % APP_ID,
         "usr/share/man/man1/hotrec.1",
