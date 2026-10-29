@@ -8,6 +8,8 @@ by a shell, and a value that is wrong gets the default and a warning instead of 
 recording. The keys:
 
     FOLDER        where the recordings are saved (``$HOME``, ``${HOME}`` and a leading ``~`` expand)
+    VIDEO_FOLDER  where video recordings are saved; not set (or empty): FOLDER
+    AUDIO_FOLDER  where sound-only recordings are saved; not set (or empty): FOLDER
     CONTAINER     mkv (plays back even when the recording was cut short) or mp4
     VIDEO_KBPS    video bit rate, kbit/s
     FPS           frames per second
@@ -41,7 +43,7 @@ _NUMBERS: Dict[str, Tuple[int, int, int]] = {
     "AAC_KBPS": (160, 32, 512),
     "MP3_KBPS": (192, 32, 320),
 }
-KEYS = ("FOLDER", "CONTAINER") + tuple(_NUMBERS)
+KEYS = ("FOLDER", "VIDEO_FOLDER", "AUDIO_FOLDER", "CONTAINER") + tuple(_NUMBERS)
 
 # The prototype's names, and what they became. KODOLO, the choice of encoder, has no successor.
 OLD_KEYS = {
@@ -64,9 +66,15 @@ class Config:
     fps: int
     aac_kbps: int
     mp3_kbps: int
+    video_folder: str = ""  # "" = ``folder``
+    audio_folder: str = ""
 
     def folder_path(self, env: Optional[Dict[str, str]] = None) -> Path:
         return Path(expand(self.folder, env))
+
+    def folder_for(self, audio: bool) -> str:
+        """The folder as written for a sound-only recording (``audio``) or a video one."""
+        return (self.audio_folder if audio else self.video_folder) or self.folder
 
 
 def config_home(env: Optional[Dict[str, str]] = None) -> Path:
@@ -168,6 +176,14 @@ def build(values: Dict[str, str], env: Optional[Dict[str, str]] = None) -> Tuple
             warnings.append("FOLDER has both kinds of quote in it, using %s" % config.folder)
         else:
             config = replace(config, folder=folder.strip())
+    for key in ("VIDEO_FOLDER", "AUDIO_FOLDER"):
+        other = values.get(key)
+        if other is None or not other.strip():  # not set, or empty: the same as FOLDER
+            continue
+        if '"' in other and "'" in other:
+            warnings.append("%s has both kinds of quote in it, using FOLDER" % key)
+        else:
+            config = replace(config, **{key.lower(): other.strip()})
     container = values.get("CONTAINER")
     if container is not None:
         if container.lower() in CONTAINERS:
@@ -196,6 +212,7 @@ def render(config: Config, header: str = "") -> str:
     return (
         "%s# Hotrec settings. They apply from the next recording.\n"
         "FOLDER=%s      # where recordings are saved\n"
+        "%s"
         "CONTAINER=%s                  # mkv (plays back even if cut short) or mp4\n"
         "VIDEO_KBPS=%d              # video bit rate, kbit/s\n"
         "FPS=%d\n"
@@ -204,6 +221,7 @@ def render(config: Config, header: str = "") -> str:
         % (
             header,
             _quote(config.folder),
+            _folder_lines(config),
             config.container,
             config.video_kbps,
             config.fps,
@@ -211,6 +229,60 @@ def render(config: Config, header: str = "") -> str:
             config.mp3_kbps,
         )
     )
+
+
+def _folder_lines(config: Config) -> str:
+    """VIDEO_FOLDER and AUDIO_FOLDER: a line when set, else a comment that says they exist."""
+    lines = ""
+    for key, value in (
+        ("VIDEO_FOLDER", config.video_folder),
+        ("AUDIO_FOLDER", config.audio_folder),
+    ):
+        if value:
+            lines += "%s=%s\n" % (key, _quote(value))
+        else:
+            lines += "# %s=    # not set: the FOLDER above\n" % key
+    return lines
+
+
+def portable(path: str, env: Optional[Dict[str, str]] = None) -> str:
+    """A folder as it is written in the settings file: under the home folder it starts with
+    ``$HOME``, so the file survives a moved home."""
+    env = os.environ if env is None else env
+    home = (env.get("HOME") or os.path.expanduser("~")).rstrip("/")
+    if home and path.startswith(home + "/"):
+        return "$HOME/" + path[len(home) + 1 :]
+    return path
+
+
+def set_values(updates: Dict[str, str], env: Optional[Dict[str, str]] = None) -> None:
+    """Write ``KEY=value`` for each update into the settings file, keeping the rest of it
+    (comments, other keys, their order). The last line of a key is the one that counts, so that
+    one is replaced; a key that is not there yet is added at the end; an empty value removes the
+    key's lines (the default applies again). Raises ``OSError`` when the file cannot be written and
+    ``ValueError`` for a value that cannot be written (a line break, both kinds of quote)."""
+    for key in updates:
+        if key not in KEYS:
+            raise ValueError("%s is not a setting" % key)
+    for key, value in updates.items():
+        if "\n" in value or "\r" in value or ('"' in value and "'" in value):
+            raise ValueError("the value of %s cannot be written to the settings file" % key)
+    path = config_path(env)
+    if not path.exists():
+        create(env)
+    lines = path.read_text(encoding="utf-8").splitlines()
+    for key, value in updates.items():
+        found = [
+            i for i, line in enumerate(lines) if (m := _LINE.match(line)) and m.group(1) == key
+        ]
+        if not value:
+            for i in reversed(found):
+                del lines[i]
+        elif found:
+            lines[found[-1]] = "%s=%s" % (key, _quote(value))
+        else:
+            lines.append("%s=%s" % (key, _quote(value)))
+    _write(path, "\n".join(lines) + "\n")
 
 
 def _quote(value: str) -> str:

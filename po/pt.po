@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 11:28+0000\n"
+"POT-Creation-Date: 2026-10-29 13:57+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Portuguese\n"
@@ -66,8 +66,28 @@ msgid "Click a field, then press the new keys. Escape cancels."
 msgstr "Clique num campo e prima as novas teclas. Esc cancela."
 
 #: hotrec/keys_window.py
+msgid "Save videos in"
+msgstr "Guardar os vídeos em"
+
+#: hotrec/keys_window.py
+msgid "Save audio in"
+msgstr "Guardar o áudio em"
+
+#: hotrec/keys_window.py
+msgid "Default"
+msgstr "Predefinição"
+
+#: hotrec/keys_window.py
 msgid "Save"
 msgstr "Guardar"
+
+#: hotrec/keys_window.py
+msgid "Choose a folder"
+msgstr "Escolher uma pasta"
+
+#: hotrec/keys_window.py
+msgid "Could not save the folders"
+msgstr "Não foi possível guardar as pastas"
 
 #: hotrec/keys_window.py
 msgid "Press the keys..."
@@ -82,9 +102,29 @@ msgid "Two of the shortcuts have the same keys."
 msgstr "Dois atalhos têm as mesmas teclas."
 
 #: hotrec/recorder.py
+msgid ""
+"The VA-API video driver is missing or does not work. On Intel graphics, "
+"install intel-media-driver (RPM Fusion nonfree), then try again."
+msgstr ""
+"O controlador de vídeo VA-API não existe ou não funciona. Com gráficos "
+"Intel, instale o intel-media-driver (RPM Fusion nonfree) e tente novamente."
+
+#: hotrec/recorder.py
+msgid ""
+"The video encoder did not start. The graphics driver may lack hardware video "
+"encoding (VA-API or NVENC)."
+msgstr ""
+"O codificador de vídeo não arrancou. O controlador gráfico pode não ter "
+"codificação de vídeo por hardware (VA-API ou NVENC)."
+
+#: hotrec/recorder.py
 #, python-format
 msgid "%s is not a safe place for the state of the recording"
 msgstr "%s não é um local seguro para o estado da gravação"
+
+#: hotrec/recorder.py
+msgid "The recording stopped"
+msgstr "A gravação parou"
 
 #: hotrec/recorder.py
 msgid "Could not find the sound output to record"

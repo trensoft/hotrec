@@ -432,3 +432,181 @@ def test_two_quick_key_presses_start_one_recording_not_two(world, env):
     assert starts == ["gpu-screen-recorder"]  # b found a's recording and stopped it
     assert first.read_state() is None
     assert world.notes[0][0] == "Recording saved"
+
+
+# -- encoder failures (0.1.3) ---------------------------------------------------------------
+
+VAAPI_LOG = "gsr error: gsr_video_encoder_vaapi_start: vaInitialize failed\n"
+
+
+def test_a_vaapi_failure_at_the_start_names_the_missing_driver(world, env):
+    world.fail_start = True
+    world.log_text = VAAPI_LOG
+    recorder = world.recorder(env)
+    assert recorder.toggle(rec.VIDEO_AUDIO) == 1
+    summary, body = world.notes[0]
+    assert summary == "Could not start the recording"
+    assert "intel-media-driver" in body and "VA-API" in body
+    assert body.splitlines()[-1].endswith("recorder.log")
+
+
+def test_any_other_encoder_failure_at_the_start_gets_the_general_text(world, env):
+    world.fail_start = True
+    world.log_text = "gsr error: nvenc: could not open the encoder\n"
+    recorder = world.recorder(env)
+    assert recorder.toggle(rec.VIDEO) == 1
+    body = world.notes[0][1]
+    assert body.startswith("The video encoder did not start.")
+    assert "intel-media-driver" not in body
+
+
+def test_a_failure_that_is_not_the_encoder_keeps_the_log_message(world, env):
+    world.fail_start = True
+    world.log_text = "gsr error: the portal session was cancelled\n"
+    recorder = world.recorder(env)
+    assert recorder.toggle(rec.VIDEO) == 1
+    assert world.notes[0][1].startswith("Could not start the recording (log: ")
+
+
+def test_an_audio_recording_is_never_blamed_on_the_video_encoder(world, env):
+    world.fail_start = True
+    world.log_text = VAAPI_LOG  # cannot be in an ffmpeg log, but the mode decides, not the text
+    recorder = world.recorder(env)
+    assert recorder.toggle(rec.AUDIO) == 1
+    assert world.notes[0][1].startswith("Could not start the recording (log: ")
+
+
+def test_a_recorder_that_dies_of_the_encoder_after_the_start_is_reported_once(world, env):
+    recorder = start(world, env, rec.VIDEO_AUDIO)  # the portal dialog took its time, then...
+    state = recorder.read_state()
+    (Path(env["XDG_RUNTIME_DIR"]) / "hotrec" / "recorder.log").write_text(VAAPI_LOG)
+    world.remove_process(state.pid)
+    assert recorder.read_state() is None
+    assert len(world.notes) == 1
+    summary, body = world.notes[0]
+    assert summary == "The recording stopped" and "intel-media-driver" in body
+    assert recorder.read_state() is None and recorder.status() is None
+    assert len(world.notes) == 1  # the state is gone: no second notification
+
+
+def test_a_cancelled_screen_choice_ends_quietly(world, env):
+    recorder = start(world, env, rec.VIDEO)
+    state = recorder.read_state()
+    (Path(env["XDG_RUNTIME_DIR"]) / "hotrec" / "recorder.log").write_text("cancelled\n")
+    world.remove_process(state.pid)
+    assert recorder.read_state() is None
+    assert world.notes == []
+
+
+def test_a_sound_recording_that_dies_ends_quietly(world, env):
+    recorder = start(world, env, rec.AUDIO)
+    state = recorder.read_state()
+    (Path(env["XDG_RUNTIME_DIR"]) / "hotrec" / "recorder.log").write_text(VAAPI_LOG)
+    world.remove_process(state.pid)
+    assert recorder.read_state() is None
+    assert world.notes == []
+
+
+def test_a_normal_stop_does_not_look_like_an_encoder_failure(world, env):
+    recorder = start(world, env, rec.VIDEO)
+    (Path(env["XDG_RUNTIME_DIR"]) / "hotrec" / "recorder.log").write_text(VAAPI_LOG)
+    assert recorder.toggle(rec.VIDEO) == 0
+    assert [n[0] for n in world.notes] == ["Recording saved"]
+
+
+def test_encoder_problem_reads_only_the_end_of_a_big_log(world, env):
+    recorder = world.recorder(env)
+    log = Path(env["XDG_RUNTIME_DIR"]) / "hotrec" / "recorder.log"
+    rec.state_dir(env)
+    log.write_text(VAAPI_LOG + "x" * 20000)
+    assert rec.encoder_problem(recorder.log_tail()) is None
+    assert len(recorder.log_tail()) == 8192
+    assert recorder.log_tail().count("x") == 8192
+    log.unlink()
+    assert recorder.log_tail() == ""
+
+
+# -- the folder of video and of sound (0.1.3) ------------------------------------------------
+
+
+def settings(env, text):
+    path = config.config_path(env)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text)
+
+
+def test_video_and_sound_go_to_their_own_folders(world, env, tmp_path):
+    settings(env, 'FOLDER="%s/all"\nVIDEO_FOLDER="%s/v"\nAUDIO_FOLDER="%s/a"\n' % ((tmp_path,) * 3))
+    video = start(world, env, rec.VIDEO).read_state().file
+    assert video == str(tmp_path / "v" / "2026-10-29_103000_video.mkv")
+    recorder = world.recorder(env)
+    recorder.toggle(rec.VIDEO)  # stop
+    audio = start(world, env, rec.AUDIO).read_state().file
+    assert audio == str(tmp_path / "a" / "2026-10-29_103000_audio.mp3")
+    assert not (tmp_path / "all").exists()
+
+
+def test_an_unset_kind_uses_folder_and_the_other_kind_its_own(world, env, tmp_path):
+    settings(env, 'FOLDER="%s/all"\nAUDIO_FOLDER="%s/a"\n' % (tmp_path, tmp_path))
+    assert start(world, env, rec.VIDEO).read_state().file.startswith(str(tmp_path / "all"))
+
+
+def test_a_folder_that_cannot_be_used_falls_back_to_folder(world, env, tmp_path):
+    blocker = tmp_path / "file"
+    blocker.write_text("x")  # a file: no folder can be made under it
+    settings(env, 'FOLDER="%s/all"\nVIDEO_FOLDER="%s/sub"\n' % (tmp_path, blocker))
+    recorder = start(world, env, rec.VIDEO)
+    assert recorder.read_state().file.startswith(str(tmp_path / "all"))
+
+
+def test_a_folder_that_is_not_writable_falls_back_to_folder(world, env, tmp_path):
+    locked = tmp_path / "locked"
+    locked.mkdir()
+    locked.chmod(0o500)
+    try:
+        if os.access(locked, os.W_OK):
+            pytest.skip("running as a user the permissions do not stop")
+        settings(env, 'FOLDER="%s/all"\nAUDIO_FOLDER="%s"\n' % (tmp_path, locked))
+        recorder = start(world, env, rec.AUDIO)
+        assert recorder.read_state().file.startswith(str(tmp_path / "all"))
+    finally:
+        locked.chmod(0o700)
+
+
+def test_a_relative_folder_is_not_used(world, env, tmp_path):
+    settings(env, 'FOLDER="%s/all"\nAUDIO_FOLDER="relative/dir"\n' % tmp_path)
+    recorder = start(world, env, rec.AUDIO)
+    assert recorder.read_state().file.startswith(str(tmp_path / "all"))
+
+
+def test_a_folder_with_home_in_it_expands(world, env):
+    settings(env, 'FOLDER="$HOME/all"\nVIDEO_FOLDER="$HOME/clips"\n')
+    recorder = start(world, env, rec.VIDEO)
+    assert recorder.read_state().file.startswith(str(Path(env["HOME"]) / "clips"))
+
+
+@pytest.mark.parametrize(
+    "line",
+    [
+        "gsr error: vaInitialize failed",
+        "libva error: /usr/lib64/dri/iHD_drv_video.so init failed",
+        "gsr error: could not create the VA-API display",
+        "gsr error: vaapi: no device",
+    ],
+)
+def test_every_way_the_vaapi_driver_shows_itself_names_the_driver(line):
+    assert "intel-media-driver" in rec.encoder_problem("info\n" + line + "\n")
+
+
+@pytest.mark.parametrize(
+    "line", ["nvenc: failed", "CUDA error", "no encoder found", "encoding failed"]
+)
+def test_the_other_encoder_words_get_the_general_text(line):
+    assert rec.encoder_problem(line).startswith("The video encoder did not start.")
+
+
+@pytest.mark.parametrize(
+    "log", ["", "cancelled by the user\n", "gsr error: no screen was selected"]
+)
+def test_other_logs_are_no_encoder_problem(log):
+    assert rec.encoder_problem(log) is None

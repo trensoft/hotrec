@@ -39,12 +39,13 @@ Names are the Fedora ones and are **not checked against EPEL 10**:
   GNOME Shell needs its AppIndicator extension (`gnome-shell-extension-appindicator`) to show it:
   a Recommends/doc note, not a hard Requires
 - optional: `xdg-user-dirs` (the default folder follows the Videos folder)
+- optional: `intel-media-driver` (VA-API driver of Intel graphics, RPM Fusion nonfree; `Recommends:`, so a repository without it does not fail the install)
 
 The program never calls Flatpak, and there is no software encoder, because the Fedora FFmpeg has no software H.264
 encoder to use.
 
 ## Version and CI
 
-No CI workflow. Version `0.1.2` is in `pyproject.toml`,
+No CI workflow. Version `0.1.3` is in `pyproject.toml`,
 `hotrec/__init__.py`, the metainfo release and the manual page (`tests/test_packaging.py` keeps
 them equal).

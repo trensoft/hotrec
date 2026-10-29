@@ -147,14 +147,48 @@ def test_the_shortcuts_window_and_menu_are_translated(lang):
     assert translated["Press the keys..."].endswith("...")
 
 
+NEW_IN_013 = (
+    "The VA-API video driver is missing or does not work. On Intel graphics, install "
+    "intel-media-driver (RPM Fusion nonfree), then try again.",
+    "The video encoder did not start. The graphics driver may lack hardware video encoding "
+    "(VA-API or NVENC).",
+    "The recording stopped",
+    "Save videos in",
+    "Save audio in",
+    "Choose a folder",
+    "Default",
+    "Could not save the folders",
+)
+
+
+@pytest.mark.parametrize("lang", LANGS)
+def test_the_encoder_and_folder_texts_are_translated(lang):
+    """0.1.3: the notification for a missing encoder driver and the folder rows."""
+    translated = {m: s for m, s, f in entries(PO / ("%s.po" % lang)) if "fuzzy" not in f}
+    for msgid in NEW_IN_013:
+        assert translated.get(msgid), (lang, msgid)
+
+
+@pytest.mark.parametrize("lang", LANGS)
+def test_the_driver_package_and_the_names_survive_in_the_notification(lang):
+    translated = {m: s for m, s, _f in entries(PO / ("%s.po" % lang))}
+    driver = translated[NEW_IN_013[0]]
+    for word in ("intel-media-driver", "RPM Fusion", "VA-API"):
+        assert word in driver, (lang, word)
+    assert "VA-API" in translated[NEW_IN_013[1]] and "NVENC" in translated[NEW_IN_013[1]], lang
+
+
 SAME_AS_ENGLISH = {"Hotrec"}
 PAUSE_IS_PAUSE = {"de", "fr", "da", "nb"}
+DEFAULT_IS_DEFAULT = {"fil"}  # the word Filipino desktops use
 
 
 @pytest.mark.parametrize("lang", LANGS)
 def test_nothing_was_left_in_english(lang):
     for msgid, msgstr, _f in entries(PO / ("%s.po" % lang)):
         if msgid in SAME_AS_ENGLISH or (msgid == "Pause" and lang in PAUSE_IS_PAUSE):
+            continue
+        if msgid == "Default" and lang in DEFAULT_IS_DEFAULT:
             continue
         assert msgstr != msgid, (lang, msgid)
 

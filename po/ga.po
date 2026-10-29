@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 11:28+0000\n"
+"POT-Creation-Date: 2026-10-29 13:57+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Irish\n"
@@ -66,8 +66,28 @@ msgid "Click a field, then press the new keys. Escape cancels."
 msgstr "Cliceáil ar réimse, ansin brúigh na heochracha nua. Cealaíonn Esc."
 
 #: hotrec/keys_window.py
+msgid "Save videos in"
+msgstr "Sábháil físeáin i"
+
+#: hotrec/keys_window.py
+msgid "Save audio in"
+msgstr "Sábháil fuaim i"
+
+#: hotrec/keys_window.py
+msgid "Default"
+msgstr "Réamhshocrú"
+
+#: hotrec/keys_window.py
 msgid "Save"
 msgstr "Sábháil"
+
+#: hotrec/keys_window.py
+msgid "Choose a folder"
+msgstr "Roghnaigh fillteán"
+
+#: hotrec/keys_window.py
+msgid "Could not save the folders"
+msgstr "Níorbh fhéidir na fillteáin a shábháil"
 
 #: hotrec/keys_window.py
 msgid "Press the keys..."
@@ -82,9 +102,29 @@ msgid "Two of the shortcuts have the same keys."
 msgstr "Tá na heochracha céanna ag dhá aicearra."
 
 #: hotrec/recorder.py
+msgid ""
+"The VA-API video driver is missing or does not work. On Intel graphics, "
+"install intel-media-driver (RPM Fusion nonfree), then try again."
+msgstr ""
+"Tá tiománaí físe VA-API ar iarraidh nó ní oibríonn sé. Le grafaicí Intel, "
+"suiteáil intel-media-driver (RPM Fusion nonfree) agus bain triail eile as."
+
+#: hotrec/recorder.py
+msgid ""
+"The video encoder did not start. The graphics driver may lack hardware video "
+"encoding (VA-API or NVENC)."
+msgstr ""
+"Níor thosaigh an ionchódóir físe. B'fhéidir nach bhfuil ionchódú físe crua-"
+"earraí ag an tiománaí grafaicí (VA-API nó NVENC)."
+
+#: hotrec/recorder.py
 #, python-format
 msgid "%s is not a safe place for the state of the recording"
 msgstr "Ní áit shábháilte é %s do staid an taifeadta"
+
+#: hotrec/recorder.py
+msgid "The recording stopped"
+msgstr "Stop an taifeadadh"
 
 #: hotrec/recorder.py
 msgid "Could not find the sound output to record"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 11:28+0000\n"
+"POT-Creation-Date: 2026-10-29 13:57+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Estonian\n"
@@ -66,8 +66,28 @@ msgid "Click a field, then press the new keys. Escape cancels."
 msgstr "Klõpsake väljal ja vajutage uusi klahve. Esc tühistab."
 
 #: hotrec/keys_window.py
+msgid "Save videos in"
+msgstr "Salvesta videod kausta"
+
+#: hotrec/keys_window.py
+msgid "Save audio in"
+msgstr "Salvesta heli kausta"
+
+#: hotrec/keys_window.py
+msgid "Default"
+msgstr "Vaikimisi"
+
+#: hotrec/keys_window.py
 msgid "Save"
 msgstr "Salvesta"
+
+#: hotrec/keys_window.py
+msgid "Choose a folder"
+msgstr "Vali kaust"
+
+#: hotrec/keys_window.py
+msgid "Could not save the folders"
+msgstr "Kaustade salvestamine ebaõnnestus"
 
 #: hotrec/keys_window.py
 msgid "Press the keys..."
@@ -82,9 +102,29 @@ msgid "Two of the shortcuts have the same keys."
 msgstr "Kahel kiirklahvil on samad klahvid."
 
 #: hotrec/recorder.py
+msgid ""
+"The VA-API video driver is missing or does not work. On Intel graphics, "
+"install intel-media-driver (RPM Fusion nonfree), then try again."
+msgstr ""
+"VA-API videodraiver puudub või ei tööta. Inteli graafika korral paigaldage "
+"intel-media-driver (RPM Fusion nonfree) ja proovige uuesti."
+
+#: hotrec/recorder.py
+msgid ""
+"The video encoder did not start. The graphics driver may lack hardware video "
+"encoding (VA-API or NVENC)."
+msgstr ""
+"Videokodeerija ei käivitunud. Graafikadraiveril võib puududa riistvaraline "
+"videokodeerimine (VA-API või NVENC)."
+
+#: hotrec/recorder.py
 #, python-format
 msgid "%s is not a safe place for the state of the recording"
 msgstr "%s ei ole lindistuse oleku jaoks turvaline koht"
+
+#: hotrec/recorder.py
+msgid "The recording stopped"
+msgstr "Salvestus peatus"
 
 #: hotrec/recorder.py
 msgid "Could not find the sound output to record"

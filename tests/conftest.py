@@ -6,6 +6,7 @@ a clock that only moves when somebody sleeps. No test starts a real recorder."""
 
 from __future__ import annotations
 
+import os
 import signal
 import subprocess
 from datetime import datetime
@@ -68,6 +69,7 @@ class World:
         self.ignore_sigterm = False
         self.write_on_int = True  # a clean stop leaves the file
         self.on_sleep = None
+        self.log_text = ""  # what the recorder prints into its log (the fd it is handed)
 
     # -- /proc -----------------------------------------------------------------------------
 
@@ -107,6 +109,8 @@ class World:
         comm = program[:15]
         pid = self.add_process(comm)
         self.procs[pid]["out"] = command[-1]
+        if self.log_text:
+            os.write(kwargs["stdout"], self.log_text.encode())
         if self.fail_start:
             self.remove_process(pid)
         return FakeProcess(self, pid)

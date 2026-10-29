@@ -1,7 +1,7 @@
 %global appid io.github.trensoft.hotrec
 
 Name:           hotrec
-Version:        0.1.2
+Version:        0.1.3
 Release:        1%{?dist}
 Summary:        Screen and audio recorder for GNOME on Wayland, with global keys and a tray indicator
 # The LICENSE file is the GPL-3.0 text; every .py carries SPDX-License-Identifier: GPL-3.0-or-later.
@@ -43,6 +43,11 @@ Recommends:     xdg-user-dirs
 # GNOME portal. Recommended, not required, so a minimal install still works.
 Recommends:     gnome-shell-extension-appindicator
 Recommends:     xdg-desktop-portal-gnome
+# Intel graphics encode H.264 through VA-API, and the driver for it (iHD, from RPM Fusion nonfree) is not in
+# the base repositories: without it gpu-screen-recorder stops at "vaInitialize failed". Only Recommends: a weak
+# dependency that dnf skips when no enabled repository has the package (EPEL 10 alone does not), so the install
+# and the build never fail on it. Hotrec says in a notification when the driver is what is missing.
+Recommends:     intel-media-driver
 
 %description
 Hotrec records the screen with sound, only the screen, or only the sound, from a global key
@@ -89,6 +94,13 @@ test -x %{buildroot}%{_bindir}/hotrec
 %{_mandir}/man1/hotrec.1*
 
 %changelog
+* Thu Oct 29 2026 TrenSoft <143960729+trensoft@users.noreply.github.com> - 0.1.3-1
+- Recommends: intel-media-driver (the VA-API driver of Intel graphics, RPM Fusion nonfree; weak, never required)
+- When the video encoder does not start, or the recorder ends by itself because of it, a desktop notification
+  says what is missing (the VA-API driver, intel-media-driver) instead of only writing to the log
+- The settings window has a folder for video recordings and one for sound-only recordings (VIDEO_FOLDER and
+  AUDIO_FOLDER); a folder that cannot be used falls back to FOLDER
+
 * Thu Oct 29 2026 TrenSoft <143960729+trensoft@users.noreply.github.com> - 0.1.2-1
 - The menu of the tray indicator lists the keyboard shortcuts as GNOME has them (grey, not clickable) and has
   "Set keyboard shortcuts...": a small window to choose the four key combinations, saved into the GNOME custom

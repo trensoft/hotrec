@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 11:28+0000\n"
+"POT-Creation-Date: 2026-10-29 13:57+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Italian\n"
@@ -66,8 +66,28 @@ msgid "Click a field, then press the new keys. Escape cancels."
 msgstr "Fai clic su un campo, poi premi i nuovi tasti. Esc annulla."
 
 #: hotrec/keys_window.py
+msgid "Save videos in"
+msgstr "Salva i video in"
+
+#: hotrec/keys_window.py
+msgid "Save audio in"
+msgstr "Salva l'audio in"
+
+#: hotrec/keys_window.py
+msgid "Default"
+msgstr "Predefinita"
+
+#: hotrec/keys_window.py
 msgid "Save"
 msgstr "Salva"
+
+#: hotrec/keys_window.py
+msgid "Choose a folder"
+msgstr "Scegli una cartella"
+
+#: hotrec/keys_window.py
+msgid "Could not save the folders"
+msgstr "Impossibile salvare le cartelle"
 
 #: hotrec/keys_window.py
 msgid "Press the keys..."
@@ -82,9 +102,29 @@ msgid "Two of the shortcuts have the same keys."
 msgstr "Due scorciatoie hanno gli stessi tasti."
 
 #: hotrec/recorder.py
+msgid ""
+"The VA-API video driver is missing or does not work. On Intel graphics, "
+"install intel-media-driver (RPM Fusion nonfree), then try again."
+msgstr ""
+"Il driver video VA-API manca o non funziona. Con grafica Intel, installa "
+"intel-media-driver (RPM Fusion nonfree) e riprova."
+
+#: hotrec/recorder.py
+msgid ""
+"The video encoder did not start. The graphics driver may lack hardware video "
+"encoding (VA-API or NVENC)."
+msgstr ""
+"Il codificatore video non è partito. Al driver grafico potrebbe mancare la "
+"codifica video hardware (VA-API o NVENC)."
+
+#: hotrec/recorder.py
 #, python-format
 msgid "%s is not a safe place for the state of the recording"
 msgstr "%s non è un posto sicuro per lo stato della registrazione"
+
+#: hotrec/recorder.py
+msgid "The recording stopped"
+msgstr "La registrazione si è interrotta"
 
 #: hotrec/recorder.py
 msgid "Could not find the sound output to record"

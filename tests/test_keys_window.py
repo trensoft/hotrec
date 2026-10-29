@@ -9,7 +9,7 @@ from types import SimpleNamespace
 import pytest
 from test_shortcuts import Gsettings, make
 
-from hotrec import DEVELOPER, __version__, cli, indicator, keys_window
+from hotrec import DEVELOPER, __version__, cli, config, indicator, keys_window
 from hotrec import shortcuts as sc
 
 DEFAULTS = {s.slug: s.accelerator for s in sc.SHORTCUTS}
@@ -26,6 +26,7 @@ class Widget:
         self.children = []
         self.destroyed = False
         self.presented = 0
+        self.sensitive = True
 
     def __getattr__(self, name):
         if name.startswith(("set_", "add", "get_", "pack_", "attach", "show_")):
@@ -40,6 +41,9 @@ class Widget:
 
     def set_label(self, text):
         self.label = text
+
+    def set_sensitive(self, value):
+        self.sensitive = value
 
     def set_text(self, text):
         self.label = text
@@ -92,9 +96,37 @@ class Keys:
         return self.presses.pop(0)
 
 
-def build(g, presses=(), saved=None, grabs=None, command="hotrec"):
+HOME_FOLDER = "/home/test/Videos/Hotrec"
+
+
+class Folders:
+    """Stands for the settings file and the folder chooser: what the window read, the folders it
+    was asked to write, and the folders the chooser will answer with (None: cancelled)."""
+
+    def __init__(self, video="", audio="", answers=(), fail=None):
+        self.cfg = config.Config(HOME_FOLDER, "mkv", 12000, 30, 160, 192, video, audio)
+        self.answers = list(answers)
+        self.asked = []
+        self.writes = []
+        self.fail = fail
+
+    def load(self):
+        return self.cfg
+
+    def write(self, values):
+        if self.fail:
+            raise self.fail
+        self.writes.append(dict(values))
+
+    def choose(self, window, title, current):
+        self.asked.append((title, current))
+        return self.answers.pop(0)
+
+
+def build(g, presses=(), saved=None, grabs=None, command="hotrec", folders=None):
     gtk = FakeGtk()
     grabs = [] if grabs is None else grabs
+    folders = folders or Folders()
     window = keys_window.KeysWindow(
         gtk,
         lambda: make(g, command),
@@ -104,6 +136,9 @@ def build(g, presses=(), saved=None, grabs=None, command="hotrec"):
         icon_name="id",
         grab=lambda w: grabs.append("grab"),
         release=lambda: grabs.append("release"),
+        load_config=folders.load,
+        write_config=folders.write,
+        choose_folder=folders.choose,
     )
     return window, gtk
 
@@ -120,7 +155,7 @@ def press(window):
 def test_the_version_line_is_the_version_and_the_maker():
     assert keys_window.version_text() == "%s by %s" % (__version__, DEVELOPER)
     assert keys_window.version_text().endswith(" by TrenSoft")
-    assert __version__ == "0.1.2"
+    assert __version__ == "0.1.3"
 
 
 def test_the_window_has_the_title_the_version_and_four_rows():
@@ -139,6 +174,10 @@ def test_the_window_has_the_title_the_version_and_four_rows():
         "Ctrl+Shift+F10",
         "Ctrl+Shift+F11",
         "Ctrl+Shift+F12",
+        HOME_FOLDER,
+        "Default",
+        HOME_FOLDER,
+        "Default",
         "Save",
     ]
 
@@ -414,3 +453,116 @@ def test_event_bare_escape():
     gdk.NAMES = {0xFF1B: "Escape"}
     event = SimpleNamespace(hardware_keycode=1, state=0, group=0)
     assert keys_window.event_to_accelerator(gdk, GTK_MASK, event) == "Escape"
+
+
+# -- the folder of video and of sound (0.1.3) ------------------------------------------------
+
+
+def test_the_folder_rows_name_the_kinds_and_show_the_default_folder():
+    window, gtk = build(Gsettings())
+    labels = [w.label for w in gtk.of("Label")]
+    assert "Save videos in" in labels and "Save audio in" in labels
+    assert [b.label for b in window.folder_buttons.values()] == [HOME_FOLDER, HOME_FOLDER]
+    assert [b.sensitive for b in window.reset_buttons.values()] == [False, False]
+
+
+def test_a_folder_that_is_set_is_shown_and_can_be_reset():
+    folders = Folders(video="$HOME/clips", audio="/data/a")
+    window, gtk = build(Gsettings(), folders=folders)
+    assert window.folder_buttons["audio"].label == "/data/a"
+    assert [b.sensitive for b in window.reset_buttons.values()] == [True, True]
+    window.reset_buttons["audio"].click()
+    assert window.folder_buttons["audio"].label == HOME_FOLDER
+    assert window.reset_buttons["audio"].sensitive is False
+    assert window.reset_buttons["video"].sensitive is True
+
+
+def test_choosing_a_folder_shows_it_and_save_writes_only_that_key():
+    folders = Folders(answers=["/mnt/disk/rec"])
+    window, gtk = build(Gsettings(), folders=folders)
+    window.folder_buttons["audio"].click()
+    assert folders.asked == [("Choose a folder", HOME_FOLDER)]
+    assert window.folder_buttons["audio"].label == "/mnt/disk/rec"
+    assert window.reset_buttons["audio"].sensitive is True
+    assert folders.writes == []  # nothing is written before Save
+    window.save_button.click()
+    assert folders.writes == [{"AUDIO_FOLDER": "/mnt/disk/rec"}]
+    assert window.closed
+
+
+def test_a_cancelled_chooser_changes_nothing():
+    folders = Folders(answers=[None])
+    window, gtk = build(Gsettings(), folders=folders)
+    window.folder_buttons["video"].click()
+    assert window.folder_buttons["video"].label == HOME_FOLDER
+    window.save_button.click()
+    assert folders.writes == []
+
+
+def test_the_chooser_starts_at_the_folder_the_kind_has_now():
+    folders = Folders(video="/data/v", answers=[None])
+    window, gtk = build(Gsettings(), folders=folders)
+    window.folder_buttons["video"].click()
+    assert folders.asked[0][1] == "/data/v"
+
+
+def test_choosing_the_default_folder_again_unsets_the_kind():
+    folders = Folders(video="/data/v", answers=[HOME_FOLDER])
+    window, gtk = build(Gsettings(), folders=folders)
+    window.folder_buttons["video"].click()
+    assert window.folders["video"] == "" and window.reset_buttons["video"].sensitive is False
+    window.save_button.click()
+    assert folders.writes == [{"VIDEO_FOLDER": ""}]  # an empty value removes the line
+
+
+def test_a_folder_under_home_is_written_with_home_in_front(monkeypatch):
+    monkeypatch.setenv("HOME", "/home/test")
+    folders = Folders(answers=["/home/test/Music/rec"])
+    window, gtk = build(Gsettings(), folders=folders)
+    window.folder_buttons["audio"].click()
+    window.save_button.click()
+    assert folders.writes == [{"AUDIO_FOLDER": "$HOME/Music/rec"}]
+
+
+def test_save_writes_the_folders_once_and_the_keys():
+    g = Gsettings()
+    folders = Folders(answers=["/a", "/v"])
+    window, gtk = build(g, folders=folders)
+    window.folder_buttons["audio"].click()
+    window.folder_buttons["video"].click()
+    window.save_button.click()
+    assert folders.writes == [{"VIDEO_FOLDER": "/v", "AUDIO_FOLDER": "/a"}]
+    assert {s.slug: g.entries[(sc.path_of(s), "binding")] for s in sc.SHORTCUTS} == DEFAULTS
+
+
+def test_a_folder_that_cannot_be_saved_is_said_and_the_window_stays():
+    g = Gsettings()
+    folders = Folders(answers=["/a"], fail=PermissionError("denied"))
+    window, gtk = build(g, folders=folders)
+    window.folder_buttons["audio"].click()
+    window.save_button.click()
+    assert window.message.label == "Could not save the folders: denied"
+    assert not window.closed
+    assert not any(c[1] == "set" for c in g.calls)  # the keys were not touched either
+
+
+def test_folders_saved_before_a_key_conflict_are_not_written_again():
+    other = sc.PATH_PREFIX + "custom0/"
+    g = Gsettings("['%s']" % other, {(other, "binding"): "<Control><Shift>F9"})
+    folders = Folders(answers=["/a"])
+    window, gtk = build(g, folders=folders)
+    window.folder_buttons["audio"].click()
+    window.save_button.click()
+    assert window.message.label.startswith("Could not set the keyboard shortcuts: ")
+    assert folders.writes == [{"AUDIO_FOLDER": "/a"}] and not window.closed
+    window.save_button.click()  # the user fixes nothing and tries again
+    assert folders.writes == [{"AUDIO_FOLDER": "/a"}]
+
+
+def test_a_folder_click_gives_up_a_key_that_is_awaited():
+    grabs = []
+    folders = Folders(answers=[None])
+    window, gtk = build(Gsettings(), grabs=grabs, folders=folders)
+    buttons(gtk)["video"].click()
+    window.folder_buttons["audio"].click()
+    assert window.waiting is None and grabs == ["grab", "release"]

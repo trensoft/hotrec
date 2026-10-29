@@ -10,6 +10,11 @@ that another program's custom keybinding already has is refused (and said so), n
 programs is overwritten. At the bottom right the version and the maker, as in the settings
 window of Slideshow Lock ("0.1.2 by TrenSoft").
 
+Below the shortcuts are two folder rows, one for video recordings and one for sound-only ones: a
+button with the folder (it opens a folder chooser) and "Default", which goes back to the
+``FOLDER`` of the settings file. Save writes a changed folder to ``VIDEO_FOLDER`` or
+``AUDIO_FOLDER`` there (``config.set_values``); nothing is written when no folder was changed.
+
 The window shows the keys the entries have now; shortcuts that are not installed yet show the
 default keys (Ctrl+Shift+F9 to F12), which is what Save would set.
 
@@ -20,9 +25,10 @@ press is a separate function, so the logic runs under test without a display.
 from __future__ import annotations
 
 import logging
+import os
 from typing import Any, Callable, Dict, List, Optional
 
-from hotrec import DEVELOPER, _, __version__
+from hotrec import DEVELOPER, _, __version__, config
 from hotrec.shortcuts import (
     SHORTCUTS,
     ShortcutError,
@@ -60,6 +66,10 @@ _MODIFIER_KEYS = frozenset(
 )
 
 EventToKeys = Callable[[Any], Optional[str]]
+ChooseFolder = Callable[[Any, str, str], Optional[str]]  # (window, title, current) -> folder
+
+# The two folder rows: kind, the settings key it is saved under.
+FOLDER_KEYS = (("video", "VIDEO_FOLDER"), ("audio", "AUDIO_FOLDER"))
 
 
 def version_text() -> str:
@@ -113,6 +123,9 @@ class KeysWindow:
         icon_name: Optional[str] = None,
         grab: Callable[[Any], None] = lambda _window: None,
         release: Callable[[], None] = lambda: None,
+        load_config: Callable[[], config.Config] = config.default_config,
+        write_config: Callable[[Dict[str, str]], None] = config.set_values,
+        choose_folder: ChooseFolder = lambda _window, _title, _current: None,
     ) -> None:
         self._shortcuts = shortcuts  # reads the keys now
         self._installer = installer  # writes them: needs to know the command the keys run
@@ -120,6 +133,14 @@ class KeysWindow:
         self._on_saved = on_saved
         self._grab = grab
         self._release = release
+        self._write_config = write_config
+        self._choose_folder = choose_folder
+        cfg = load_config()
+        self.default_folder = cfg.folder  # as written in the settings file
+        self.folders: Dict[str, str] = {"video": cfg.video_folder, "audio": cfg.audio_folder}
+        self._saved_folders = dict(self.folders)  # "" = the default folder
+        self.folder_buttons: Dict[str, Any] = {}
+        self.reset_buttons: Dict[str, Any] = {}
         self.closed = False
         self.waiting: Optional[str] = None  # the slug whose new keys are awaited
         self.keys: Dict[str, str] = self._current_keys()
@@ -152,6 +173,24 @@ class KeysWindow:
             grid.attach(button, 1, row, 1, 1)
             self.buttons[shortcut.slug] = button
         box.pack_start(grid, False, False, 0)
+
+        folder_grid = Gtk.Grid(column_spacing=12, row_spacing=6)
+        folder_names = {"video": _("Save videos in"), "audio": _("Save audio in")}
+        for row, (kind, _key) in enumerate(FOLDER_KEYS):
+            label = Gtk.Label(label=folder_names[kind])
+            label.set_xalign(0)
+            label.set_hexpand(True)
+            choose = Gtk.Button(label=self._folder_text(kind))
+            choose.connect("clicked", self._folder_clicked, kind)
+            reset = Gtk.Button(label=_("Default"))
+            reset.connect("clicked", self._folder_reset, kind)
+            reset.set_sensitive(bool(self.folders[kind]))
+            folder_grid.attach(label, 0, row, 1, 1)
+            folder_grid.attach(choose, 1, row, 1, 1)
+            folder_grid.attach(reset, 2, row, 1, 1)
+            self.folder_buttons[kind] = choose
+            self.reset_buttons[kind] = reset
+        box.pack_start(folder_grid, False, False, 6)
 
         self.message = Gtk.Label(label="")
         self.message.set_xalign(0)
@@ -195,6 +234,49 @@ class KeysWindow:
 
     def _show_keys(self, slug: str) -> None:
         self.buttons[slug].set_label(accelerator_label(self.keys[slug]))
+
+    def _folder_text(self, kind: str) -> str:
+        """The folder of a kind as the button shows it: the real path."""
+        return config.expand(self.folders[kind] or self.default_folder)
+
+    def _show_folder(self, kind: str) -> None:
+        self.folder_buttons[kind].set_label(self._folder_text(kind))
+        self.reset_buttons[kind].set_sensitive(bool(self.folders[kind]))
+
+    def _folder_clicked(self, _button: Any, kind: str) -> None:
+        self._stop_waiting()
+        chosen = self._choose_folder(self.window, _("Choose a folder"), self._folder_text(kind))
+        if not chosen:
+            return
+        written = config.portable(chosen)
+        same = config.expand(written) == config.expand(self.default_folder)
+        self.folders[kind] = "" if same else written
+        self._say("")
+        self._show_folder(kind)
+
+    def _folder_reset(self, _button: Any, kind: str) -> None:
+        self._stop_waiting()
+        self.folders[kind] = ""
+        self._say("")
+        self._show_folder(kind)
+
+    def _save_folders(self) -> bool:
+        """Write the folders that were changed. ``False`` (and a message) when that failed."""
+        changed = {
+            key: self.folders[kind]
+            for kind, key in FOLDER_KEYS
+            if self.folders[kind] != self._saved_folders[kind]
+        }
+        if not changed:
+            return True
+        try:
+            self._write_config(changed)
+        except (OSError, ValueError) as error:
+            _LOG.error("[keys] cannot save the folders: %s", error)
+            self._say("%s: %s" % (_("Could not save the folders"), error))
+            return False
+        self._saved_folders = dict(self.folders)
+        return True
 
     def _stop_waiting(self) -> None:
         if self.waiting is not None:
@@ -242,6 +324,8 @@ class KeysWindow:
         if self.duplicates():
             self._say(_("Two of the shortcuts have the same keys."))
             return
+        if not self._save_folders():
+            return
         try:
             self._installer().install(self.keys)
         except ShortcutError as error:
@@ -274,6 +358,22 @@ def open_window(
         except Exception as error:  # a grab never decides whether the window works
             _LOG.warning("[keys] cannot grab the keyboard: %s", error)
 
+    def choose_folder(window: Any, title: str, current: str) -> Optional[str]:
+        """The desktop's folder chooser (through the portal on GNOME); ``None`` when cancelled."""
+        dialog = Gtk.FileChooserNative.new(
+            title, window, Gtk.FileChooserAction.SELECT_FOLDER, None, None
+        )
+        try:
+            dialog.set_modal(True)
+            dialog.set_create_folders(True)
+            if current and os.path.isdir(current):
+                dialog.set_current_folder(current)
+            if dialog.run() == Gtk.ResponseType.ACCEPT:
+                return str(dialog.get_filename() or "") or None
+            return None
+        finally:
+            dialog.destroy()
+
     def release() -> None:
         try:
             Gdk.Display.get_default().get_default_seat().ungrab()
@@ -289,4 +389,7 @@ def open_window(
         icon_name,
         grab,
         release,
+        lambda: config.load()[0],
+        config.set_values,
+        choose_folder,
     )

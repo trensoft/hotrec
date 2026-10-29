@@ -29,6 +29,16 @@ removed and the next key starts a new recording.
 
 Starting: the recorder is a new session (`start_new_session`), its output goes to `recorder.log`.
 If it is gone within 1.5 s the user gets a notification with the log path, and no state is written.
+When the end of the log shows an encoder failure (`vaInitialize failed` and other VA-API words: the VA-API
+driver is missing, with the package named, `intel-media-driver`; `nvenc`, `cuda`, `encoder`: a general
+encoder message) the notification says that instead. With the portal the encoder starts only after the
+screen is chosen, so the recorder can also end well after the start: `read_state` finds the pid gone,
+removes the state, and, for a video recording whose log shows an encoder failure, sends "The recording
+stopped" with the same text (a cancelled screen choice and sound recordings end quietly, as before).
+
+Folders: `FOLDER` is the default; `VIDEO_FOLDER` and `AUDIO_FOLDER` (set in the shortcuts window or by hand)
+override it per kind. A chosen folder is used when it can be made and written (an unplugged drive cannot);
+else the recording goes to `FOLDER` and the log says why.
 A missing program is named ("gpu-screen-recorder is not installed"). The sound-only mode needs the
 default sink from `pactl get-default-sink`.
 
@@ -94,7 +104,7 @@ custom keybinding is a `ShortcutConflict` (compared as keys, not as text, so `<C
 `<Primary>F9`) and nothing is written; two of ours with the same keys are refused before GNOME is
 touched. Shortcuts that are not installed yet show the default keys (Ctrl+Shift+F9 to F12), which
 is what Save would set; `hotrec autostart` installs exactly these, so the first window shows them
-as they are. At the bottom right: "0.1.2 by TrenSoft" (not translated), as in the settings window of
+as they are. At the bottom right: "0.1.3 by TrenSoft" (not translated), as in the settings window of
 Slideshow Lock. There is no separate About window.
 
 ## Settings and languages

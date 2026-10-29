@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 11:28+0000\n"
+"POT-Creation-Date: 2026-10-29 13:57+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Japanese\n"
@@ -66,8 +66,28 @@ msgid "Click a field, then press the new keys. Escape cancels."
 msgstr "欄をクリックしてから、新しいキーを押してください。Esc で取り消します。"
 
 #: hotrec/keys_window.py
+msgid "Save videos in"
+msgstr "動画の保存先"
+
+#: hotrec/keys_window.py
+msgid "Save audio in"
+msgstr "音声の保存先"
+
+#: hotrec/keys_window.py
+msgid "Default"
+msgstr "既定"
+
+#: hotrec/keys_window.py
 msgid "Save"
 msgstr "保存"
+
+#: hotrec/keys_window.py
+msgid "Choose a folder"
+msgstr "フォルダーを選択"
+
+#: hotrec/keys_window.py
+msgid "Could not save the folders"
+msgstr "フォルダーを保存できませんでした"
 
 #: hotrec/keys_window.py
 msgid "Press the keys..."
@@ -82,9 +102,30 @@ msgid "Two of the shortcuts have the same keys."
 msgstr "2 つのショートカットが同じキーになっています。"
 
 #: hotrec/recorder.py
+msgid ""
+"The VA-API video driver is missing or does not work. On Intel graphics, "
+"install intel-media-driver (RPM Fusion nonfree), then try again."
+msgstr ""
+"VA-API ビデオドライバーがないか、動作していません。Intel グラフィックスでは "
+"intel-media-driver (RPM Fusion nonfree) をインストールして、もう一度お試しく"
+"ださい。"
+
+#: hotrec/recorder.py
+msgid ""
+"The video encoder did not start. The graphics driver may lack hardware video "
+"encoding (VA-API or NVENC)."
+msgstr ""
+"ビデオエンコーダーが起動しませんでした。グラフィックドライバーにハードウェア"
+"ビデオエンコード (VA-API または NVENC) がない可能性があります。"
+
+#: hotrec/recorder.py
 #, python-format
 msgid "%s is not a safe place for the state of the recording"
 msgstr "%s は録画の状態を置く場所として安全ではありません"
+
+#: hotrec/recorder.py
+msgid "The recording stopped"
+msgstr "録画が停止しました"
 
 #: hotrec/recorder.py
 msgid "Could not find the sound output to record"

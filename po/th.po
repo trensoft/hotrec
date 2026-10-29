@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 11:28+0000\n"
+"POT-Creation-Date: 2026-10-29 13:57+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Thai\n"
@@ -66,8 +66,28 @@ msgid "Click a field, then press the new keys. Escape cancels."
 msgstr "คลิกที่ช่อง แล้วกดแป้นใหม่ กด Esc เพื่อยกเลิก"
 
 #: hotrec/keys_window.py
+msgid "Save videos in"
+msgstr "บันทึกวิดีโอไว้ที่"
+
+#: hotrec/keys_window.py
+msgid "Save audio in"
+msgstr "บันทึกเสียงไว้ที่"
+
+#: hotrec/keys_window.py
+msgid "Default"
+msgstr "ค่าเริ่มต้น"
+
+#: hotrec/keys_window.py
 msgid "Save"
 msgstr "บันทึก"
+
+#: hotrec/keys_window.py
+msgid "Choose a folder"
+msgstr "เลือกโฟลเดอร์"
+
+#: hotrec/keys_window.py
+msgid "Could not save the folders"
+msgstr "ไม่สามารถบันทึกโฟลเดอร์ได้"
 
 #: hotrec/keys_window.py
 msgid "Press the keys..."
@@ -82,9 +102,29 @@ msgid "Two of the shortcuts have the same keys."
 msgstr "แป้นพิมพ์ลัดสองรายการใช้แป้นเดียวกัน"
 
 #: hotrec/recorder.py
+msgid ""
+"The VA-API video driver is missing or does not work. On Intel graphics, "
+"install intel-media-driver (RPM Fusion nonfree), then try again."
+msgstr ""
+"ไม่มีไดรเวอร์วิดีโอ VA-API หรือไดรเวอร์ทำงานไม่ได้ หากใช้กราฟิก Intel ให้ติดตั้ง intel-"
+"media-driver (RPM Fusion nonfree) แล้วลองอีกครั้ง"
+
+#: hotrec/recorder.py
+msgid ""
+"The video encoder did not start. The graphics driver may lack hardware video "
+"encoding (VA-API or NVENC)."
+msgstr ""
+"ตัวเข้ารหัสวิดีโอไม่เริ่มทำงาน ไดรเวอร์กราฟิกอาจไม่รองรับการเข้ารหัสวิดีโอด้วยฮาร์ดแวร์ (VA-API "
+"หรือ NVENC)"
+
+#: hotrec/recorder.py
 #, python-format
 msgid "%s is not a safe place for the state of the recording"
 msgstr "%s ไม่ใช่ที่ปลอดภัยสำหรับเก็บสถานะการบันทึก"
+
+#: hotrec/recorder.py
+msgid "The recording stopped"
+msgstr "การบันทึกหยุดลง"
 
 #: hotrec/recorder.py
 msgid "Could not find the sound output to record"

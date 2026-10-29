@@ -54,6 +54,8 @@ From a checkout, without installing: `./run.sh shortcuts install --command "$PWD
 
 ```
 FOLDER="$HOME/Videos/Hotrec"   # where recordings are saved
+# VIDEO_FOLDER=                # not set: the FOLDER above (the shortcuts window sets these two)
+# AUDIO_FOLDER=
 CONTAINER=mkv                  # mkv (plays back even if cut short) or mp4
 VIDEO_KBPS=12000               # video bit rate, kbit/s
 FPS=30

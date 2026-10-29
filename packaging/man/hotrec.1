@@ -1,4 +1,4 @@
-.TH HOTREC 1 "2026-10-29" "hotrec 0.1.2" "User Commands"
+.TH HOTREC 1 "2026-10-29" "hotrec 0.1.3" "User Commands"
 .SH NAME
 hotrec \- record the screen and the sound of a GNOME desktop with keyboard shortcuts
 .SH SYNOPSIS
@@ -101,7 +101,9 @@ switches it off with a file of the same name in \fB~/.config/autostart\fR that h
 The settings (\fB$XDG_CONFIG_HOME\fR is honoured). Written on the first run; if the old
 \fB~/.config/felvetel.conf\fR exists, its values are taken over once. Keys, one per line:
 \fBFOLDER\fR (default: a Hotrec folder in the Videos folder; \fB$HOME\fR and a leading \fB~\fR
-expand), \fBCONTAINER\fR (\fBmkv\fR, the default, plays back even when a recording was cut short,
+expand), \fBVIDEO_FOLDER\fR and \fBAUDIO_FOLDER\fR (the folder of video and of sound\-only
+recordings; not set, or empty: \fBFOLDER\fR; a folder that does not exist and cannot be made, or is
+not writable, is replaced by \fBFOLDER\fR), \fBCONTAINER\fR (\fBmkv\fR, the default, plays back even when a recording was cut short,
 or \fBmp4\fR), \fBVIDEO_KBPS\fR (12000), \fBFPS\fR (30), \fBAAC_KBPS\fR (160, the sound of a video
 recording), \fBMP3_KBPS\fR (192, a sound\-only recording). The file is read, never run; a wrong
 value is reported in the log and replaced by the default.

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 11:28+0000\n"
+"POT-Creation-Date: 2026-10-29 13:57+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Hindi\n"
@@ -66,8 +66,28 @@ msgid "Click a field, then press the new keys. Escape cancels."
 msgstr "किसी फ़ील्ड पर क्लिक करें, फिर नई कुंजियाँ दबाएँ। Esc रद्द करता है।"
 
 #: hotrec/keys_window.py
+msgid "Save videos in"
+msgstr "वीडियो यहाँ सहेजें"
+
+#: hotrec/keys_window.py
+msgid "Save audio in"
+msgstr "ऑडियो यहाँ सहेजें"
+
+#: hotrec/keys_window.py
+msgid "Default"
+msgstr "डिफ़ॉल्ट"
+
+#: hotrec/keys_window.py
 msgid "Save"
 msgstr "सहेजें"
+
+#: hotrec/keys_window.py
+msgid "Choose a folder"
+msgstr "फ़ोल्डर चुनें"
+
+#: hotrec/keys_window.py
+msgid "Could not save the folders"
+msgstr "फ़ोल्डर सहेजे नहीं जा सके"
 
 #: hotrec/keys_window.py
 msgid "Press the keys..."
@@ -82,9 +102,29 @@ msgid "Two of the shortcuts have the same keys."
 msgstr "दो शॉर्टकट की कुंजियाँ एक जैसी हैं।"
 
 #: hotrec/recorder.py
+msgid ""
+"The VA-API video driver is missing or does not work. On Intel graphics, "
+"install intel-media-driver (RPM Fusion nonfree), then try again."
+msgstr ""
+"VA-API वीडियो ड्राइवर मौजूद नहीं है या काम नहीं कर रहा। Intel ग्राफ़िक्स पर intel-"
+"media-driver (RPM Fusion nonfree) इंस्टॉल करें और फिर कोशिश करें।"
+
+#: hotrec/recorder.py
+msgid ""
+"The video encoder did not start. The graphics driver may lack hardware video "
+"encoding (VA-API or NVENC)."
+msgstr ""
+"वीडियो एन्कोडर शुरू नहीं हुआ। हो सकता है ग्राफ़िक्स ड्राइवर में हार्डवेयर वीडियो एन्कोडिंग "
+"(VA-API या NVENC) न हो।"
+
+#: hotrec/recorder.py
 #, python-format
 msgid "%s is not a safe place for the state of the recording"
 msgstr "%s रिकॉर्डिंग की स्थिति रखने के लिए सुरक्षित जगह नहीं है"
+
+#: hotrec/recorder.py
+msgid "The recording stopped"
+msgstr "रिकॉर्डिंग रुक गई"
 
 #: hotrec/recorder.py
 msgid "Could not find the sound output to record"

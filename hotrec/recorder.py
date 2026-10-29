@@ -56,6 +56,32 @@ KILL_WAIT_SECONDS = 5.0
 _TICK = 0.1
 
 
+# What the recorder prints when the graphics hardware cannot encode video. ``vaInitialize failed``
+# is the VA-API driver missing (an Intel laptop without intel-media-driver); the rest is any other
+# word of an encoder failure.
+_VAAPI_WORDS = ("vainitialize", "libva", "va-api", "vaapi")
+_ENCODER_WORDS = ("nvenc", "cuda", "encoder", "encoding")
+_LOG_TAIL_BYTES = 8192
+
+
+def encoder_problem(log_text: str) -> Optional[str]:
+    """What to tell the user when the video recorder's log (its last lines) shows that the
+    encoder did not start: what is missing, in the user's language. ``None`` when the log does
+    not look like an encoder failure (a cancelled screen choice, say)."""
+    text = log_text.lower()
+    if any(word in text for word in _VAAPI_WORDS):
+        return _(
+            "The VA-API video driver is missing or does not work. "
+            "On Intel graphics, install intel-media-driver (RPM Fusion nonfree), then try again."
+        )
+    if any(word in text for word in _ENCODER_WORDS):
+        return _(
+            "The video encoder did not start. "
+            "The graphics driver may lack hardware video encoding (VA-API or NVENC)."
+        )
+    return None
+
+
 class RecorderError(Exception):
     """A failure the user should hear about; the message is already translated."""
 
@@ -235,7 +261,30 @@ class Recorder:
         if self.is_alive(state):
             return state
         self.clear_state()
+        self._ended(state)
         return None
+
+    def log_tail(self) -> str:
+        """The end of the video recorder's log (empty when there is none)."""
+        try:
+            with open(self.dir / "recorder.log", "rb") as handle:
+                handle.seek(0, os.SEEK_END)
+                handle.seek(max(0, handle.tell() - _LOG_TAIL_BYTES))
+                return handle.read().decode("utf-8", errors="replace")
+        except OSError:
+            return ""
+
+    def _ended(self, state: State) -> None:
+        """A recording whose recorder is gone without a stop command (the stop clears the state
+        itself). When it died of an encoder failure, which with the portal can come well after
+        the start (the screen is chosen first), the user is told what is missing; a cancelled
+        screen choice or a sound recording ends quietly, as before."""
+        if state.mode == AUDIO:
+            return
+        hint = encoder_problem(self.log_tail())
+        if hint:
+            _LOG.error("[recording] the recorder ended by itself: %s", hint)
+            self.notify(_("The recording stopped"), "%s\n%s" % (hint, self.dir / "recorder.log"))
 
     def write_state(self, state: State) -> None:
         tmp = self.dir / ("state.json.%d.tmp" % os.getpid())
@@ -318,16 +367,34 @@ class Recorder:
             return 1
         return 0
 
+    def target_folder(self, cfg: config.Config, mode: str) -> Path:
+        """The folder this recording is saved in, made if it is not there yet. The one chosen for
+        this kind of recording (video or sound) when it can be used (it exists or can be made, and
+        is writable: a drive that is not plugged in is not); else the ``FOLDER`` of the settings,
+        and when that cannot be made either, a ``RecorderError``."""
+        default = cfg.folder_path(self.env)
+        written = cfg.folder_for(mode == AUDIO)
+        if written != cfg.folder:
+            chosen = Path(config.expand(written, self.env))
+            try:
+                if chosen.is_absolute():
+                    chosen.mkdir(parents=True, exist_ok=True)
+                    if os.access(chosen, os.W_OK | os.X_OK):
+                        return chosen
+            except OSError:
+                pass
+            _LOG.warning("[folder] %s cannot be used, saving in %s", chosen, default)
+        try:
+            default.mkdir(parents=True, exist_ok=True)
+        except OSError as error:
+            raise RecorderError(_("Could not create the folder %s") % default) from error
+        return default
+
     def _launch(self, mode: str) -> None:
         cfg, warnings = config.load(self.env)
         for warning in warnings:
             _LOG.warning("[config] %s", warning)
-        folder = cfg.folder_path(self.env)
-        try:
-            folder.mkdir(parents=True, exist_ok=True)
-        except OSError as error:
-            raise RecorderError(_("Could not create the folder %s") % folder) from error
-        out = recording_path(folder, mode, cfg, self.now())
+        out = recording_path(self.target_folder(cfg, mode), mode, cfg, self.now())
         if mode == AUDIO:
             command = audio_command(cfg, self.default_monitor(), out)
         else:
@@ -356,14 +423,22 @@ class Recorder:
             self.sleep(_TICK)
             waited += _TICK
             if proc.poll() is not None:
-                raise RecorderError(_("Could not start the recording (log: %s)") % log_path)
+                raise RecorderError(self._start_failure(mode, log_path))
         info = proc_identity(proc.pid, self.proc_root)
         if info is None:
-            raise RecorderError(_("Could not start the recording (log: %s)") % log_path)
+            raise RecorderError(self._start_failure(mode, log_path))
         self.write_state(
             State(pid=proc.pid, started=int(info["started"]), mode=mode, file=str(out))  # type: ignore[call-overload]
         )
         self.spawn_indicator()
+
+    def _start_failure(self, mode: str, log_path: Path) -> str:
+        """Why a recorder that ended at once did not start: the missing encoder driver when the
+        log says so, else the log's place."""
+        hint = encoder_problem(self.log_tail()) if mode != AUDIO else None
+        if hint:
+            return "%s\n%s" % (hint, log_path)
+        return _("Could not start the recording (log: %s)") % log_path
 
     def spawn_indicator(self) -> None:
         """The red dot. It holds a lock, so a second one exits at once; it quits by itself when
