@@ -76,6 +76,7 @@ test -x %{buildroot}%{_bindir}/hotrec
 %files -f %{pyproject_files} -f %{appid}.lang
 %license LICENSE
 %doc README.md
+%{_bindir}/hotrec
 %{_datadir}/applications/%{appid}.desktop
 %{_datadir}/metainfo/%{appid}.metainfo.xml
 %{_datadir}/icons/hicolor/scalable/apps/%{appid}.svg
