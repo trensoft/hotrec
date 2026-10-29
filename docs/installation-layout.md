@@ -20,10 +20,12 @@ Python dependencies (PyGObject comes from the distribution). `%pyproject_install
 | `/usr/share/icons/hicolor/scalable/status/io.github.trensoft.hotrec-paused.svg` | yellow dot |
 | `/usr/share/locale/<lang>/LC_MESSAGES/io.github.trensoft.hotrec.mo` x 40 | `po/*.po` (`po/LINGUAS`) |
 | `/usr/share/man/man1/hotrec.1` | `packaging/man/hotrec.1` |
+| `/etc/xdg/autostart/io.github.trensoft.hotrec-autostart.desktop` | `data/*-autostart.desktop` (`SYSCONFDIR`, default `/etc`; `%config(noreplace)`) |
 | `%license LICENSE` | |
 
 The target needs `make`, `msgfmt` (gettext) at build time; all files are mode 0644. It does not
-touch icon caches or the desktop database (the package's scriptlets do that).
+touch icon caches or the desktop database (the package's scriptlets do that). Hotrec has no scriptlet
+that sets keys: they are per user, and the autostart entry above does it at the user's login.
 
 ## Runtime, as a proposal for `Requires:`
 
@@ -43,6 +45,6 @@ encoder to use.
 
 ## Version and CI
 
-No CI workflow. Version `0.1.0` is in `pyproject.toml`,
+No CI workflow. Version `0.1.1` is in `pyproject.toml`,
 `hotrec/__init__.py`, the metainfo release and the manual page (`tests/test_packaging.py` keeps
 them equal).

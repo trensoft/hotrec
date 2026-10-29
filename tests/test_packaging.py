@@ -47,6 +47,30 @@ def test_the_launcher_names_real_commands_and_the_actions_it_lists():
     }
 
 
+def test_the_autostart_entry_runs_a_command_the_cli_has_and_only_in_gnome():
+    lines = (DATA / (APP_ID + "-autostart.desktop")).read_text(encoding="utf-8").splitlines()
+    assert lines[0] == "[Desktop Entry]"
+    entry = dict(line.split("=", 1) for line in lines[1:] if "=" in line)
+    assert entry["Type"] == "Application" and entry["TryExec"] == "hotrec"
+    assert entry["Exec"] == "hotrec autostart"
+    cli.build_parser().parse_args(entry["Exec"].split()[1:])
+    assert entry["NoDisplay"] == "true" and entry["OnlyShowIn"] == "GNOME;"
+    assert entry["X-GNOME-Autostart-enabled"] == "true"
+    assert entry["Icon"] == APP_ID
+
+
+def test_the_spec_follows_the_version_and_installs_the_autostart_entry():
+    spec = (REPO / "packaging/fedora/hotrec.spec").read_text(encoding="utf-8")
+    assert re.search(r"^Version:\s+%s$" % re.escape(__version__), spec, re.MULTILINE)
+    entry = "%{_sysconfdir}/xdg/autostart/%{appid}-autostart.desktop"
+    files = spec.split("\n%files", 1)[1].split("\n%changelog", 1)[0]
+    assert entry in files
+    assert "SYSCONFDIR=%{_sysconfdir}" in spec
+    assert "desktop-file-validate %{buildroot}" + entry in spec  # %check
+    changelog = spec.split("%changelog\n", 1)[1]
+    assert re.match(r"\* \w{3} \w{3} \d+ \d{4} .* - %s-1\n" % re.escape(__version__), changelog)
+
+
 def test_the_action_names_are_the_shortcut_names():
     """One text, one translation: the launcher's actions and the GNOME shortcuts read alike."""
     sections = desktop_sections()
@@ -127,6 +151,7 @@ def test_install_data_puts_every_file_where_the_package_expects_it(tmp_path):
         if p.is_file() and p.suffix != ".mo"
     )
     assert found == [
+        "etc/xdg/autostart/%s-autostart.desktop" % APP_ID,
         "usr/share/applications/%s.desktop" % APP_ID,
         "usr/share/icons/hicolor/scalable/apps/%s.svg" % APP_ID,
         "usr/share/icons/hicolor/scalable/status/%s-paused.svg" % APP_ID,

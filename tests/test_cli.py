@@ -89,6 +89,7 @@ def test_the_help_has_no_cpu_mode(capsys):
 class FakeShortcuts:
     made = []
     error = None
+    replaced = []
 
     def __init__(self, command, **_kw):
         FakeShortcuts.made.append(command)
@@ -158,6 +159,82 @@ def test_setup_failure_is_a_notification_too(shortcuts):
     shortcuts.error = "gsettings not found"
     assert cli.main(["setup"]) == 1
     assert FakeRecorder.notes == [("Could not set the keyboard shortcuts", "gsettings not found")]
+
+
+def test_shortcuts_install_says_which_prototype_keys_it_replaced(shortcuts, capsys):
+    shortcuts.replaced = ["felvetel.sh kep"]
+    assert cli.main(["shortcuts", "install"]) == 0
+    assert "replaced the old key that ran: felvetel.sh kep" in capsys.readouterr().out
+    shortcuts.replaced = []
+
+
+class Dot:
+    """What ``indicator.run`` is called with by the autostart command."""
+
+    calls = []
+
+
+@pytest.fixture
+def dot(monkeypatch):
+    from hotrec import indicator
+
+    Dot.calls = []
+    monkeypatch.setattr(
+        indicator, "run", lambda recorder, resident=False: Dot.calls.append(resident) or 0
+    )
+    return Dot
+
+
+def test_autostart_sets_the_shortcuts_the_first_time_and_keeps_the_dot(shortcuts, dot):
+    marker = sc.done_marker()
+    assert not marker.exists()
+    assert cli.main(["autostart"]) == 0
+    assert shortcuts.made == ["/usr/bin/hotrec"]
+    assert FakeRecorder.notes[0][0] == "Keyboard shortcuts are set"
+    assert marker.read_text(encoding="utf-8") == __version__ + "\n"
+    assert dot.calls == [True]  # the resident dot
+
+
+def test_autostart_does_not_set_them_again(shortcuts, dot):
+    cli.main(["autostart"])
+    shortcuts.made.clear()
+    FakeRecorder.notes.clear()
+    assert cli.main(["autostart"]) == 0
+    assert shortcuts.made == [] and FakeRecorder.notes == []
+    assert dot.calls == [True, True]
+
+
+def test_autostart_with_a_key_taken_tells_once_and_still_starts_the_dot(
+    shortcuts, dot, monkeypatch
+):
+    class Taken(FakeShortcuts):
+        def install(self):
+            raise sc.ShortcutConflict("already used")
+
+    monkeypatch.setattr(cli, "Shortcuts", Taken)
+    assert cli.main(["autostart"]) == 0
+    assert FakeRecorder.notes == [("Could not set the keyboard shortcuts", "already used")]
+    assert sc.done_marker().exists()  # a person has to decide: no nagging at every login
+    FakeRecorder.notes.clear()
+    cli.main(["autostart"])
+    assert FakeRecorder.notes == [] and dot.calls == [True, True]
+
+
+def test_autostart_tries_again_at_the_next_login_after_another_failure(shortcuts, dot):
+    shortcuts.error = "gsettings not found"
+    assert cli.main(["autostart"]) == 0
+    assert FakeRecorder.notes == [("Could not set the keyboard shortcuts", "gsettings not found")]
+    assert not sc.done_marker().exists()
+    assert dot.calls == [True]  # the dot does not wait for the shortcuts
+    shortcuts.error = None
+    cli.main(["autostart"])
+    assert sc.done_marker().exists()
+
+
+def test_autostart_works_when_the_marker_cannot_be_written(shortcuts, dot, monkeypatch):
+    monkeypatch.setenv("XDG_STATE_HOME", "/proc/hotrec-test-no-such-place")
+    assert cli.main(["autostart"]) == 0
+    assert dot.calls == [True]
 
 
 def test_indicator_runs_the_dot(monkeypatch):

@@ -205,3 +205,133 @@ def test_a_failure_in_the_middle_surfaces():
 def test_the_real_runner_reports_a_missing_program_as_127():
     code, out = sc._run(["definitely-not-a-program-hotrec"])
     assert code == 127 and out
+
+
+# -- the prototype's keys are replaced, nobody else's -------------------------------------------
+
+LEGACY_COMMANDS = [
+    "/home/attila/felvetel/felvetel.sh kepeshang",
+    "felvetel.sh kep",
+    "bash /opt/felvetel.sh hang",
+    "'/home/a b/felvetel/felvetel.sh' szunet",
+    "bash -c '~/felvetel/felvetel.sh kep'",
+    "/usr/local/bin/felvetel kepeshang",
+    "felvetel-kepeshang",
+    "/home/attila/bin/felvetel-szunet",
+]
+FOREIGN_COMMANDS = [
+    "",
+    "hotrec video",
+    "gnome-terminal",
+    "/home/attila/felvetel/felvetel.sh",  # no mode
+    "felvetel.sh kepek",  # not one of the four words
+    "felvetel.sh kep2",
+    "my-felvetel.sh kep",  # another script
+    "/opt/felvetel/other kep",  # a directory of that name only
+    "notfelvetel-kep",
+    "felvetel-kepeshangx",
+]
+
+
+@pytest.mark.parametrize("command", LEGACY_COMMANDS)
+def test_the_prototype_commands_are_recognised(command):
+    assert sc.is_legacy_command(command)
+
+
+@pytest.mark.parametrize("command", FOREIGN_COMMANDS)
+def test_other_commands_are_not(command):
+    assert not sc.is_legacy_command(command)
+
+
+def old_key(n, command, binding="<Primary><Shift>F9", name="felvetel"):
+    path = "%sfelvetel-%d/" % (sc.PATH_PREFIX, n)
+    return path, {(path, "command"): command, (path, "binding"): binding, (path, "name"): name}
+
+
+def old_setup():
+    """Two of the prototype's keys (one on a key of ours, one on another), and a foreign one."""
+    p1, e1 = old_key(1, "/home/attila/felvetel/felvetel.sh kepeshang", "<Primary><Shift>F9")
+    p2, e2 = old_key(2, "/home/attila/felvetel/felvetel.sh szunet", "<Super>F12")
+    entries = {(OTHER, "binding"): "<Super>t", (OTHER, "command"): "gnome-terminal"}
+    entries.update(e1)
+    entries.update(e2)
+    listing = "['%s', '%s', '%s']" % (p1, OTHER, p2)
+    return Gsettings(listing, entries), p1, p2
+
+
+def test_install_replaces_the_prototype_keys_and_keeps_the_others():
+    g, p1, p2 = old_setup()
+    shortcuts = make(g)
+    shortcuts.install()
+    assert sc.parse_list(g.listing) == [OTHER] + [sc.path_of(s) for s in sc.SHORTCUTS]
+    for path in (p1, p2):
+        assert not [k for (p, k) in g.entries if p == path]  # name, command, binding reset
+    assert g.entries[(OTHER, "binding")] == "<Super>t"
+    assert g.entries[(OTHER, "command")] == "gnome-terminal"
+    assert shortcuts.replaced == [
+        "/home/attila/felvetel/felvetel.sh kepeshang",
+        "/home/attila/felvetel/felvetel.sh szunet",
+    ]
+    for s in sc.SHORTCUTS:
+        assert g.entries[(sc.path_of(s), "binding")] == s.accelerator
+
+
+def test_the_prototype_key_on_one_of_our_keys_is_no_conflict():
+    g, _p1, _p2 = old_setup()
+    make(g).install()  # p1 holds Ctrl+Shift+F9; it is replaced, so the key is free
+
+
+def test_a_second_install_replaces_nothing():
+    g, _p1, _p2 = old_setup()
+    shortcuts = make(g)
+    shortcuts.install()
+    listing = g.listing
+    g.calls.clear()
+    shortcuts.install()
+    assert shortcuts.replaced == [] and g.listing == listing
+    assert not any(c[1] in ("set", "reset") and "felvetel" in " ".join(c) for c in g.calls)
+
+
+def test_a_foreign_key_with_a_prototype_name_is_not_touched():
+    path = sc.PATH_PREFIX + "felvetel-kep/"
+    entries = {
+        (path, "command"): "/usr/bin/other-recorder kep",
+        (path, "binding"): "<Super>F1",
+        (path, "name"): "felvetel-kep",
+    }
+    g = Gsettings("['%s']" % path, entries)
+    shortcuts = make(g)
+    shortcuts.install()
+    assert path in sc.parse_list(g.listing) and shortcuts.replaced == []
+    assert entries.items() <= g.entries.items()
+
+
+def test_a_foreign_key_on_our_key_is_still_a_conflict_next_to_a_prototype_key():
+    g, _p1, _p2 = old_setup()
+    g.entries[(OTHER, "binding")] = "<Primary><Shift>F10"
+    with pytest.raises(sc.ShortcutConflict):
+        make(g).install()
+    assert not any(c[1] in ("set", "reset") for c in g.calls)  # the prototype keys stay too
+
+
+def test_the_conflict_is_a_shortcut_error():
+    assert issubclass(sc.ShortcutConflict, sc.ShortcutError)
+
+
+def test_when_the_list_cannot_be_written_the_prototype_keys_stay():
+    g, p1, p2 = old_setup()
+    g.fail_on = "set %s %s" % (sc.SCHEMA, sc.LIST_KEY)
+    with pytest.raises(sc.ShortcutError):
+        make(g).install()
+    assert (p1, "command") in g.entries and (p2, "binding") in g.entries
+    assert not [c for c in g.calls if c[1] == "reset"]
+
+
+def test_the_done_marker_is_under_the_state_home():
+    assert str(sc.done_marker({"XDG_STATE_HOME": "/s", "HOME": "/h"})) == (
+        "/s/hotrec/shortcuts-installed"
+    )
+    assert str(sc.done_marker({"HOME": "/h"})) == "/h/.local/state/hotrec/shortcuts-installed"
+    assert str(sc.done_marker({"XDG_STATE_HOME": "rel", "HOME": "/h"})) == (
+        "/h/.local/state/hotrec/shortcuts-installed"
+    )

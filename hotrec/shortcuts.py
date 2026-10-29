@@ -10,6 +10,12 @@ on Wayland. ``install`` adds ours to the list GNOME keeps in the GSettings key
 programs alone; ``remove`` takes ours out again. Both are repeatable: running one twice changes
 nothing the second time.
 
+The shortcuts of the prototype this program grew out of (custom keybindings that run
+``felvetel.sh kepeshang|kep|hang|szunet``) are *replaced*: ``install`` takes them out of the list
+and resets their keys, because the new keys are the same four keys for the same job. An entry is
+taken for a prototype one by its **command** only (``is_legacy_command``); its name and its dconf
+path are not looked at, so another program's entry is never touched, whatever it is called.
+
 ``gsettings`` is the interface (a program that has no GSettings schema of its own writes through
 it). It is run through ``run`` so the tests can answer for it.
 """
@@ -17,11 +23,14 @@ it). It is run through ``run`` so the tests can answer for it.
 from __future__ import annotations
 
 import ast
+import os
+import re
 import shlex
 import shutil
 import subprocess
 from dataclasses import dataclass
-from typing import Callable, Dict, List, Optional, Sequence, Tuple
+from pathlib import Path
+from typing import Callable, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from hotrec import APP_ID, _
 
@@ -29,6 +38,13 @@ SCHEMA = "org.gnome.settings-daemon.plugins.media-keys"
 LIST_KEY = "custom-keybindings"
 ENTRY_SCHEMA = SCHEMA + ".custom-keybinding"
 PATH_PREFIX = "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/"
+
+# What the prototype's keys ran: ``felvetel.sh <mode>`` (a script of any name before it: a path, a
+# quote, ``bash``), or a ``felvetel-<mode>`` command of its own. The mode is a whole word.
+_LEGACY_COMMAND = re.compile(
+    r"""(?:^|[\s/'"])felvetel(?:\.sh)?['"]?\s+(?:kepeshang|kep|hang|szunet)(?![\w-])"""
+    r"""|(?:^|[\s/'"])felvetel-(?:kepeshang|kep|hang|szunet)(?![\w-])"""
+)
 
 
 @dataclass(frozen=True)
@@ -62,6 +78,27 @@ def path_of(shortcut: Shortcut) -> str:
 
 class ShortcutError(Exception):
     pass
+
+
+class ShortcutConflict(ShortcutError):
+    """Another program's custom keybinding uses a key of ours: asking again changes nothing."""
+
+
+def is_legacy_command(command: str) -> bool:
+    """Whether a custom keybinding's command is one of the prototype's (see the module text)."""
+    return bool(_LEGACY_COMMAND.search(command))
+
+
+def done_marker(env: Optional[Mapping[str, str]] = None) -> Path:
+    """The file that says the shortcuts were set at a login: ``$XDG_STATE_HOME/hotrec/...``, else
+    ``~/.local/state/hotrec/...``. Removing it makes the next login do it again."""
+    env = os.environ if env is None else env
+    base = env.get("XDG_STATE_HOME")
+    if base and os.path.isabs(base):
+        root = Path(base)
+    else:
+        root = Path(env.get("HOME") or "~").expanduser() / ".local" / "state"
+    return root / "hotrec" / "shortcuts-installed"
 
 
 Run = Callable[[Sequence[str]], Tuple[int, str]]
@@ -111,6 +148,7 @@ class Shortcuts:
         self.command = command
         self.run = run
         self.which = which
+        self.replaced: List[str] = []  # commands of the prototype keys the last install replaced
 
     def _need_gsettings(self) -> None:
         if not self.which("gsettings"):
@@ -137,12 +175,25 @@ class Shortcuts:
             return ""
         return value if isinstance(value, str) else ""
 
-    def conflicts(self, existing: Sequence[str]) -> List[Tuple[Shortcut, str]]:
-        """Our keys that another custom keybinding already uses: ``(ours, that entry's path)``."""
+    def legacy(self, existing: Sequence[str]) -> List[Tuple[str, str]]:
+        """The prototype's keys in the list: ``(path, command)``."""
         ours = {path_of(s) for s in SHORTCUTS}
         found = []
         for path in existing:
-            if path in ours:
+            command = "" if path in ours else self._entry(path, "command")
+            if command and is_legacy_command(command):
+                found.append((path, command))
+        return found
+
+    def conflicts(
+        self, existing: Sequence[str], ignore: Sequence[str] = ()
+    ) -> List[Tuple[Shortcut, str]]:
+        """Our keys that another custom keybinding already uses: ``(ours, that entry's path)``.
+        ``ignore`` are the entries about to be replaced."""
+        ours = {path_of(s) for s in SHORTCUTS}
+        found = []
+        for path in existing:
+            if path in ours or path in ignore:
                 continue
             binding = self._entry(path, "binding")
             for shortcut in SHORTCUTS:
@@ -151,14 +202,17 @@ class Shortcuts:
         return found
 
     def install(self) -> List[str]:
-        """Add the four shortcuts. Returns the lines to show; raises ``ShortcutError`` when
-        gsettings fails or when another custom keybinding already uses one of the keys (nothing
+        """Add the four shortcuts and replace the prototype's keys (``self.replaced`` says which).
+        Returns the lines to show; raises ``ShortcutError`` when gsettings fails, and
+        ``ShortcutConflict`` when another custom keybinding already uses one of the keys (nothing
         is changed then)."""
         self._need_gsettings()
         existing = self._get_list()
-        clash = self.conflicts(existing)
+        old = self.legacy(existing)
+        old_paths = [path for path, _command in old]
+        clash = self.conflicts(existing, old_paths)
         if clash:
-            raise ShortcutError(
+            raise ShortcutConflict(
                 "already used by another custom keybinding: %s"
                 % ", ".join("%s (%s)" % (s.keys, path) for s, path in clash)
             )
@@ -169,12 +223,16 @@ class Shortcuts:
             line = "%s %s" % (shlex.quote(self.command), shortcut.slug)
             self._set(["set", target, "command", gvariant_string(line)])
             self._set(["set", target, "binding", gvariant_string(shortcut.accelerator)])
-        wanted = list(existing)
+        wanted = [path for path in existing if path not in old_paths]
         for shortcut in SHORTCUTS:
             if path_of(shortcut) not in wanted:
                 wanted.append(path_of(shortcut))
         if wanted != existing:
             self._set(["set", SCHEMA, LIST_KEY, gvariant_list(wanted)])
+        for path in old_paths:  # after the list: a failure above leaves the old keys as they were
+            for key in ("name", "command", "binding"):
+                self._set(["reset", "%s:%s" % (ENTRY_SCHEMA, path), key])
+        self.replaced = [command for _path, command in old]
         return ["%s  %s %s" % (s.keys, shlex.quote(self.command), s.slug) for s in SHORTCUTS]
 
     def remove(self) -> List[str]:

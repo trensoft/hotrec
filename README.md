@@ -29,6 +29,15 @@ This adds the four keys to the custom keyboard shortcuts of GNOME and leaves you
 the keys is taken by another custom shortcut, nothing is changed and the command says which.
 `hotrec shortcuts remove` takes them out again.
 
+With the package installed there is nothing to do: at the next login of a GNOME session the
+autostart entry runs `hotrec autostart`, which sets the keys once per user (the file
+`~/.local/state/hotrec/shortcuts-installed` says it was done; delete it to have it done again) and
+keeps the Hotrec dot in the top bar, one at a time. The keys of the prototype this program grew out
+of (custom shortcuts that run `felvetel.sh kepeshang|kep|hang|szunet`, or `felvetel-<word>`) are
+replaced by the Hotrec ones; any other custom shortcut stays. To switch the autostart off, copy
+`/etc/xdg/autostart/io.github.trensoft.hotrec-autostart.desktop` to `~/.config/autostart/` and add
+`Hidden=true`.
+
 From a checkout, without installing: `./run.sh shortcuts install --command "$PWD/run.sh"`.
 
 ## Settings
@@ -50,7 +59,7 @@ logged and replaced by the default. If the prototype's `~/.config/felvetel.conf`
 
 ## Commands
 
-`hotrec video-audio | video | audio | pause | stop | status | setup | shortcuts ... | indicator`;
+`hotrec video-audio | video | audio | pause | stop | status | setup | autostart | shortcuts ... | indicator`;
 see `man hotrec`. Recordings are named `2026-10-29_103000_video-audio.mkv` (`_video`, `_audio.mp3`).
 
 ## Needs

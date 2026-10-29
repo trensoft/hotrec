@@ -1,4 +1,4 @@
-.TH HOTREC 1 "2026-10-29" "hotrec 0.1.0" "User Commands"
+.TH HOTREC 1 "2026-10-29" "hotrec 0.1.1" "User Commands"
 .SH NAME
 hotrec \- record the screen and the sound of a GNOME desktop with keyboard shortcuts
 .SH SYNOPSIS
@@ -44,14 +44,26 @@ Set the keyboard shortcuts (as \fBshortcuts install\fR) and say so in a notifica
 the launcher does.
 .TP
 .B shortcuts install
-Add the four GNOME keyboard shortcuts below, next to the ones that exist. Fails, and changes
-nothing, if one of the keys is used by another custom shortcut.
+Add the four GNOME keyboard shortcuts below, next to the ones that exist. The custom shortcuts of
+the prototype this program grew out of are replaced by them: a custom shortcut counts as one when
+its command is \fBfelvetel.sh\fR (or \fBfelvetel\fR) followed by \fBkepeshang\fR, \fBkep\fR,
+\fBhang\fR or \fBszunet\fR, or is \fBfelvetel\-\fR and one of those words; the name and the
+place of the shortcut are not looked at. Fails, and changes nothing, if one of the keys is used by
+another custom shortcut that is not one of those.
 .TP
 .B shortcuts remove
 Remove them again.
 .TP
 .B shortcuts status
 Show which of them are set.
+.TP
+.B autostart
+What the autostart entry runs at every login of a GNOME session. The first time it sets the
+keyboard shortcuts (as \fBshortcuts install\fR, with the same notification) and writes
+\fB~/.local/state/hotrec/shortcuts\-installed\fR; then it stays as the dot in the top bar. Removing
+that file makes the next login set the shortcuts again. It also writes the file when another
+shortcut holds one of the keys, so that the notification is not repeated at every login; any other
+failure is tried again at the next login. A second \fBautostart\fR exits at once.
 .TP
 .B indicator
 The dot in the top bar. It is started by a recording and ends with it.
@@ -72,6 +84,11 @@ pause
 The keys run \fBhotrec\fR from the PATH. \fB\-\-command\fR names another command (a checkout's
 \fBrun.sh\fR, for instance).
 .SH FILES
+.TP
+.I /etc/xdg/autostart/io.github.trensoft.hotrec\-autostart.desktop
+Starts \fBhotrec autostart\fR at the login of a GNOME session. Installed by the package; a user
+switches it off with a file of the same name in \fB~/.config/autostart\fR that has
+\fBHidden=true\fR.
 .TP
 .I ~/.config/hotrec.conf
 The settings (\fB$XDG_CONFIG_HOME\fR is honoured). Written on the first run; if the old

@@ -1,11 +1,12 @@
 # Installs the data files of Hotrec (everything except the Python package and the `hotrec` command,
 # which pyproject.toml installs: `pip install .`, or %pyproject_install in a spec).
 #
-#   make install-data DESTDIR=/path/to/buildroot PREFIX=/usr
+#   make install-data DESTDIR=/path/to/buildroot PREFIX=/usr [SYSCONFDIR=/etc]
 #
 # Needs gettext (msgfmt) for the translated launcher, metadata and catalogs.
 PREFIX ?= /usr
 DESTDIR ?=
+SYSCONFDIR ?= /etc
 APP_ID := io.github.trensoft.hotrec
 DATADIR := $(DESTDIR)$(PREFIX)/share
 ICONS := $(DATADIR)/icons/hicolor
@@ -28,6 +29,8 @@ install-data:
 	install -Dpm 0644 data/icons/hicolor/symbolic/apps/$(APP_ID)-symbolic.svg \
 	  $(ICONS)/symbolic/apps/$(APP_ID)-symbolic.svg
 	install -Dpm 0644 packaging/man/hotrec.1 $(DATADIR)/man/man1/hotrec.1
+	install -Dpm 0644 data/$(APP_ID)-autostart.desktop \
+	  $(DESTDIR)$(SYSCONFDIR)/xdg/autostart/$(APP_ID)-autostart.desktop
 
 test:
 	python3 -m pytest

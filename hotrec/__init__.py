@@ -14,4 +14,4 @@ _ = gettext.gettext
 
 APP_ID = "io.github.trensoft.hotrec"
 APP_NAME = "Hotrec"
-__version__ = "0.1.0"
+__version__ = "0.1.1"

@@ -30,7 +30,7 @@ def env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Dict[str, str]:
         "XDG_CONFIG_HOME": str(home / ".config"),
         "XDG_RUNTIME_DIR": str(runtime),
     }
-    for name in ("LANGUAGE", "LC_ALL", "LC_MESSAGES", "HOTREC_LOCALEDIR"):
+    for name in ("LANGUAGE", "LC_ALL", "LC_MESSAGES", "HOTREC_LOCALEDIR", "XDG_STATE_HOME"):
         monkeypatch.delenv(name, raising=False)
     monkeypatch.setenv("LANG", "C")
     for name, value in values.items():

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Hotrec
+Comment=Sets the Hotrec keyboard shortcuts once and keeps the recording dot in the top bar
+Exec=hotrec autostart
+TryExec=hotrec
+Icon=io.github.trensoft.hotrec
+Terminal=false
+NoDisplay=true
+OnlyShowIn=GNOME;
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Delay=3

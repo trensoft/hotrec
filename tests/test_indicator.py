@@ -36,6 +36,10 @@ class Item:
     def __init__(self, label=""):
         self.label = label
         self.handlers = {}
+        self.sensitive = True
+
+    def set_sensitive(self, value):
+        self.sensitive = value
 
     def connect(self, name, handler):
         self.handlers[name] = handler
@@ -196,3 +200,64 @@ def test_missing_gtk_is_a_message_not_a_traceback(tmp_path, monkeypatch, capsys)
     monkeypatch.setattr(indicator, "_load_toolkit", broken)
     assert indicator.run(recorder) == 1
     assert "GTK 3" in capsys.readouterr().err
+
+
+def test_a_resident_dot_stays_while_nothing_records_and_offers_the_three_modes(
+    tmp_path, monkeypatch
+):
+    spawned = []
+    monkeypatch.setattr(indicator, "_spawn", lambda *args: spawned.append(args))
+    recorder = StubRecorder(tmp_path, None)
+    toolkit = Toolkit([None, None], recorder)
+    assert indicator.run(recorder, toolkit.triple(), resident=True) == 0
+    dot = toolkit.indicator
+    assert dot.args == (APP_ID, APP_ID + "-symbolic", "app-status")
+    labels = [item.label for item in dot.menu.items]
+    assert labels == [
+        "Record screen and sound",
+        "Record screen only",
+        "Record sound only",
+        "Pause",
+        "Stop and save",
+    ]
+    assert [item.sensitive for item in dot.menu.items] == [True, True, True, False, False]
+    assert not toolkit.quit_called  # nothing recording does not end a resident dot
+    assert dot.icons[-1] == (APP_ID + "-symbolic", "Hotrec")
+    for item in dot.menu.items[:3]:
+        item.handlers["activate"](item)
+    assert spawned == [("video-audio",), ("video",), ("audio",)]
+
+
+def test_a_resident_dot_follows_a_recording_and_back(tmp_path):
+    running = rec.State(1, 2, "video", "/f")
+    recorder = StubRecorder(tmp_path, None)
+    toolkit = Toolkit([running, rec.State(1, 2, "video", "/f", paused=True), None], recorder)
+    indicator.run(recorder, toolkit.triple(), resident=True)
+    dot = toolkit.indicator
+    assert [icon for icon, _text in dot.icons] == [
+        APP_ID + "-symbolic",  # the first look, nothing recording
+        APP_ID + "-recording",
+        APP_ID + "-paused",
+        APP_ID + "-symbolic",
+    ]
+    assert not toolkit.quit_called
+
+
+def test_a_resident_dot_while_recording_cannot_start_another(tmp_path):
+    recorder = StubRecorder(tmp_path, rec.State(1, 2, "video", "/f"))
+    toolkit = Toolkit([], recorder)
+    indicator.run(recorder, toolkit.triple(), resident=True)
+    assert [i.sensitive for i in toolkit.indicator.menu.items] == [False, False, False, True, True]
+    assert toolkit.indicator.args[1] == APP_ID + "-recording"
+
+
+def test_a_second_resident_dot_exits_at_once(tmp_path):
+    recorder = StubRecorder(tmp_path, None)
+    holder = open(tmp_path / "indicator.lock", "a")
+    fcntl.flock(holder, fcntl.LOCK_EX)
+    try:
+        toolkit = Toolkit([], recorder)
+        assert indicator.run(recorder, toolkit.triple(), resident=True) == 0
+        assert toolkit.indicator is None
+    finally:
+        holder.close()

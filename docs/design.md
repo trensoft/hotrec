@@ -49,10 +49,33 @@ list first and keeps the entries of others, refuses when another custom entry us
 (nothing is changed), writes the list last, and does nothing the second time. Keys of GNOME's own
 (non-custom) shortcuts are not checked.
 
+The prototype's keys are replaced: a custom entry counts as one when its **command** is
+`felvetel.sh` (or `felvetel`) followed by `kepeshang`, `kep`, `hang` or `szunet` as a whole word,
+or is `felvetel-<that word>` (`is_legacy_command`, tested with the commands in
+`tests/test_shortcuts.py`). The entry's name and dconf path are not looked at: another program's
+entry that is merely called `felvetel-...` stays, and still counts for the conflict check. The
+prototype entries are taken out of the list in the same write that adds ours and their keys are
+reset afterwards, so a failed write leaves them as they were; the key one of them held is not a
+conflict.
+
+## Autostart
+
+`/etc/xdg/autostart/io.github.trensoft.hotrec-autostart.desktop` (GNOME only, hidden from the
+menus) runs `hotrec autostart` at every login. The first time it runs the same code as
+`hotrec setup` (shortcuts and the notification) and writes
+`$XDG_STATE_HOME/hotrec/shortcuts-installed` (`~/.local/state/hotrec/` by default). The marker is
+written when the shortcuts are set and when another program holds one of the keys (the person has
+to decide; a notification at every login would nag). Another failure (gsettings not ready yet)
+writes no marker, so the next login tries again. Either way it then becomes the dot: it runs
+`indicator.run(resident=True)`.
+
 ## The dot
 
 `hotrec indicator` (started by a recording, one at a time) shows `...-recording` or `...-paused`
 (red or yellow) and a menu; it polls the state twice a second and quits when nothing records.
+The resident one (`hotrec autostart`) does not quit: while nothing records it shows the Hotrec
+symbolic icon, the three start entries are usable and Pause and Stop are greyed; while a recording
+runs it is the other way round. The lock makes a second dot, resident or not, exit at once.
 GTK 3 and an AppIndicator library (Ayatana first, then the old one) are imported only here.
 
 ## Settings and languages

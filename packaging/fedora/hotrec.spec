@@ -1,7 +1,7 @@
 %global appid io.github.trensoft.hotrec
 
 Name:           hotrec
-Version:        0.1.0
+Version:        0.1.1
 Release:        1%{?dist}
 Summary:        Screen and audio recorder for GNOME on Wayland, with global keys and a tray indicator
 # The LICENSE file is the GPL-3.0 text; every .py carries SPDX-License-Identifier: GPL-3.0-or-later.
@@ -35,7 +35,8 @@ Requires:       libnotify
 Requires:       pulseaudio-utils
 Requires:       glib2
 Requires:       hicolor-icon-theme
-# No procps-ng: the program calls no pgrep/pkill. Shortcuts are set by the user (hotrec shortcuts install), not by a scriptlet.
+# No procps-ng: the program calls no pgrep/pkill. No scriptlet sets the shortcuts: they belong to each user, so the autostart
+# entry below runs "hotrec autostart" at the user's login, which sets them once (per user) and keeps the tray indicator.
 # xdg-user-dirs: the default folder follows the Videos folder
 Recommends:     xdg-user-dirs
 # The GNOME tray needs the AppIndicator extension (Fedora and EPEL 10 have it), the screen cast dialog the
@@ -61,12 +62,13 @@ through the screen cast portal, with the hardware encoder of the GPU.
 %install
 %pyproject_install
 %pyproject_save_files hotrec
-make install-data DESTDIR=%{buildroot} PREFIX=%{_prefix}
+make install-data DESTDIR=%{buildroot} PREFIX=%{_prefix} SYSCONFDIR=%{_sysconfdir}
 %find_lang %{appid}
 
 %check
 %pyproject_check_import
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{appid}.desktop
+desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{appid}-autostart.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{appid}.metainfo.xml
 test -x %{buildroot}%{_bindir}/hotrec
 
@@ -77,6 +79,7 @@ test -x %{buildroot}%{_bindir}/hotrec
 %license LICENSE
 %doc README.md
 %{_bindir}/hotrec
+%config(noreplace) %{_sysconfdir}/xdg/autostart/%{appid}-autostart.desktop
 %{_datadir}/applications/%{appid}.desktop
 %{_datadir}/metainfo/%{appid}.metainfo.xml
 %{_datadir}/icons/hicolor/scalable/apps/%{appid}.svg
@@ -86,5 +89,9 @@ test -x %{buildroot}%{_bindir}/hotrec
 %{_mandir}/man1/hotrec.1*
 
 %changelog
+* Thu Oct 29 2026 TrenSoft <143960729+trensoft@users.noreply.github.com> - 0.1.1-1
+- Autostart entry in /etc/xdg/autostart: "hotrec autostart" sets the keyboard shortcuts once per user at login and keeps
+  the tray indicator running (one instance); the prototype's felvetel shortcuts are replaced by the Hotrec ones
+
 * Thu Oct 29 2026 TrenSoft <143960729+trensoft@users.noreply.github.com> - 0.1.0-1
 - Packaging for trensoft/hotrec: Python part by pyproject macros, data part by make install-data
