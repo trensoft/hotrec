@@ -36,7 +36,14 @@ def test_the_launcher_names_real_commands_and_the_actions_it_lists():
     assert main["Exec"] == "hotrec setup"
     assert main["Categories"].endswith(";") and main["Actions"].endswith(";")
     actions = main["Actions"].strip(";").split(";")
-    assert actions == ["video-audio", "video", "audio", "pause"]
+    assert actions == [
+        "video-audio",
+        "video",
+        "audio",
+        "pause",
+        "region-video-audio",
+        "region-video",
+    ]
     parser = cli.build_parser()
     for action in actions:
         section = sections["Desktop Action " + action]
@@ -207,7 +214,7 @@ def test_the_extension_reads_the_state_file_hotrec_writes(tmp_path):
 
     logic = (EXTENSION / "logic.js").read_text(encoding="utf-8")
     for field in fields(recorder.State):
-        if field.name != "file":  # the file name is not used by the dot
+        if field.name not in ("file", "region"):  # the dot needs neither the file nor the area
             assert field.name in logic, field.name
     assert "'state.json'" in logic and "STATE_DIR = 'hotrec'" in logic
     runtime = tmp_path / "run"

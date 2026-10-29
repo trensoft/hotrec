@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 17:10+0000\n"
+"POT-Creation-Date: 2026-10-29 20:35+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Japanese\n"
@@ -128,12 +128,16 @@ msgid "The recording stopped"
 msgstr "録画が停止しました"
 
 #: hotrec/recorder.py
-msgid "Could not find the sound output to record"
-msgstr "録音する音声出力が見つかりませんでした"
-
-#: hotrec/recorder.py
 msgid "Could not start the recording"
 msgstr "録画を開始できませんでした"
+
+#: hotrec/recorder.py
+msgid "The window to choose the area did not start"
+msgstr "範囲を選ぶウィンドウを開始できませんでした"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "録音する音声出力が見つかりませんでした"
 
 #: hotrec/recorder.py
 #, python-format
@@ -156,12 +160,23 @@ msgid "Could not start the recording (log: %s)"
 msgstr "録画を開始できませんでした (ログ: %s)"
 
 #: hotrec/recorder.py
+msgid ""
+"Recording saved, but the area could not be cut out: the whole screen is in it"
+msgstr ""
+"録画を保存しましたが、範囲を切り出せませんでした。画面全体が含まれています"
+
+#: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "録画を保存しました"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "録画が不完全な可能性があります"
+
+#: hotrec/selector.py
+msgid "Drag the area to record. Esc or the right button cancels."
+msgstr ""
+"ドラッグして録画する範囲を選んでください。Esc または右ボタンで取り消します。"
 
 #: hotrec/shellext.py
 msgid ""
@@ -179,6 +194,14 @@ msgstr ""
 "全画面表示の動画の上に表示される赤い点滅ドットがオンになりました。まだ表示さ"
 "れない場合は、一度ログアウトして再ログインしてください。「拡張機能」アプリで"
 "オフにできます。"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area and sound"
+msgstr "範囲と音声を録画"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area only"
+msgstr "範囲のみを録画"
 
 #: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
 msgid "Record screen and sound"

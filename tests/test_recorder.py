@@ -161,7 +161,8 @@ def test_the_state_file_is_written_whole_and_private(world, env):
     start(world, env)
     path = Path(env["XDG_RUNTIME_DIR"]) / "hotrec" / "state.json"
     data = json.loads(path.read_text())
-    assert set(data) == {"pid", "started", "mode", "file", "paused"}
+    assert set(data) == {"pid", "started", "mode", "file", "paused", "region"}
+    assert data["region"] is None  # a whole-screen recording has no area
     log = Path(env["XDG_RUNTIME_DIR"]) / "hotrec" / "recorder.log"
     assert (log.stat().st_mode & 0o777) == 0o600
 

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 17:10+0000\n"
+"POT-Creation-Date: 2026-10-29 20:35+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Lithuanian\n"
@@ -129,12 +129,16 @@ msgid "The recording stopped"
 msgstr "Įrašymas sustojo"
 
 #: hotrec/recorder.py
-msgid "Could not find the sound output to record"
-msgstr "Nerasta įrašytina garso išvestis"
-
-#: hotrec/recorder.py
 msgid "Could not start the recording"
 msgstr "Nepavyko pradėti įrašymo"
+
+#: hotrec/recorder.py
+msgid "The window to choose the area did not start"
+msgstr "Srities pasirinkimo langas nepasileido"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "Nerasta įrašytina garso išvestis"
 
 #: hotrec/recorder.py
 #, python-format
@@ -157,12 +161,24 @@ msgid "Could not start the recording (log: %s)"
 msgstr "Nepavyko pradėti įrašymo (žurnalas: %s)"
 
 #: hotrec/recorder.py
+msgid ""
+"Recording saved, but the area could not be cut out: the whole screen is in it"
+msgstr ""
+"Įrašas išsaugotas, bet srities iškirpti nepavyko: jame yra visas ekranas"
+
+#: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Įrašas išsaugotas"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "Įrašas gali būti neišsamus"
+
+#: hotrec/selector.py
+msgid "Drag the area to record. Esc or the right button cancels."
+msgstr ""
+"Vilkite, kad pasirinktumėte įrašomą sritį. Esc arba dešinysis mygtukas "
+"atšaukia."
 
 #: hotrec/shellext.py
 msgid ""
@@ -180,6 +196,14 @@ msgstr ""
 "Mirksintis raudonas taškas virš viso ekrano vaizdo įrašo įjungtas. Jei jo "
 "dar nematote, vieną kartą atsijunkite ir vėl prisijunkite. Išjungti jį "
 "galite programoje „Plėtiniai“."
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area and sound"
+msgstr "Įrašyti sritį ir garsą"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area only"
+msgstr "Įrašyti tik sritį"
 
 #: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
 msgid "Record screen and sound"

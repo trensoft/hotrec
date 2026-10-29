@@ -4,6 +4,8 @@
 """The ``hotrec`` command.
 
 hotrec video-audio | video | audio   start this recording, or stop and save the one running
+hotrec region-video-audio | region-video
+                                     draw an area with the mouse and record it, or stop and save
 hotrec pause                         pause or resume
 hotrec stop                          stop and save (does nothing when nothing records)
 hotrec status                        one line; exit status 0 recording, 1 not
@@ -11,6 +13,7 @@ hotrec setup                         set the keyboard shortcuts and say so in a 
 hotrec autostart                     at login: set the shortcuts once, then keep the top bar dot
 hotrec shortcuts install|remove|status
 hotrec indicator                     the top bar dot (started by a recording, not by hand)
+hotrec select-region                 the window that draws the area (run by the region commands)
 """
 
 from __future__ import annotations
@@ -19,10 +22,19 @@ import argparse
 import logging
 import shutil
 import sys
+from pathlib import Path
 from typing import List, Optional
 
 from hotrec import _, __version__, i18n, shellext
-from hotrec.recorder import AUDIO, MODES, VIDEO, VIDEO_AUDIO, Recorder
+from hotrec.recorder import (
+    AUDIO,
+    MODES,
+    REGION_VIDEO,
+    REGION_VIDEO_AUDIO,
+    VIDEO,
+    VIDEO_AUDIO,
+    Recorder,
+)
 from hotrec.shortcuts import ShortcutConflict, ShortcutError, Shortcuts, done_marker
 
 _LOG = logging.getLogger("hotrec")
@@ -36,6 +48,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--version", action="version", version="%(prog)s " + __version__)
     commands = parser.add_subparsers(dest="command", metavar="COMMAND", required=True)
     for mode, text in (
+        (REGION_VIDEO_AUDIO, "record an area of the screen and the sound"),
+        (REGION_VIDEO, "record an area of the screen only"),
         (VIDEO_AUDIO, "record the screen and the sound"),
         (VIDEO, "record the screen only"),
         (AUDIO, "record the sound only (MP3)"),
@@ -49,6 +63,7 @@ def build_parser() -> argparse.ArgumentParser:
         "autostart", help="at login: set the shortcuts once and keep the top bar dot (autostart)"
     )
     commands.add_parser("indicator", help="the top bar dot (started by a recording)")
+    commands.add_parser("select-region", help="draw the area to record (run by the region modes)")
     shortcuts = commands.add_parser("shortcuts", help="manage the GNOME keyboard shortcuts")
     shortcuts.add_argument("action", choices=("install", "remove", "status"))
     shortcuts.add_argument(
@@ -109,6 +124,32 @@ def _set_shortcuts(recorder: Recorder) -> Optional[ShortcutError]:
     return None
 
 
+def _add_missing_shortcuts() -> bool:
+    """Add the shortcuts a newer version brought (the two area keys) for a person who set the
+    old ones up. Never touches an entry that is there; a key another program has is left out and
+    logged. Returns whether this is settled (done, or nothing to do, or the key is taken): a
+    failure of gsettings is not, and is tried at the next login."""
+    try:
+        shortcuts = _shortcuts(None)
+        added = shortcuts.add_missing()
+    except ShortcutError as error:
+        _LOG.warning("[autostart] cannot add the new shortcuts: %s", error)
+        return False
+    for slug in added:
+        _LOG.info("[autostart] added the shortcut %s", slug)
+    for slug, path in shortcuts.skipped:
+        _LOG.warning("[autostart] shortcut %s not added: its keys are used by %s", slug, path)
+    return True
+
+
+def _write_marker(path: Path) -> None:
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("%s\n" % __version__, encoding="utf-8")
+    except OSError as problem:
+        _LOG.warning("[autostart] cannot write %s: %s", path, problem)
+
+
 def _do_setup(recorder: Recorder) -> int:
     return 0 if _set_shortcuts(recorder) is None else 1
 
@@ -121,17 +162,21 @@ def _do_autostart(recorder: Recorder) -> int:
     the keys (a person has to decide, and a notification at every login would only nag); any other
     failure (gsettings not up yet) is tried again at the next login. The dot starts either way.
 
+    A person who set the shortcuts up with an older version gets the ones that are new (the two
+    area keys) added at the first login after the update, and only those (``shortcuts-regions-
+    added`` is the marker); the keys they already have, changed or not, are not touched.
+
     The Shell extension of the dot over a fullscreen video (``shellext``) is switched on the same
     way, once, when its package is installed."""
     marker = done_marker()
+    regions = marker.with_name("shortcuts-regions-added")
     if not marker.exists():
         error = _set_shortcuts(recorder)
         if error is None or isinstance(error, ShortcutConflict):
-            try:
-                marker.parent.mkdir(parents=True, exist_ok=True)
-                marker.write_text("%s\n" % __version__, encoding="utf-8")
-            except OSError as problem:
-                _LOG.warning("[autostart] cannot write %s: %s", marker, problem)
+            _write_marker(marker)
+            _write_marker(regions)  # an install sets all six (or, in a conflict, none of them)
+    if marker.exists() and not regions.exists() and _add_missing_shortcuts():
+        _write_marker(regions)
     try:
         shellext.offer(recorder.notify)
     except Exception as problem:  # an extra must never keep the dot from starting
@@ -166,6 +211,10 @@ def main(argv: Optional[List[str]] = None) -> int:
         return _do_autostart(recorder)
     if args.command == "shortcuts":
         return _do_shortcuts(args.action, args.run_command)
+    if args.command == "select-region":
+        from hotrec import selector
+
+        return selector.run()
     if args.command == "indicator":
         from hotrec import indicator
 

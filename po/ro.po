@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 17:10+0000\n"
+"POT-Creation-Date: 2026-10-29 20:35+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Romanian\n"
@@ -128,12 +128,16 @@ msgid "The recording stopped"
 msgstr "Înregistrarea s-a oprit"
 
 #: hotrec/recorder.py
-msgid "Could not find the sound output to record"
-msgstr "Ieșirea de sunet de înregistrat nu a fost găsită"
-
-#: hotrec/recorder.py
 msgid "Could not start the recording"
 msgstr "Înregistrarea nu a putut porni"
+
+#: hotrec/recorder.py
+msgid "The window to choose the area did not start"
+msgstr "Fereastra pentru alegerea zonei nu a pornit"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "Ieșirea de sunet de înregistrat nu a fost găsită"
 
 #: hotrec/recorder.py
 #, python-format
@@ -156,12 +160,24 @@ msgid "Could not start the recording (log: %s)"
 msgstr "Înregistrarea nu a putut porni (jurnal: %s)"
 
 #: hotrec/recorder.py
+msgid ""
+"Recording saved, but the area could not be cut out: the whole screen is in it"
+msgstr ""
+"Înregistrare salvată, dar zona nu a putut fi decupată: ecranul întreg este "
+"inclus"
+
+#: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Înregistrare salvată"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "Înregistrarea ar putea fi incompletă"
+
+#: hotrec/selector.py
+msgid "Drag the area to record. Esc or the right button cancels."
+msgstr ""
+"Trageți pentru a alege zona de înregistrat. Esc sau butonul drept anulează."
 
 #: hotrec/shellext.py
 msgid ""
@@ -179,6 +195,14 @@ msgstr ""
 "Punctul roșu intermitent peste un videoclip pe tot ecranul este activat. "
 "Dacă nu îl vedeți încă, deconectați-vă și conectați-vă din nou o dată. Îl "
 "puteți dezactiva în aplicația Extensii."
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area and sound"
+msgstr "Înregistrează zona și sunetul"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area only"
+msgstr "Înregistrează doar zona"
 
 #: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
 msgid "Record screen and sound"

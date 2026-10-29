@@ -1,7 +1,7 @@
 %global appid io.github.trensoft.hotrec
 
 Name:           hotrec
-Version:        0.1.4
+Version:        0.1.5
 Release:        1%{?dist}
 Summary:        Screen and audio recorder for GNOME on Wayland, with global keys and a tray indicator
 # The LICENSE file is the GPL-3.0 text; every .py carries SPDX-License-Identifier: GPL-3.0-or-later.
@@ -116,6 +116,17 @@ test -x %{buildroot}%{_bindir}/hotrec
 %{_datadir}/gnome-shell/extensions/hotrec-dot@trensoft.github.io/
 
 %changelog
+* Thu Oct 29 2026 TrenSoft <143960729+trensoft@users.noreply.github.com> - 0.1.5-1
+- New: recording an area of the screen. "hotrec region-video-audio" (Ctrl+Shift+F7, with sound) and
+  "hotrec region-video" (Ctrl+Shift+F8, screen only) dim the screen, the user drags the area with the mouse
+  (own GTK 3 window on every monitor; Esc or the right button cancels). The portal still records the whole
+  monitor; when the recording stops the area is cut out without encoding the video again (ffmpeg -c copy
+  with the h264_metadata bitstream filter rewrites the cropping values of the stream), so no video encoder
+  is needed. The left edge moves to a multiple of 64 pixels, the others to 2 pixels. If the cut fails the
+  whole screen is kept and a notification says so
+- The two keys are in the shortcuts window and can be changed there. "hotrec autostart" adds them for people
+  who set the first four up with an older version, once, and touches no entry that is there
+- F9 to F12 are unchanged
 * Thu Oct 29 2026 TrenSoft <143960729+trensoft@users.noreply.github.com> - 0.1.4-1
 - New subpackage hotrec-gnome-shell-extension (Recommends: of hotrec): a GNOME Shell extension, GNOME 47-49,
   that shows a blinking red dot above everything, also a fullscreen video, while Hotrec records (a steady yellow

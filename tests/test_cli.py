@@ -90,9 +90,19 @@ class FakeShortcuts:
     made = []
     error = None
     replaced = []
+    add_calls = 0
+    add_error = None
+    add_result = ["region-video-audio", "region-video"]
+    skipped = []
 
     def __init__(self, command, **_kw):
         FakeShortcuts.made.append(command)
+
+    def add_missing(self):
+        FakeShortcuts.add_calls += 1
+        if FakeShortcuts.add_error:
+            raise sc.ShortcutError(FakeShortcuts.add_error)
+        return FakeShortcuts.add_result
 
     def install(self):
         if FakeShortcuts.error:
@@ -109,6 +119,7 @@ class FakeShortcuts:
 @pytest.fixture
 def shortcuts(monkeypatch):
     FakeShortcuts.made, FakeShortcuts.error = [], None
+    FakeShortcuts.add_calls, FakeShortcuts.add_error, FakeShortcuts.skipped = 0, None, []
     monkeypatch.setattr(cli, "Shortcuts", FakeShortcuts)
     monkeypatch.setattr(cli.shutil, "which", lambda name: "/usr/bin/hotrec")
     return FakeShortcuts
@@ -235,6 +246,60 @@ def test_autostart_works_when_the_marker_cannot_be_written(shortcuts, dot, monke
     monkeypatch.setenv("XDG_STATE_HOME", "/proc/hotrec-test-no-such-place")
     assert cli.main(["autostart"]) == 0
     assert dot.calls == [True]
+
+
+def regions_marker():
+    return sc.done_marker().with_name("shortcuts-regions-added")
+
+
+def test_autostart_adds_the_two_area_keys_for_a_person_who_has_the_old_ones(shortcuts, dot):
+    marker = sc.done_marker()
+    marker.parent.mkdir(parents=True)
+    marker.write_text("0.1.4\n", encoding="utf-8")  # the four keys were set by 0.1.4
+    assert cli.main(["autostart"]) == 0
+    assert shortcuts.made == ["/usr/bin/hotrec"]  # only to add the missing: no full install
+    assert shortcuts.add_calls == 1
+    assert FakeRecorder.notes == []  # no manual step, no notification
+    assert regions_marker().exists()
+    assert marker.read_text(encoding="utf-8") == "0.1.4\n"  # the old marker is left as it was
+    cli.main(["autostart"])
+    assert shortcuts.add_calls == 1  # once, not at every login
+
+
+def test_autostart_first_install_also_settles_the_area_keys(shortcuts, dot):
+    cli.main(["autostart"])
+    assert regions_marker().exists()
+
+
+def test_autostart_tries_the_area_keys_again_when_gsettings_fails(shortcuts, dot):
+    sc.done_marker().parent.mkdir(parents=True)
+    sc.done_marker().write_text("0.1.4\n", encoding="utf-8")
+    shortcuts.add_error = "gsettings not found"
+    assert cli.main(["autostart"]) == 0
+    assert dot.calls == [True]  # the dot does not wait for them
+    assert not regions_marker().exists()
+    shortcuts.add_error = None
+    cli.main(["autostart"])
+    assert regions_marker().exists() and shortcuts.add_calls == 2
+
+
+def test_autostart_a_taken_area_key_is_logged_not_notified_and_settled(shortcuts, dot, caplog):
+    sc.done_marker().parent.mkdir(parents=True)
+    sc.done_marker().write_text("0.1.4\n", encoding="utf-8")
+    shortcuts.add_result = []
+    shortcuts.skipped = [("region-video", "/custom7/")]
+    with caplog.at_level("WARNING"):
+        cli.main(["autostart"])
+    assert "region-video not added" in caplog.text and "/custom7/" in caplog.text
+    assert FakeRecorder.notes == [] and regions_marker().exists()
+    shortcuts.add_result = ["region-video-audio", "region-video"]
+
+
+def test_select_region_runs_the_area_window(monkeypatch):
+    from hotrec import selector
+
+    monkeypatch.setattr(selector, "run", lambda: 3)
+    assert cli.main(["select-region"]) == 3
 
 
 def test_indicator_runs_the_dot(monkeypatch):

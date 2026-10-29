@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 17:10+0000\n"
+"POT-Creation-Date: 2026-10-29 20:35+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Filipino\n"
@@ -131,12 +131,16 @@ msgid "The recording stopped"
 msgstr "Huminto ang pag-record"
 
 #: hotrec/recorder.py
-msgid "Could not find the sound output to record"
-msgstr "Hindi nahanap ang audio output na ire-record"
-
-#: hotrec/recorder.py
 msgid "Could not start the recording"
 msgstr "Hindi masimulan ang recording"
+
+#: hotrec/recorder.py
+msgid "The window to choose the area did not start"
+msgstr "Hindi nagsimula ang window para pumili ng area"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "Hindi nahanap ang audio output na ire-record"
 
 #: hotrec/recorder.py
 #, python-format
@@ -159,12 +163,24 @@ msgid "Could not start the recording (log: %s)"
 msgstr "Hindi masimulan ang recording (log: %s)"
 
 #: hotrec/recorder.py
+msgid ""
+"Recording saved, but the area could not be cut out: the whole screen is in it"
+msgstr ""
+"Na-save ang recording, pero hindi nagupit ang area: nandoon ang buong screen"
+
+#: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Na-save ang recording"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "Maaaring hindi kumpleto ang recording"
+
+#: hotrec/selector.py
+msgid "Drag the area to record. Esc or the right button cancels."
+msgstr ""
+"I-drag para piliin ang area na ire-record. Kinakansela ng Esc o ng kanang "
+"button."
 
 #: hotrec/shellext.py
 msgid ""
@@ -182,6 +198,14 @@ msgstr ""
 "Naka-on na ang kumukurap na pulang tuldok sa ibabaw ng fullscreen na video. "
 "Kung hindi mo pa ito nakikita, mag-log out at mag-log in nang isang beses. "
 "Maaari mo itong i-off sa Extensions app."
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area and sound"
+msgstr "I-record ang area at tunog"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area only"
+msgstr "I-record ang area lang"
 
 #: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
 msgid "Record screen and sound"

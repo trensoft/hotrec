@@ -10,18 +10,31 @@ keys here are GNOME's own custom shortcuts, so they work in every window.
 | Ctrl+Shift+F10 | record the screen only |
 | Ctrl+Shift+F11 | record the sound only (MP3) |
 | Ctrl+Shift+F12 | pause, and resume |
+| Ctrl+Shift+F7 | record an area of the screen, with the sound |
+| Ctrl+Shift+F8 | record an area of the screen only |
 
-The same key stops and saves the recording that runs (any of F9, F10, F11 does, whichever started
+The same key stops and saves the recording that runs (any of F7 to F11 does, whichever started
 it). While a recording runs, a red blinking dot in the top bar shows it, a yellow steady one that it is paused;
 its menu has Pause/Resume and Stop and save.
 
-At the top of that menu, in grey, are the four keys as GNOME has them now ("Ctrl+Shift+F9 - Record
+At the top of that menu, in grey, are the six keys as GNOME has them now ("Ctrl+Shift+F9 - Record
 screen and sound"). The dot that stays in the top bar after login also has **Set keyboard
 shortcuts...**: a small window with a field for each shortcut. Click a field, press the new keys
 (Escape gives up; a letter alone is refused, a function key may stand alone), then Save. The window
 writes the GNOME custom keybindings with the same code as `hotrec shortcuts install`, so a key that
 another program's custom shortcut already uses is refused and said so, and nothing of other
 programs is overwritten. The version and the maker are at the bottom of the window.
+
+**Recording an area** (F7, F8): the screen is dimmed on every monitor and the area is drawn with the
+mouse (drag with the left button; Escape or the right button gives up). The portal still records the
+whole monitor; when the recording stops, the area is cut out of the file **without encoding the video
+again**: `ffmpeg -c copy` with the `h264_metadata` bitstream filter rewrites the cropping values in the
+H.264 headers, which takes seconds and needs no video encoder. The left edge of the area moves left to a
+multiple of 64 pixels (players cut the left edge exactly only there), the other edges to 2 pixels. If
+the cut fails (ffmpeg failed, or the portal recorded another monitor than the one the area was drawn
+on), the whole screen stays in the file and a notification says so. People who set the first four keys
+up with an older version get F7 and F8 added at the next login, by `hotrec autostart`, and nothing else
+of theirs is touched.
 
 The screen is recorded by `gpu-screen-recorder` (portal mode: the desktop asks which screen, once,
 and remembers), encoded as H.264 by the graphics hardware (NVENC, VA-API). The sound of the video
@@ -82,7 +95,7 @@ logged and replaced by the default. If the prototype's `~/.config/felvetel.conf`
 
 ## Commands
 
-`hotrec video-audio | video | audio | pause | stop | status | setup | autostart | shortcuts ... | indicator`;
+`hotrec video-audio | video | audio | region-video-audio | region-video | select-region | pause | stop | status | setup | autostart | shortcuts ... | indicator`;
 see `man hotrec`. Recordings are named `2026-10-29_103000_video-audio.mkv` (`_video`, `_audio.mp3`).
 
 ## Needs

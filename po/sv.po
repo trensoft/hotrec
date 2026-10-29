@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 17:10+0000\n"
+"POT-Creation-Date: 2026-10-29 20:35+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Swedish\n"
@@ -128,12 +128,16 @@ msgid "The recording stopped"
 msgstr "Inspelningen stoppades"
 
 #: hotrec/recorder.py
-msgid "Could not find the sound output to record"
-msgstr "Ljudutgången som ska spelas in hittades inte"
-
-#: hotrec/recorder.py
 msgid "Could not start the recording"
 msgstr "Inspelningen kunde inte startas"
+
+#: hotrec/recorder.py
+msgid "The window to choose the area did not start"
+msgstr "Fönstret för att välja område startade inte"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "Ljudutgången som ska spelas in hittades inte"
 
 #: hotrec/recorder.py
 #, python-format
@@ -156,12 +160,24 @@ msgid "Could not start the recording (log: %s)"
 msgstr "Inspelningen kunde inte startas (logg: %s)"
 
 #: hotrec/recorder.py
+msgid ""
+"Recording saved, but the area could not be cut out: the whole screen is in it"
+msgstr ""
+"Inspelningen sparad, men området kunde inte klippas ut: hela skärmen finns "
+"med"
+
+#: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Inspelningen sparad"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "Inspelningen kan vara ofullständig"
+
+#: hotrec/selector.py
+msgid "Drag the area to record. Esc or the right button cancels."
+msgstr ""
+"Dra för att välja området som ska spelas in. Esc eller högerknappen avbryter."
 
 #: hotrec/shellext.py
 msgid ""
@@ -178,6 +194,14 @@ msgid ""
 msgstr ""
 "Den blinkande röda pricken över en helskärmsvideo är påslagen. Om du inte "
 "ser den ännu, logga ut och in en gång. Du kan stänga av den i appen Tillägg."
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area and sound"
+msgstr "Spela in område och ljud"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area only"
+msgstr "Spela bara in området"
 
 #: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
 msgid "Record screen and sound"

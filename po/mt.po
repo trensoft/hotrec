@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 17:10+0000\n"
+"POT-Creation-Date: 2026-10-29 20:35+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Maltese\n"
@@ -129,12 +129,16 @@ msgid "The recording stopped"
 msgstr "It-tiġrija twaqqfet"
 
 #: hotrec/recorder.py
-msgid "Could not find the sound output to record"
-msgstr "L-output tal-ħoss li għandu jiġi rreġistrat ma nstabx"
-
-#: hotrec/recorder.py
 msgid "Could not start the recording"
 msgstr "Ir-reġistrazzjoni ma setgħetx tibda"
+
+#: hotrec/recorder.py
+msgid "The window to choose the area did not start"
+msgstr "It-tieqa biex tintgħażel iż-żona ma nfetħitx"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "L-output tal-ħoss li għandu jiġi rreġistrat ma nstabx"
 
 #: hotrec/recorder.py
 #, python-format
@@ -157,12 +161,25 @@ msgid "Could not start the recording (log: %s)"
 msgstr "Ir-reġistrazzjoni ma setgħetx tibda (log: %s)"
 
 #: hotrec/recorder.py
+msgid ""
+"Recording saved, but the area could not be cut out: the whole screen is in it"
+msgstr ""
+"Ir-reġistrazzjoni ssejvjat, imma ż-żona ma setgħetx titqatta': hemm l-iskrin "
+"kollu"
+
+#: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Ir-reġistrazzjoni ssejvjat"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "Ir-reġistrazzjoni tista' tkun mhux kompluta"
+
+#: hotrec/selector.py
+msgid "Drag the area to record. Esc or the right button cancels."
+msgstr ""
+"Kebbes biex tagħżel iż-żona li se tirreġistra. Esc jew il-buttuna tal-lemin "
+"jikkanċellaw."
 
 #: hotrec/shellext.py
 msgid ""
@@ -180,6 +197,14 @@ msgstr ""
 "Il-punt aħmar li jteptep fuq vidjo fuq l-iskrin kollu huwa mixgħul. Jekk "
 "għadek ma tarahx, oħroġ u idħol għal darba. Tista' titfih fl-app "
 "Estensjonijiet."
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area and sound"
+msgstr "Irreġistra żona u ħoss"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area only"
+msgstr "Irreġistra żona biss"
 
 #: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
 msgid "Record screen and sound"

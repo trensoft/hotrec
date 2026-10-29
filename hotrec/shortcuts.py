@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 TrenSoft
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-"""The four keyboard shortcuts, as GNOME custom keybindings.
+"""The six keyboard shortcuts, as GNOME custom keybindings.
 
 GNOME on Wayland gives a program no global keys, so the keys are *the desktop's*: a custom
 keybinding that runs ``hotrec <mode>``. They work in every window, which the keys of OBS do not
@@ -59,6 +59,9 @@ SHORTCUTS = (
     Shortcut("video", "<Primary><Shift>F10", "Ctrl+Shift+F10"),
     Shortcut("audio", "<Primary><Shift>F11", "Ctrl+Shift+F11"),
     Shortcut("pause", "<Primary><Shift>F12", "Ctrl+Shift+F12"),
+    # new in 0.1.5; last, so the order of the first four (and what a person has set) is as it was
+    Shortcut("region-video-audio", "<Primary><Shift>F7", "Ctrl+Shift+F7"),
+    Shortcut("region-video", "<Primary><Shift>F8", "Ctrl+Shift+F8"),
 )
 
 
@@ -142,6 +145,8 @@ def accelerator_problem(text: str) -> Optional[str]:
 def shortcut_names() -> Dict[str, str]:
     """The name each shortcut has in the GNOME keyboard settings (translated at install time)."""
     return {
+        "region-video-audio": _("Record area and sound"),
+        "region-video": _("Record area only"),
         "video-audio": _("Record screen and sound"),
         "video": _("Record screen only"),
         "audio": _("Record sound only"),
@@ -226,6 +231,7 @@ class Shortcuts:
         self.run = run
         self.which = which
         self.replaced: List[str] = []  # commands of the prototype keys the last install replaced
+        self.skipped: List[Tuple[str, str]] = []  # (slug, path) ``add_missing`` left out: key taken
 
     def _need_gsettings(self) -> None:
         if not self.which("gsettings"):
@@ -311,8 +317,8 @@ class Shortcuts:
         return wanted
 
     def install(self, keys: Optional[Mapping[str, str]] = None) -> List[str]:
-        """Add the four shortcuts and replace the prototype's keys (``self.replaced`` says which).
-        ``keys`` maps a slug to the accelerator it should have (default: Ctrl+Shift+F9 to F12),
+        """Add the six shortcuts and replace the prototype's keys (``self.replaced`` says which).
+        ``keys`` maps a slug to the accelerator it should have (default: Ctrl+Shift+F7 to F12),
         so a shortcut that is already there gets the new keys. Returns the lines to show; raises
         ``ShortcutError`` when gsettings fails or the keys are no good, and ``ShortcutConflict``
         when another custom keybinding already uses one of the keys (nothing is changed then)."""
@@ -352,8 +358,48 @@ class Shortcuts:
             for s in SHORTCUTS
         ]
 
+    def add_missing(self) -> List[str]:
+        """Add the shortcuts of ours that are not in the list yet, with their default keys, and
+        touch nothing else: the keys a person already set (or changed) stay as they are. This is
+        how a version that brings new shortcuts reaches the people who installed the old ones.
+        A default key that another custom keybinding (or one of our own entries) already has is
+        not taken: that shortcut is left out and named in ``self.skipped``. Returns the slugs
+        that were added."""
+        self._need_gsettings()
+        existing = self._get_list()
+        missing = [s for s in SHORTCUTS if path_of(s) not in existing]
+        self.skipped = []
+        if not missing:
+            return []
+        used = [
+            (self._entry(path, "binding"), path)
+            for path in existing
+            if path not in {path_of(s) for s in missing}
+        ]
+        added = []
+        for shortcut in missing:
+            clash = [
+                path for binding, path in used if same_accelerator(binding, shortcut.accelerator)
+            ]
+            if clash:
+                self.skipped.append((shortcut.slug, clash[0]))
+                continue
+            added.append(shortcut)
+        names = shortcut_names()
+        for shortcut in added:
+            target = "%s:%s" % (ENTRY_SCHEMA, path_of(shortcut))
+            self._set(["set", target, "name", gvariant_string(names[shortcut.slug])])
+            line = "%s %s" % (shlex.quote(self.command), shortcut.slug)
+            self._set(["set", target, "command", gvariant_string(line)])
+            self._set(["set", target, "binding", gvariant_string(shortcut.accelerator)])
+        if added:
+            self._set(
+                ["set", SCHEMA, LIST_KEY, gvariant_list(existing + [path_of(s) for s in added])]
+            )
+        return [s.slug for s in added]
+
     def remove(self) -> List[str]:
-        """Take the four shortcuts out. Returns the paths that were removed."""
+        """Take the six shortcuts out. Returns the paths that were removed."""
         self._need_gsettings()
         existing = self._get_list()
         ours = {path_of(s) for s in SHORTCUTS}

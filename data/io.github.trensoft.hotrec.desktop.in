@@ -9,7 +9,7 @@ Terminal=false
 StartupNotify=false
 Categories=AudioVideo;Recorder;GNOME;GTK;
 Keywords=record;screen;screencast;sound;audio;webinar;
-Actions=video-audio;video;audio;pause;
+Actions=video-audio;video;audio;pause;region-video-audio;region-video;
 
 [Desktop Action video-audio]
 Name=Record screen and sound
@@ -26,3 +26,11 @@ Exec=hotrec audio
 [Desktop Action pause]
 Name=Pause or resume recording
 Exec=hotrec pause
+
+[Desktop Action region-video-audio]
+Name=Record area and sound
+Exec=hotrec region-video-audio
+
+[Desktop Action region-video]
+Name=Record area only
+Exec=hotrec region-video

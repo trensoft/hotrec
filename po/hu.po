@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 17:10+0000\n"
+"POT-Creation-Date: 2026-10-29 20:35+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Hungarian\n"
@@ -129,12 +129,16 @@ msgid "The recording stopped"
 msgstr "A felvétel leállt"
 
 #: hotrec/recorder.py
-msgid "Could not find the sound output to record"
-msgstr "Nem található a felveendő hangkimenet"
-
-#: hotrec/recorder.py
 msgid "Could not start the recording"
 msgstr "A felvétel nem indult el"
+
+#: hotrec/recorder.py
+msgid "The window to choose the area did not start"
+msgstr "A terület kiválasztására szolgáló ablak nem indult el"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "Nem található a felveendő hangkimenet"
 
 #: hotrec/recorder.py
 #, python-format
@@ -157,12 +161,23 @@ msgid "Could not start the recording (log: %s)"
 msgstr "A felvétel nem indult el (napló: %s)"
 
 #: hotrec/recorder.py
+msgid ""
+"Recording saved, but the area could not be cut out: the whole screen is in it"
+msgstr ""
+"A felvétel mentve, de a területet nem lehetett kivágni: a teljes képernyő "
+"benne van"
+
+#: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "A felvétel mentve"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "A felvétel hiányos lehet"
+
+#: hotrec/selector.py
+msgid "Drag the area to record. Esc or the right button cancels."
+msgstr "Húzza ki a felveendő területet. Az Esc vagy a jobb gomb megszakítja."
 
 #: hotrec/shellext.py
 msgid ""
@@ -180,6 +195,14 @@ msgstr ""
 "A teljes képernyős videó fölött villogó piros pötty be van kapcsolva. Ha még "
 "nem látja, jelentkezzen ki, majd be egyszer. A Bővítmények alkalmazásban "
 "kikapcsolhatja."
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area and sound"
+msgstr "Terület és hang felvétele"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area only"
+msgstr "Csak a terület felvétele"
 
 #: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
 msgid "Record screen and sound"

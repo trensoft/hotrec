@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 17:10+0000\n"
+"POT-Creation-Date: 2026-10-29 20:35+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Serbian\n"
@@ -128,12 +128,16 @@ msgid "The recording stopped"
 msgstr "Снимање је заустављено"
 
 #: hotrec/recorder.py
-msgid "Could not find the sound output to record"
-msgstr "Звучни излаз за снимање није пронађен"
-
-#: hotrec/recorder.py
 msgid "Could not start the recording"
 msgstr "Снимање није могло да почне"
+
+#: hotrec/recorder.py
+msgid "The window to choose the area did not start"
+msgstr "Прозор за избор области није покренут"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "Звучни излаз за снимање није пронађен"
 
 #: hotrec/recorder.py
 #, python-format
@@ -156,12 +160,23 @@ msgid "Could not start the recording (log: %s)"
 msgstr "Снимање није могло да почне (дневник: %s)"
 
 #: hotrec/recorder.py
+msgid ""
+"Recording saved, but the area could not be cut out: the whole screen is in it"
+msgstr ""
+"Снимак је сачуван, али област није могла да се исече: у њему је цео екран"
+
+#: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Снимак је сачуван"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "Снимак је можда непотпун"
+
+#: hotrec/selector.py
+msgid "Drag the area to record. Esc or the right button cancels."
+msgstr ""
+"Превуците да изаберете област за снимање. Esc или десни тастер поништава."
 
 #: hotrec/shellext.py
 msgid ""
@@ -179,6 +194,14 @@ msgstr ""
 "Трепћућа црвена тачка изнад видеа преко целог екрана је укључена. Ако је још "
 "не видите, једном се одјавите и поново пријавите. Можете је искључити у "
 "апликацији Проширења."
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area and sound"
+msgstr "Сними област и звук"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area only"
+msgstr "Сними само област"
 
 #: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
 msgid "Record screen and sound"

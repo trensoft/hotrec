@@ -48,12 +48,14 @@ def make(g, command="hotrec"):
     return sc.Shortcuts(command, run=g, which=lambda name: "/usr/bin/" + name)
 
 
-def test_the_four_shortcuts_are_f9_to_f12_with_control_and_shift():
+def test_the_six_shortcuts_are_f9_to_f12_then_the_two_area_keys_f7_and_f8():
     assert [(s.slug, s.accelerator, s.keys) for s in sc.SHORTCUTS] == [
         ("video-audio", "<Primary><Shift>F9", "Ctrl+Shift+F9"),
         ("video", "<Primary><Shift>F10", "Ctrl+Shift+F10"),
         ("audio", "<Primary><Shift>F11", "Ctrl+Shift+F11"),
         ("pause", "<Primary><Shift>F12", "Ctrl+Shift+F12"),
+        ("region-video-audio", "<Primary><Shift>F7", "Ctrl+Shift+F7"),
+        ("region-video", "<Primary><Shift>F8", "Ctrl+Shift+F8"),
     ]
 
 
@@ -63,7 +65,7 @@ def test_paths_are_ours():
         paths[0]
         == "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/hotrec-video-audio/"
     )
-    assert len(set(paths)) == 4 and all(p.endswith("/") for p in paths)
+    assert len(set(paths)) == 6 and all(p.endswith("/") for p in paths)
 
 
 @pytest.mark.parametrize(
@@ -99,10 +101,12 @@ def test_install_on_an_empty_list():
     g = Gsettings()
     lines = make(g).install()
     assert lines[0] == "Ctrl+Shift+F9  hotrec video-audio"
-    assert len(lines) == 4
+    assert len(lines) == 6
     names = {p: v for (p, k), v in g.entries.items() if k == "name"}
     assert sorted(names.values()) == [
         "Pause or resume recording",
+        "Record area and sound",
+        "Record area only",
         "Record screen and sound",
         "Record screen only",
         "Record sound only",
@@ -117,7 +121,7 @@ def test_install_keeps_the_entries_of_other_programs():
     g = Gsettings(EXISTING, {(OTHER, "binding"): "<Super>t"})
     make(g).install()
     assert sc.parse_list(g.listing)[0] == OTHER
-    assert len(sc.parse_list(g.listing)) == 5
+    assert len(sc.parse_list(g.listing)) == 7
 
 
 def test_install_twice_changes_nothing_the_second_time():
@@ -163,7 +167,7 @@ def test_remove_takes_only_ours_and_resets_them():
     shortcuts = make(g)
     shortcuts.install()
     removed = shortcuts.remove()
-    assert len(removed) == 4
+    assert len(removed) == 6
     assert sc.parse_list(g.listing) == [OTHER]
     assert not [k for (p, k) in g.entries if p.startswith(sc.PATH_PREFIX + "hotrec")]
     assert g.entries[(OTHER, "binding")] == "<Super>t"
@@ -178,7 +182,7 @@ def test_remove_with_nothing_installed_does_nothing():
 def test_status():
     g = Gsettings()
     shortcuts = make(g)
-    assert [run for _s, run in shortcuts.status()] == [None] * 4
+    assert [run for _s, run in shortcuts.status()] == [None] * 6
     shortcuts.install()
     assert [run for _s, run in shortcuts.status()][3] == "hotrec pause"
 
@@ -402,6 +406,8 @@ def test_bindings_are_what_gnome_has():
         "video": "<Primary><Shift>F10",
         "audio": "<Primary><Alt>a",
         "pause": "<Primary><Shift>F12",
+        "region-video-audio": "<Primary><Shift>F7",
+        "region-video": "<Primary><Shift>F8",
     }
 
 
@@ -421,10 +427,12 @@ def test_install_with_keys_changes_an_installed_shortcut_and_keeps_the_rest():
         "Super+F2  hotrec video",
         "Ctrl+Shift+F11  hotrec audio",
         "Ctrl+Alt+P  hotrec pause",
+        "Ctrl+Shift+F7  hotrec region-video-audio",
+        "Ctrl+Shift+F8  hotrec region-video",
     ]
     assert g.entries[(sc.path_of(sc.SHORTCUTS[1]), "binding")] == "<Super>F2"
     assert g.entries[(sc.path_of(sc.SHORTCUTS[3]), "binding")] == "<Primary><Alt>p"
-    assert len(sc.parse_list(g.listing)) == 4
+    assert len(sc.parse_list(g.listing)) == 6
 
 
 def test_install_with_keys_that_are_no_keys_changes_nothing():
@@ -457,3 +465,90 @@ def test_a_foreign_key_on_a_key_we_leave_is_no_conflict():
     g = Gsettings("['%s']" % other, {(other, "binding"): "<Primary><Shift>F9"})
     make(g).install({"video-audio": "<Primary><Shift>F2"})  # F9 is free once we do not take it
     assert g.entries[(sc.path_of(sc.SHORTCUTS[0]), "binding")] == "<Primary><Shift>F2"
+
+
+# -- add_missing: the two area keys for a person who set the first four up with 0.1.4 -------------
+
+OLD_FOUR = [s for s in sc.SHORTCUTS if not s.slug.startswith("region")]
+NEW_TWO = [s for s in sc.SHORTCUTS if s.slug.startswith("region")]
+
+
+def installed_by_the_old_version(extra=None, custom=None):
+    """gsettings as 0.1.4 left it: the four entries (and a foreign one), keys as in ``custom``."""
+    entries = {(OTHER, "binding"): "<Super>t"}
+    paths = [OTHER]
+    for s in OLD_FOUR:
+        path = sc.path_of(s)
+        paths.append(path)
+        entries[(path, "name")] = "old name of " + s.slug
+        entries[(path, "command")] = "hotrec " + s.slug
+        entries[(path, "binding")] = (custom or {}).get(s.slug, s.accelerator)
+    entries.update(extra or {})
+    return Gsettings(repr(paths), entries)
+
+
+def test_add_missing_adds_only_the_two_area_keys_and_touches_nothing_else():
+    g = installed_by_the_old_version(custom={"video": "<Super>F2"})
+    before = dict(g.entries)
+    added = make(g, "/usr/bin/hotrec").add_missing()
+    assert added == ["region-video-audio", "region-video"]
+    for key, value in before.items():  # every value the person has is as it was
+        assert g.entries[key] == value
+    for s in NEW_TWO:
+        assert g.entries[(sc.path_of(s), "binding")] == s.accelerator
+        assert g.entries[(sc.path_of(s), "command")] == "/usr/bin/hotrec " + s.slug
+    assert g.entries[(sc.path_of(NEW_TWO[0]), "name")] == "Record area and sound"
+    assert g.entries[(sc.path_of(NEW_TWO[1]), "name")] == "Record area only"
+    assert sc.parse_list(g.listing) == [OTHER] + [sc.path_of(s) for s in OLD_FOUR + NEW_TWO]
+    assert not any(c[1] == "reset" for c in g.calls)
+
+
+def test_add_missing_with_everything_there_changes_nothing():
+    g = Gsettings()
+    shortcuts = make(g)
+    shortcuts.install()
+    g.calls.clear()
+    assert shortcuts.add_missing() == []
+    assert not any(c[1] in ("set", "reset") for c in g.calls)
+
+
+def test_add_missing_twice_changes_nothing_the_second_time():
+    g = installed_by_the_old_version()
+    shortcuts = make(g)
+    shortcuts.add_missing()
+    g.calls.clear()
+    assert shortcuts.add_missing() == []
+    assert not any(c[1] in ("set", "reset") for c in g.calls)
+
+
+def test_add_missing_leaves_out_a_key_another_program_has_and_names_it():
+    g = installed_by_the_old_version(
+        extra={(OTHER, "binding"): "<Control><Shift>f8"}  # another program's, spelled differently
+    )
+    shortcuts = make(g)
+    assert shortcuts.add_missing() == ["region-video-audio"]
+    assert shortcuts.skipped == [("region-video", OTHER)]
+    assert (sc.path_of(NEW_TWO[1]), "binding") not in g.entries
+    assert sc.path_of(NEW_TWO[1]) not in sc.parse_list(g.listing)
+
+
+def test_add_missing_leaves_out_a_key_the_person_gave_one_of_our_old_shortcuts():
+    g = installed_by_the_old_version(custom={"pause": "<Primary><Shift>F7"})
+    shortcuts = make(g)
+    assert shortcuts.add_missing() == ["region-video"]
+    assert shortcuts.skipped == [("region-video-audio", sc.path_of(OLD_FOUR[3]))]
+    assert g.entries[(sc.path_of(OLD_FOUR[3]), "binding")] == "<Primary><Shift>F7"
+
+
+def test_add_missing_with_a_failing_gsettings_is_a_shortcut_error():
+    g = installed_by_the_old_version()
+    g.fail_on = "set"
+    with pytest.raises(sc.ShortcutError):
+        make(g).add_missing()
+    assert sc.path_of(NEW_TWO[0]) not in sc.parse_list(g.listing)  # not listed half done
+
+
+def test_add_missing_without_gsettings_is_the_clear_error():
+    shortcuts = sc.Shortcuts("hotrec", run=Gsettings(), which=lambda name: None)
+    with pytest.raises(sc.ShortcutError):
+        shortcuts.add_missing()

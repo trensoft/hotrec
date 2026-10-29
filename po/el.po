@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 17:10+0000\n"
+"POT-Creation-Date: 2026-10-29 20:35+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Greek\n"
@@ -128,12 +128,16 @@ msgid "The recording stopped"
 msgstr "Η εγγραφή σταμάτησε"
 
 #: hotrec/recorder.py
-msgid "Could not find the sound output to record"
-msgstr "Δεν βρέθηκε η έξοδος ήχου προς εγγραφή"
-
-#: hotrec/recorder.py
 msgid "Could not start the recording"
 msgstr "Δεν ήταν δυνατή η έναρξη της εγγραφής"
+
+#: hotrec/recorder.py
+msgid "The window to choose the area did not start"
+msgstr "Το παράθυρο επιλογής περιοχής δεν ξεκίνησε"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "Δεν βρέθηκε η έξοδος ήχου προς εγγραφή"
 
 #: hotrec/recorder.py
 #, python-format
@@ -156,12 +160,25 @@ msgid "Could not start the recording (log: %s)"
 msgstr "Δεν ήταν δυνατή η έναρξη της εγγραφής (αρχείο καταγραφής: %s)"
 
 #: hotrec/recorder.py
+msgid ""
+"Recording saved, but the area could not be cut out: the whole screen is in it"
+msgstr ""
+"Η εγγραφή αποθηκεύτηκε, αλλά η περιοχή δεν μπόρεσε να αποκοπεί: "
+"περιλαμβάνεται ολόκληρη η οθόνη"
+
+#: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Η εγγραφή αποθηκεύτηκε"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "Η εγγραφή ίσως είναι ελλιπής"
+
+#: hotrec/selector.py
+msgid "Drag the area to record. Esc or the right button cancels."
+msgstr ""
+"Σύρετε για να επιλέξετε την περιοχή εγγραφής. Το Esc ή το δεξί κουμπί "
+"ακυρώνει."
 
 #: hotrec/shellext.py
 msgid ""
@@ -179,6 +196,14 @@ msgstr ""
 "Η κόκκινη αναβοσβήνουσα τελεία πάνω από ένα βίντεο πλήρους οθόνης είναι "
 "ενεργή. Αν δεν τη βλέπετε ακόμη, αποσυνδεθείτε και συνδεθείτε ξανά μία φορά. "
 "Μπορείτε να την απενεργοποιήσετε στην εφαρμογή Επεκτάσεις."
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area and sound"
+msgstr "Εγγραφή περιοχής και ήχου"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area only"
+msgstr "Εγγραφή μόνο της περιοχής"
 
 #: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
 msgid "Record screen and sound"

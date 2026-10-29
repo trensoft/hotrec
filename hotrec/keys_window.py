@@ -1,9 +1,9 @@
 # SPDX-FileCopyrightText: 2026 TrenSoft
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-"""The window where the four keyboard shortcuts are chosen (menu of the top bar dot).
+"""The window where the six keyboard shortcuts are chosen (menu of the top bar dot).
 
-Four rows, one per shortcut: its name and a button with the keys it has. A click on the button
+Six rows, one per shortcut: its name and a button with the keys it has. A click on the button
 waits for the new keys ("Press the keys..."), Escape gives that up. Save writes them into the
 GNOME custom keybindings with ``Shortcuts.install``, the same code ``hotrec setup`` uses: a key
 that another program's custom keybinding already has is refused (and said so), nothing of other
@@ -16,7 +16,7 @@ button with the folder (it opens a folder chooser) and "Default", which goes bac
 ``AUDIO_FOLDER`` there (``config.set_values``); nothing is written when no folder was changed.
 
 The window shows the keys the entries have now; shortcuts that are not installed yet show the
-default keys (Ctrl+Shift+F9 to F12), which is what Save would set.
+default keys (Ctrl+Shift+F7 to F12), which is what Save would set.
 
 GTK 3 is passed in (``indicator`` loads it when the dot starts); the Gdk part of reading a key
 press is a separate function, so the logic runs under test without a display.

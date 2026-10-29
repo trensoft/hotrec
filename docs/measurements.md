@@ -37,6 +37,13 @@
   stream is the whole stage, so probably): then the extension is switched off and the tray dot stays.
   That `gsettings set org.gnome.shell enabled-extensions` makes a running Shell load a new extension
   without a login is not measured either (the notification says a login may be needed).
+- The area (0.1.5): measured with an ffmpeg 7.0 binary, on synthetic H.264 files: the picture of
+  `-c copy -bsf:v h264_metadata=crop_*` is bit for bit the one the `crop` filter gives (mkv, mp4,
+  extradata and in-band SPS), and an unaligned left edge is widened by ffmpeg (hence the 64 pixels).
+  **Not measured:** the GTK 3 area window on a real GNOME Wayland desktop (dimming, drag, Escape and
+  right button, cursor, several monitors, scaling); the SPS of a real gpu-screen-recorder stream
+  (NVENC / VA-API) cut and played; that the portal stream has the shape of the monitor; two monitors
+  with the same shape (the wrong one would be cut); the packaging as an RPM.
 - The packages: the names in `docs/installation-layout.md` are not checked against EPEL 10 or
   Fedora, and nothing was built as an RPM.
 - Translations by a native speaker (none), RTL display of Arabic and Hebrew in a notification.

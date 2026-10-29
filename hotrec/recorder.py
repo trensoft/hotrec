@@ -3,11 +3,14 @@
 
 """Start, pause and stop a recording. One recording at a time; every key press is one command.
 
-The three modes share one rule (the prototype's): a key starts its recording when nothing is
+The modes share one rule (the prototype's): a key starts its recording when nothing is
 recording and, when something is, stops and saves it, whichever mode that one is.
 
 - ``video-audio`` and ``video``: ``gpu-screen-recorder`` in portal mode (the desktop asks which
   screen, and remembers the answer). Pause is SIGUSR2 (the recorder toggles), stop is SIGINT.
+- ``region-video-audio`` and ``region-video``: the same recording of the whole monitor, with the
+  area chosen with the mouse first (``select_region``, a window of its own, see ``selector``).
+  When the recording is stopped the area is cut out without encoding the video again (``region``).
 - ``audio``: ``ffmpeg`` records the monitor of the default sound output as MP3. Pause is SIGSTOP
   and SIGCONT, stop is SIGINT.
 
@@ -37,13 +40,18 @@ from pathlib import Path
 from typing import Callable, Dict, Iterator, List, Optional
 
 from hotrec import APP_NAME, _, config
+from hotrec.region import Region, crop_for, video_size
 
 _LOG = logging.getLogger(__name__)
 
 VIDEO_AUDIO = "video-audio"
 VIDEO = "video"
 AUDIO = "audio"
-MODES = (VIDEO_AUDIO, VIDEO, AUDIO)
+REGION_VIDEO_AUDIO = "region-video-audio"
+REGION_VIDEO = "region-video"
+REGION_MODES = (REGION_VIDEO_AUDIO, REGION_VIDEO)
+MODES = (VIDEO_AUDIO, VIDEO, AUDIO, *REGION_MODES)
+WITH_SOUND = (VIDEO_AUDIO, REGION_VIDEO_AUDIO)
 
 GSR = "gpu-screen-recorder"
 FFMPEG = "ffmpeg"
@@ -53,6 +61,9 @@ _COMM = {GSR: GSR[:15], FFMPEG: FFMPEG}
 START_CHECK_SECONDS = 1.5  # a recorder that is gone this soon did not start
 STOP_WAIT_SECONDS = 20.0  # SIGINT: the recorder writes the end of the file
 KILL_WAIT_SECONDS = 5.0
+SELECT_WAIT_SECONDS = 120.0  # the area window left open this long is a cancelled choice
+CROP_WAIT_SECONDS = 600.0
+SELECT_CANCELLED = 3  # exit status of ``hotrec select-region`` when the choice was given up
 _TICK = 0.1
 
 
@@ -101,6 +112,7 @@ class State:
     mode: str
     file: str
     paused: bool = False
+    region: Optional[List[float]] = None  # the area to cut out when this recording stops
 
 
 def state_dir(env: Optional[Dict[str, str]] = None) -> Path:
@@ -228,6 +240,7 @@ class Recorder:
         proc_root: str = "/proc",
         start_check: float = START_CHECK_SECONDS,
         stop_wait: float = STOP_WAIT_SECONDS,
+        select_region: Optional[Callable[[], Optional[Region]]] = None,
     ) -> None:
         self.env: Dict[str, str] = dict(os.environ if env is None else env)
         self.popen = popen
@@ -239,6 +252,7 @@ class Recorder:
         self.proc_root = proc_root
         self.start_check = start_check
         self.stop_wait = stop_wait
+        self.select_region = select_region or self._select_region
 
     # -- state ---------------------------------------------------------------------------------
 
@@ -257,12 +271,14 @@ class Recorder:
         cancelled portal dialog, a crash, a reboot) is removed."""
         try:
             data = json.loads((self.dir / "state.json").read_text(encoding="utf-8"))
+            area = Region.from_list(data.get("region"))
             state = State(
                 pid=int(data["pid"]),
                 started=int(data["started"]),
                 mode=str(data["mode"]),
                 file=str(data["file"]),
                 paused=bool(data.get("paused", False)),
+                region=area.as_list() if area else None,
             )
         except (OSError, ValueError, KeyError, TypeError):
             return None
@@ -315,9 +331,65 @@ class Recorder:
         """The key of ``mode``: stop and save what is recording, else start a recording."""
         if mode not in MODES:
             raise ValueError("unknown mode %r" % mode)
+        if mode in REGION_MODES:
+            return self._toggle_region(mode)
         with self.locked():
             state = self.read_state()
             return self._stop(state) if state else self._start(mode)
+
+    def _toggle_region(self, mode: str) -> int:
+        """The key of an area mode: stop and save what is recording, else let the user draw the
+        area and start. The area window is open while no lock is held (a key press during it
+        must not wait for it, and a second window is refused), and the state is read again after
+        it: a recording that started meanwhile is left alone."""
+        with self.locked():
+            state = self.read_state()
+            if state:
+                return self._stop(state)
+        with open(self.dir / "select.lock", "a") as handle:
+            try:
+                fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except OSError:
+                return 0  # the area window is already open
+            try:
+                area = self.select_region()
+            except RecorderError as error:
+                _LOG.error("[select] %s", error)
+                self.notify(_("Could not start the recording"), str(error))
+                return 1
+        if area is None:
+            return 0
+        with self.locked():
+            if self.read_state():
+                return 0
+            return self._start(mode, area)
+
+    def _select_region(self) -> Optional[Region]:
+        """Run the area window (``hotrec select-region``, a process of its own so GTK is loaded
+        only for it) and read the area it prints. ``None``: the choice was given up."""
+        command = [sys.executable, "-m", "hotrec", "select-region"]
+        try:
+            result = self.run(
+                command,
+                stdin=subprocess.DEVNULL,
+                capture_output=True,
+                text=True,
+                timeout=SELECT_WAIT_SECONDS,
+                check=False,
+            )
+        except subprocess.TimeoutExpired:
+            return None
+        except (OSError, subprocess.SubprocessError) as error:
+            raise RecorderError(_("The window to choose the area did not start")) from error
+        if result.returncode == SELECT_CANCELLED:
+            return None
+        if result.returncode != 0:
+            _LOG.error("[select] %s", (result.stderr or "").strip()[-500:])
+            raise RecorderError(_("The window to choose the area did not start"))
+        try:
+            return Region.from_json(result.stdout)
+        except (ValueError, KeyError, TypeError) as error:
+            raise RecorderError(_("The window to choose the area did not start")) from error
 
     def stop(self) -> int:
         with self.locked():
@@ -366,9 +438,9 @@ class Recorder:
             raise RecorderError(_("Could not find the sound output to record"))
         return sink + ".monitor"
 
-    def _start(self, mode: str) -> int:
+    def _start(self, mode: str, area: Optional[Region] = None) -> int:
         try:
-            self._launch(mode)
+            self._launch(mode, area)
         except RecorderError as error:
             _LOG.error("[start] %s", error)
             self.notify(_("Could not start the recording"), str(error))
@@ -398,7 +470,7 @@ class Recorder:
             raise RecorderError(_("Could not create the folder %s") % default) from error
         return default
 
-    def _launch(self, mode: str) -> None:
+    def _launch(self, mode: str, area: Optional[Region] = None) -> None:
         cfg, warnings = config.load(self.env)
         for warning in warnings:
             _LOG.warning("[config] %s", warning)
@@ -406,7 +478,7 @@ class Recorder:
         if mode == AUDIO:
             command = audio_command(cfg, self.default_monitor(), out)
         else:
-            command = video_command(cfg, mode == VIDEO_AUDIO, out)
+            command = video_command(cfg, mode in WITH_SOUND, out)
         log_path = self.dir / "recorder.log"
         flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | getattr(os, "O_NOFOLLOW", 0)
         log_fd = os.open(log_path, flags, 0o600)
@@ -436,7 +508,13 @@ class Recorder:
         if info is None:
             raise RecorderError(self._start_failure(mode, log_path))
         self.write_state(
-            State(pid=proc.pid, started=int(info["started"]), mode=mode, file=str(out))  # type: ignore[call-overload]
+            State(
+                pid=proc.pid,
+                started=int(info["started"]),  # type: ignore[call-overload]
+                mode=mode,
+                file=str(out),
+                region=area.as_list() if area else None,
+            )
         )
         self.spawn_indicator()
 
@@ -504,7 +582,73 @@ class Recorder:
                 self._wait_gone(state, KILL_WAIT_SECONDS)
         self.clear_state()
         if clean and Path(state.file).is_file():
+            area = Region.from_list(state.region)
+            if area is not None and not self._cut_out(Path(state.file), area):
+                self.notify(
+                    _(
+                        "Recording saved, but the area could not be cut out: "
+                        "the whole screen is in it"
+                    ),
+                    state.file,
+                )
+                return 0
             self.notify(_("Recording saved"), state.file)
             return 0
         self.notify(_("The recording may be incomplete"), state.file)
         return 1
+
+    def _cut_out(self, path: Path, area: Region) -> bool:
+        """Cut the area out of the finished video without encoding it again: ffmpeg copies the
+        streams and rewrites the cropping values of the H.264 headers (see ``region``). The video
+        is replaced only when ffmpeg succeeded; ``False`` leaves the whole screen as it was."""
+        temporary = path.with_name("%s.cropping%s" % (path.stem, path.suffix))
+        try:
+            info = self.run(
+                [FFMPEG, "-hide_banner", "-i", str(path)],
+                stdin=subprocess.DEVNULL,
+                capture_output=True,
+                text=True,
+                timeout=30,
+                check=False,
+            )
+            size = video_size(info.stderr or "")
+            crop = crop_for(area, *size) if size else None
+            if crop is None:
+                _LOG.error("[crop] no usable size or shape for %s (size %s)", path, size)
+                return False
+            result = self.run(
+                [
+                    FFMPEG,
+                    "-hide_banner",
+                    "-loglevel",
+                    "error",
+                    "-y",
+                    "-i",
+                    str(path),
+                    "-map",
+                    "0",
+                    "-c",
+                    "copy",
+                    "-bsf:v",
+                    crop.bitstream_filter(),
+                    str(temporary),
+                ],
+                stdin=subprocess.DEVNULL,
+                capture_output=True,
+                text=True,
+                timeout=CROP_WAIT_SECONDS,
+                check=False,
+            )
+            if result.returncode != 0 or not temporary.is_file() or temporary.stat().st_size == 0:
+                _LOG.error("[crop] ffmpeg failed: %s", (result.stderr or "").strip()[-500:])
+                return False
+            os.replace(temporary, path)
+            return True
+        except (OSError, subprocess.SubprocessError) as error:
+            _LOG.error("[crop] the cut failed: %s", error)
+            return False
+        finally:  # whatever happened, no half-written copy stays next to the recording
+            try:
+                temporary.unlink()
+            except OSError:
+                pass

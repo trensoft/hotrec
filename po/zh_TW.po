@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 17:10+0000\n"
+"POT-Creation-Date: 2026-10-29 20:35+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Chinese (Traditional)\n"
@@ -125,12 +125,16 @@ msgid "The recording stopped"
 msgstr "錄製已停止"
 
 #: hotrec/recorder.py
-msgid "Could not find the sound output to record"
-msgstr "找不到要錄製的聲音輸出"
-
-#: hotrec/recorder.py
 msgid "Could not start the recording"
 msgstr "無法開始錄製"
+
+#: hotrec/recorder.py
+msgid "The window to choose the area did not start"
+msgstr "選擇區域的視窗無法啟動"
+
+#: hotrec/recorder.py
+msgid "Could not find the sound output to record"
+msgstr "找不到要錄製的聲音輸出"
 
 #: hotrec/recorder.py
 #, python-format
@@ -153,12 +157,21 @@ msgid "Could not start the recording (log: %s)"
 msgstr "無法開始錄製（記錄檔：%s）"
 
 #: hotrec/recorder.py
+msgid ""
+"Recording saved, but the area could not be cut out: the whole screen is in it"
+msgstr "錄製已儲存，但無法裁切出該區域：其中包含整個螢幕"
+
+#: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "錄製已儲存"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
 msgstr "錄製可能不完整"
+
+#: hotrec/selector.py
+msgid "Drag the area to record. Esc or the right button cancels."
+msgstr "拖曳以選擇要錄製的區域。按 Esc 或右鍵取消。"
 
 #: hotrec/shellext.py
 msgid ""
@@ -174,6 +187,14 @@ msgid ""
 msgstr ""
 "全螢幕影片上方閃爍的紅點已開啟。如果還看不到，請登出後再登入一次。您可以在"
 "「擴充功能」應用程式中將其關閉。"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area and sound"
+msgstr "錄製區域和聲音"
+
+#: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
+msgid "Record area only"
+msgstr "僅錄製區域"
 
 #: hotrec/shortcuts.py data/io.github.trensoft.hotrec.desktop.in
 msgid "Record screen and sound"

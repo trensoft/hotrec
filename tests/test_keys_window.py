@@ -155,25 +155,29 @@ def press(window):
 def test_the_version_line_is_the_version_and_the_maker():
     assert keys_window.version_text() == "%s by %s" % (__version__, DEVELOPER)
     assert keys_window.version_text().endswith(" by TrenSoft")
-    assert __version__ == "0.1.4"
+    assert __version__ == "0.1.5"
 
 
-def test_the_window_has_the_title_the_version_and_four_rows():
+def test_the_window_has_the_title_the_version_and_six_rows():
     window, gtk = build(Gsettings())
     assert gtk.of("Window")[0].title == "Keyboard shortcuts"
     labels = [w.label for w in gtk.of("Label")]
     assert keys_window.version_text() in labels
-    assert labels[1:5] == [
+    assert labels[1:7] == [
         "Record screen and sound",
         "Record screen only",
         "Record sound only",
         "Pause or resume recording",
+        "Record area and sound",
+        "Record area only",
     ]
     assert [b.label for b in gtk.of("Button")] == [
         "Ctrl+Shift+F9",
         "Ctrl+Shift+F10",
         "Ctrl+Shift+F11",
         "Ctrl+Shift+F12",
+        "Ctrl+Shift+F7",
+        "Ctrl+Shift+F8",
         HOME_FOLDER,
         "Default",
         HOME_FOLDER,
@@ -184,7 +188,8 @@ def test_the_window_has_the_title_the_version_and_four_rows():
 
 def test_first_run_shows_the_default_keys_of_what_the_autostart_set(monkeypatch, env):
     """The 0.1.1 autostart path (hotrec autostart -> setup -> install) puts F9 to F12 into
-    GNOME; the window then shows exactly these, and so does the top of the menu."""
+    GNOME (and the two area keys F7 and F8); the window then shows exactly these, and so does the
+    top of the menu."""
     g = Gsettings()
     monkeypatch.setattr(cli.shutil, "which", lambda name: "/usr/bin/" + name)
     monkeypatch.setattr(
@@ -196,17 +201,21 @@ def test_first_run_shows_the_default_keys_of_what_the_autostart_set(monkeypatch,
     assert {s.slug: g.entries[(sc.path_of(s), "binding")] for s in sc.SHORTCUTS} == DEFAULTS
     window, gtk = build(g)
     assert window.keys == DEFAULTS
-    assert [b.label for b in gtk.of("Button")][:4] == [
+    assert [b.label for b in gtk.of("Button")][:6] == [
         "Ctrl+Shift+F9",
         "Ctrl+Shift+F10",
         "Ctrl+Shift+F11",
         "Ctrl+Shift+F12",
+        "Ctrl+Shift+F7",
+        "Ctrl+Shift+F8",
     ]
     assert indicator.key_lines(make(g)) == [
         "Ctrl+Shift+F9 - Record screen and sound",
         "Ctrl+Shift+F10 - Record screen only",
         "Ctrl+Shift+F11 - Record sound only",
         "Ctrl+Shift+F12 - Pause or resume recording",
+        "Ctrl+Shift+F7 - Record area and sound",
+        "Ctrl+Shift+F8 - Record area only",
     ]
 
 

@@ -25,6 +25,7 @@ removed and the next key starts a new recording.
 | Mode | Program | Pause | Stop |
 |---|---|---|---|
 | `video-audio`, `video` | `gpu-screen-recorder -w portal -restore-portal-session yes -f FPS -k h264 -encoder gpu -bm cbr -q KBPS [-a default_output -ac aac -ab KBPS] -o FILE` | SIGUSR2 (the recorder toggles) | SIGINT |
+| `region-video-audio`, `region-video` | the same `gpu-screen-recorder` command as `video-audio` / `video` (the whole monitor), after the area was drawn; at the stop `ffmpeg -c copy -bsf:v h264_metadata=crop_*` rewrites the area into the file (see "The area") | SIGUSR2 | SIGINT, then the cut |
 | `audio` | `ffmpeg -n -f pulse -i <default sink>.monitor -c:a libmp3lame -b:a KBPS FILE` | SIGSTOP / SIGCONT | SIGINT |
 
 Starting: the recorder is a new session (`start_new_session`), its output goes to `recorder.log`.
@@ -89,7 +90,7 @@ symbolic icon, the three start entries are usable and Pause and Stop are greyed;
 runs it is the other way round. The lock makes a second dot, resident or not, exit at once.
 GTK 3 and an AppIndicator library (Ayatana first, then the old one) are imported only here.
 
-The top of the menu holds four grey lines, "Ctrl+Shift+F9 - Record screen and sound", read from
+The top of the menu holds six grey lines, "Ctrl+Shift+F9 - Record screen and sound", read from
 GNOME (`Shortcuts.bindings()`) when the dot starts, after the window below saved, and every
 minute (`KEYS_REREAD_TICKS`); a shortcut without keys, or GNOME's settings missing, leaves its line
 hidden. The resident dot has "Set keyboard shortcuts..." at the bottom.
@@ -103,10 +104,37 @@ Escape gives up. A bare letter is refused; the function keys may stand alone. Sa
 `Shortcuts.install(keys)`, the code of `hotrec setup`, with the new accelerators: a key of another
 custom keybinding is a `ShortcutConflict` (compared as keys, not as text, so `<Control>f9` equals
 `<Primary>F9`) and nothing is written; two of ours with the same keys are refused before GNOME is
-touched. Shortcuts that are not installed yet show the default keys (Ctrl+Shift+F9 to F12), which
+touched. Shortcuts that are not installed yet show the default keys (Ctrl+Shift+F7 to F12), which
 is what Save would set; `hotrec autostart` installs exactly these, so the first window shows them
-as they are. At the bottom right: "0.1.4 by TrenSoft" (not translated), as in the settings window of
+as they are. At the bottom right: "0.1.5 by TrenSoft" (not translated), as in the settings window of
 Slideshow Lock. There is no separate About window.
+
+## The area (0.1.5)
+
+`region-video-audio` (Ctrl+Shift+F7) and `region-video` (Ctrl+Shift+F8). With nothing recording, the
+key runs `hotrec select-region` as a process of its own (`selector.py`, GTK 3 is loaded only there):
+on every monitor a transparent fullscreen window dims the screen; a drag with the left button draws
+the area, the release chooses it, Escape or the right button gives up (exit status 3). The window prints
+the area as JSON, as **fractions of the monitor it was drawn on** plus the monitor's width/height
+(`region.Region`). No lock is held while the window is open (`select.lock` refuses a second window); the
+state is read again afterwards, and a recording that started meanwhile is left alone. The area is kept in
+`state.json` (`region`, `[left, top, right, bottom, aspect]`).
+
+The portal records the whole monitor, as for `video`. At the stop, after the recorder ended cleanly,
+`Recorder._cut_out` reads the size of the file (`ffmpeg -i`), turns the fractions into pixels
+(`region.crop_for`) and runs `ffmpeg -c copy -bsf:v h264_metadata=crop_left=..:crop_right=..:crop_top=..:crop_bottom=..`
+into a temporary file next to the recording, which replaces it only if ffmpeg succeeded and wrote
+something. Nothing is encoded again, so there is no encoder to be missing and it takes seconds. The
+cropping values are counted against the coded size (visible size rounded up to 16) in steps of 2 pixels;
+ffmpeg based players cut the left edge exactly only at a multiple of 64 pixels, so the left edge moves
+left to such a column. When the file does not have the shape of the monitor the area was drawn on
+(2% tolerance: the portal recorded another monitor), or ffmpeg fails, the whole screen stays and the
+notification says so.
+
+Existing users: `hotrec autostart` runs `Shortcuts.add_missing()` once (marker
+`shortcuts-regions-added`), which adds only the entries that are not in the list, with their default keys,
+and leaves out a key another custom keybinding (or one of our entries) already has; nothing that is there
+is changed.
 
 ## The dot over a fullscreen video (0.1.4)
 

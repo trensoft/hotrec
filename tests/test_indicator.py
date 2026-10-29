@@ -280,16 +280,24 @@ def test_a_resident_dot_stays_while_nothing_records_and_offers_the_three_modes(
         "Record screen and sound",
         "Record screen only",
         "Record sound only",
+        "Record area and sound",
+        "Record area only",
         "Pause",
         "Stop and save",
         "Set keyboard shortcuts...",
     ]
-    assert [item.sensitive for item in dot.menu.items] == [True, True, True, False, False, True]
+    assert [item.sensitive for item in dot.menu.items] == [True] * 5 + [False, False, True]
     assert not toolkit.quit_called  # nothing recording does not end a resident dot
     assert dot.icons[-1] == (APP_ID + "-symbolic", "Hotrec")
-    for item in dot.menu.items[:3]:
+    for item in dot.menu.items[:5]:
         item.handlers["activate"](item)
-    assert spawned == [("video-audio",), ("video",), ("audio",)]
+    assert spawned == [
+        ("video-audio",),
+        ("video",),
+        ("audio",),
+        ("region-video-audio",),
+        ("region-video",),
+    ]
 
 
 def test_a_resident_dot_follows_a_recording_and_back(tmp_path):
@@ -312,7 +320,7 @@ def test_a_resident_dot_while_recording_cannot_start_another(tmp_path):
     toolkit = Toolkit([], recorder)
     indicator.run(recorder, toolkit.triple(), resident=True)
     sensitive = [i.sensitive for i in toolkit.indicator.menu.items]
-    assert sensitive == [False, False, False, True, True, True]  # the last: the keys window
+    assert sensitive == [False] * 5 + [True, True, True]  # the last: the keys window
     assert toolkit.indicator.args[1] == APP_ID + "-recording"
 
 
@@ -343,6 +351,8 @@ def test_the_top_of_the_menu_lists_the_keys_grey_and_not_clickable(tmp_path, mon
                     "video": "<Control><Shift>f10",
                     "audio": "<Primary><Alt>r",
                     "pause": "<Super>F12",
+                    "region-video-audio": "<Primary><Shift>F7",
+                    "region-video": "<Primary><Shift>F8",
                 }
             )
         ),
@@ -351,16 +361,18 @@ def test_the_top_of_the_menu_lists_the_keys_grey_and_not_clickable(tmp_path, mon
     toolkit = Toolkit([], recorder)
     indicator.run(recorder, toolkit.triple(), resident=True)
     menu = toolkit.indicator.menu
-    assert menu.all[:4] == menu.key_lines  # at the top
+    assert menu.all[:6] == menu.key_lines  # at the top
     assert [i.label for i in menu.key_lines] == [
         "Ctrl+Shift+F9 - Record screen and sound",
         "Ctrl+Shift+F10 - Record screen only",
         "Ctrl+Alt+R - Record sound only",
         "Super+F12 - Pause or resume recording",
+        "Ctrl+Shift+F7 - Record area and sound",
+        "Ctrl+Shift+F8 - Record area only",
     ]
     assert all(not i.sensitive and i.visible for i in menu.key_lines)
     assert all("activate" not in i.handlers for i in menu.key_lines)
-    assert menu.all[4].separator
+    assert menu.all[6].separator
 
 
 def test_the_key_lines_are_there_in_the_dot_of_a_recording_too(tmp_path, monkeypatch):
@@ -377,6 +389,8 @@ def test_the_key_lines_are_there_in_the_dot_of_a_recording_too(tmp_path, monkeyp
         ("", False),
         ("", False),
         ("Ctrl+Shift+F12 - Pause or resume recording", True),
+        ("", False),
+        ("", False),
     ]
 
 
@@ -458,4 +472,4 @@ def test_the_installer_needs_hotrec_on_the_path(monkeypatch):
 
 def test_key_lines_skip_a_shortcut_without_keys():
     lines = indicator.key_lines(KeySource(keys_of({"audio": "<Primary><Shift>F11"})))
-    assert lines == [None, None, "Ctrl+Shift+F11 - Record sound only", None]
+    assert lines == [None, None, "Ctrl+Shift+F11 - Record sound only", None, None, None]
