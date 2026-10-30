@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 20:35+0000\n"
+"POT-Creation-Date: 2026-10-30 06:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Hungarian\n"
@@ -32,6 +32,14 @@ msgstr ""
 "Ctrl+Shift+F9: képernyő és hang. Ctrl+Shift+F10: csak a képernyő. "
 "Ctrl+Shift+F11: csak a hang. Ctrl+Shift+F12: szünet vagy folytatás. Az első "
 "három bármelyike leállítja és menti a felvételt."
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F7: area and sound. Ctrl+Shift+F8: area only. Both also stop and "
+"save the recording."
+msgstr ""
+"Ctrl+Shift+F7: terület és hang. Ctrl+Shift+F8: csak a terület. Mindkettő le "
+"is állítja és el is menti a felvételt."
 
 #: hotrec/indicator.py
 msgid "Paused"
@@ -170,6 +178,13 @@ msgstr ""
 #: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "A felvétel mentve"
+
+#: hotrec/recorder.py
+msgid ""
+"Only the view is cropped to the area: the rest of the screen stays in the "
+"file"
+msgstr ""
+"Csak a nézet van a területre vágva: a képernyő többi része a fájlban marad"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"

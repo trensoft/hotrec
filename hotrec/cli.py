@@ -119,6 +119,11 @@ def _set_shortcuts(recorder: Recorder) -> Optional[ShortcutError]:
             "Ctrl+Shift+F9: screen and sound. Ctrl+Shift+F10: screen only. "
             "Ctrl+Shift+F11: sound only. Ctrl+Shift+F12: pause or resume. "
             "Any of the first three stops and saves the recording."
+        )
+        + "\n"
+        + _(
+            "Ctrl+Shift+F7: area and sound. Ctrl+Shift+F8: area only. "
+            "Both also stop and save the recording."
         ),
     )
     return None

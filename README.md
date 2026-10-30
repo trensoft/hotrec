@@ -27,14 +27,27 @@ programs is overwritten. The version and the maker are at the bottom of the wind
 
 **Recording an area** (F7, F8): the screen is dimmed on every monitor and the area is drawn with the
 mouse (drag with the left button; Escape or the right button gives up). The portal still records the
-whole monitor; when the recording stops, the area is cut out of the file **without encoding the video
-again**: `ffmpeg -c copy` with the `h264_metadata` bitstream filter rewrites the cropping values in the
-H.264 headers, which takes seconds and needs no video encoder. The left edge of the area moves left to a
-multiple of 64 pixels (players cut the left edge exactly only there), the other edges to 2 pixels. If
-the cut fails (ffmpeg failed, or the portal recorded another monitor than the one the area was drawn
-on), the whole screen stays in the file and a notification says so. People who set the first four keys
-up with an older version get F7 and F8 added at the next login, by `hotrec autostart`, and nothing else
-of theirs is touched.
+whole monitor; when the recording stops, the picture is cropped to the area **without encoding the
+video again**: `ffmpeg -c copy` with the `h264_metadata` bitstream filter rewrites the cropping values
+in the H.264 headers, which takes seconds and needs no video encoder. The left edge of the area moves
+left to a multiple of 64 pixels (players cut the left edge exactly only there), the other edges to 2
+pixels.
+
+**This crops the view, it does not black out the rest.** The whole picture of the monitor stays in the
+file; only the instruction "show this part" is changed. Anyone who has the file can remove the cropping
+with one ffmpeg command and get the whole screen back (other windows, notifications, a password
+manager, a chat), and some players and editors ignore the cropping and show the whole screen at once.
+Do not use the area to hide something from the person you send the file to. The notification after the
+recording says so. Cutting the picture away for real (encoding it again) is not done in 0.1.5.
+
+The area belongs to the monitor the portal records, which is the one you chose in the portal's
+dialog, not necessarily the one you drew on. Hotrec only stores the area as fractions of the screen
+(and the shape of the monitor), not which monitor it was. With two monitors of the same shape the
+fractions are applied to whichever one the portal records, and the area can be the wrong part of the
+picture, with no warning. If the shape differs, or ffmpeg fails, the whole screen stays in the file
+and a notification says so. People who set the first four keys up with an older version get F7 and F8
+added at the next login, by `hotrec autostart`, and nothing else of theirs is touched: a shortcut of
+the first four that they took out is not put back.
 
 The screen is recorded by `gpu-screen-recorder` (portal mode: the desktop asks which screen, once,
 and remembers), encoded as H.264 by the graphics hardware (NVENC, VA-API). The sound of the video

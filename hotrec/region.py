@@ -11,6 +11,11 @@ has no software H.264 encoder). Measured with ffmpeg 7.0: the picture a player s
 bit the one the
 ``crop`` filter gives.
 
+This crops the **view**; it is not a redaction. The picture data of the whole monitor stays in the
+file, the cropping can be removed again with one ffmpeg command, and some players ignore it. The
+README, the man page and the notification after the recording say so; do not call it "cut out"
+in text a person reads without saying what stays.
+
 Two limits of the headers, both handled here:
 
 - the cropping values are counted against the *coded* size, which is the visible size rounded up

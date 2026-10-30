@@ -120,10 +120,14 @@ test -x %{buildroot}%{_bindir}/hotrec
 - New: recording an area of the screen. "hotrec region-video-audio" (Ctrl+Shift+F7, with sound) and
   "hotrec region-video" (Ctrl+Shift+F8, screen only) dim the screen, the user drags the area with the mouse
   (own GTK 3 window on every monitor; Esc or the right button cancels). The portal still records the whole
-  monitor; when the recording stops the area is cut out without encoding the video again (ffmpeg -c copy
-  with the h264_metadata bitstream filter rewrites the cropping values of the stream), so no video encoder
-  is needed. The left edge moves to a multiple of 64 pixels, the others to 2 pixels. If the cut fails the
-  whole screen is kept and a notification says so
+  monitor; when the recording stops the picture is cropped to the area without encoding the video again
+  (ffmpeg -c copy with the h264_metadata bitstream filter rewrites the cropping values of the stream), so
+  no video encoder is needed. The left edge moves to a multiple of 64 pixels, the others to 2 pixels. If
+  the cut fails the whole screen is kept and a notification says so
+- The area is a crop of the view, not a redaction: the whole screen stays in the file, the cropping can be
+  removed with one ffmpeg command, and some players ignore it. The README, the man page and the
+  notification after the recording say so. The area is applied to the monitor the portal records; with two
+  monitors of the same shape this can be the wrong one, unnoticed (documented, not fixed)
 - The two keys are in the shortcuts window and can be changed there. "hotrec autostart" adds them for people
   who set the first four up with an older version, once, and touches no entry that is there
 - F9 to F12 are unchanged

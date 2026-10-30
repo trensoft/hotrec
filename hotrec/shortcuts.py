@@ -64,6 +64,11 @@ SHORTCUTS = (
     Shortcut("region-video", "<Primary><Shift>F8", "Ctrl+Shift+F8"),
 )
 
+# What ``Shortcuts.add_missing`` may add for a person who set the first four up with 0.1.4: only
+# the shortcuts that are new in 0.1.5. The first four are never put back, because a person may
+# have taken them out on purpose (``hotrec shortcuts remove``, or by hand in Settings).
+ADDED_IN_0_1_5 = frozenset({"region-video-audio", "region-video"})
+
 
 # How the modifiers of an accelerator are spelled, by every name GTK and GNOME use for them.
 _MODIFIER_NAMES = {
@@ -359,15 +364,16 @@ class Shortcuts:
         ]
 
     def add_missing(self) -> List[str]:
-        """Add the shortcuts of ours that are not in the list yet, with their default keys, and
-        touch nothing else: the keys a person already set (or changed) stay as they are. This is
-        how a version that brings new shortcuts reaches the people who installed the old ones.
+        """Add the new shortcuts of 0.1.5 (``ADDED_IN_0_1_5``) that are not in the list yet, with
+        their default keys, and touch nothing else: the keys a person already set (or changed)
+        stay as they are, and an old shortcut that is missing is not put back. This is how a
+        version that brings new shortcuts reaches the people who installed the old ones.
         A default key that another custom keybinding (or one of our own entries) already has is
         not taken: that shortcut is left out and named in ``self.skipped``. Returns the slugs
         that were added."""
         self._need_gsettings()
         existing = self._get_list()
-        missing = [s for s in SHORTCUTS if path_of(s) not in existing]
+        missing = [s for s in SHORTCUTS if s.slug in ADDED_IN_0_1_5 and path_of(s) not in existing]
         self.skipped = []
         if not missing:
             return []

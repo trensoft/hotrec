@@ -503,6 +503,27 @@ def test_add_missing_adds_only_the_two_area_keys_and_touches_nothing_else():
     assert not any(c[1] == "reset" for c in g.calls)
 
 
+def test_add_missing_does_not_put_back_an_old_shortcut_a_person_took_out():
+    # F9-F12 removed on purpose (``hotrec shortcuts remove``, or by hand): only the new ones come
+    g = Gsettings(repr([OTHER]), {(OTHER, "binding"): "<Super>t"})
+    shortcuts = make(g, "/usr/bin/hotrec")
+    assert shortcuts.add_missing() == ["region-video-audio", "region-video"]
+    listed = sc.parse_list(g.listing)
+    assert listed == [OTHER] + [sc.path_of(s) for s in NEW_TWO]
+    for s in OLD_FOUR:
+        assert sc.path_of(s) not in listed
+        assert not any(path == sc.path_of(s) for path, _ in g.entries)
+    g.calls.clear()
+    assert shortcuts.add_missing() == []  # and nothing more the second time
+    assert not any(c[1] in ("set", "reset") for c in g.calls)
+
+
+def test_add_missing_with_nothing_of_the_four_and_one_new_one_there_adds_the_other_new_one():
+    g = Gsettings(repr([OTHER, sc.path_of(NEW_TWO[0])]), {(OTHER, "binding"): "<Super>t"})
+    assert make(g).add_missing() == ["region-video"]
+    assert not any(sc.path_of(s) in sc.parse_list(g.listing) for s in OLD_FOUR)
+
+
 def test_add_missing_with_everything_there_changes_nothing():
     g = Gsettings()
     shortcuts = make(g)

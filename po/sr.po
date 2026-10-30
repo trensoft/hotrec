@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 20:35+0000\n"
+"POT-Creation-Date: 2026-10-30 06:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Serbian\n"
@@ -33,6 +33,14 @@ msgstr ""
 "Ctrl+Shift+F9: екран и звук. Ctrl+Shift+F10: само екран. Ctrl+Shift+F11: "
 "само звук. Ctrl+Shift+F12: паузирај или настави. Било која од прве три "
 "зауставља и чува снимак."
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F7: area and sound. Ctrl+Shift+F8: area only. Both also stop and "
+"save the recording."
+msgstr ""
+"Ctrl+Shift+F7: област и звук. Ctrl+Shift+F8: само област. Обе такође "
+"заустављају и чувају снимак."
 
 #: hotrec/indicator.py
 msgid "Paused"
@@ -168,6 +176,12 @@ msgstr ""
 #: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Снимак је сачуван"
+
+#: hotrec/recorder.py
+msgid ""
+"Only the view is cropped to the area: the rest of the screen stays in the "
+"file"
+msgstr "Само приказ је опсечен на област: остатак екрана остаје у датотеци"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"

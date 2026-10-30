@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 20:35+0000\n"
+"POT-Creation-Date: 2026-10-30 06:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Maltese\n"
@@ -33,6 +33,14 @@ msgstr ""
 "Ctrl+Shift+F9: skrin u ħoss. Ctrl+Shift+F10: skrin biss. Ctrl+Shift+F11: "
 "ħoss biss. Ctrl+Shift+F12: waqqaf jew kompli. Kwalunkwe waħda mill-ewwel "
 "tlieta twaqqaf u żżomm ir-reġistrazzjoni."
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F7: area and sound. Ctrl+Shift+F8: area only. Both also stop and "
+"save the recording."
+msgstr ""
+"Ctrl+Shift+F7: żona u ħoss. Ctrl+Shift+F8: żona biss. It-tnejn iwaqqfu u "
+"jsejvjaw ir-reġistrazzjoni wkoll."
 
 #: hotrec/indicator.py
 msgid "Paused"
@@ -170,6 +178,13 @@ msgstr ""
 #: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Ir-reġistrazzjoni ssejvjat"
+
+#: hotrec/recorder.py
+msgid ""
+"Only the view is cropped to the area: the rest of the screen stays in the "
+"file"
+msgstr ""
+"Il-veduta biss titqatta' għaż-żona: il-bqija tal-iskrin jibqa' fil-fajl"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"

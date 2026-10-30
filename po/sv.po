@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 20:35+0000\n"
+"POT-Creation-Date: 2026-10-30 06:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Swedish\n"
@@ -32,6 +32,14 @@ msgstr ""
 "Ctrl+Skift+F9: skärm och ljud. Ctrl+Skift+F10: endast skärm. Ctrl+Skift+F11: "
 "endast ljud. Ctrl+Skift+F12: pausa eller återuppta. Vilket som helst av de "
 "tre första stoppar och sparar inspelningen."
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F7: area and sound. Ctrl+Shift+F8: area only. Both also stop and "
+"save the recording."
+msgstr ""
+"Ctrl+Skift+F7: område och ljud. Ctrl+Skift+F8: endast område. Båda stoppar "
+"också och sparar inspelningen."
 
 #: hotrec/indicator.py
 msgid "Paused"
@@ -169,6 +177,12 @@ msgstr ""
 #: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Inspelningen sparad"
+
+#: hotrec/recorder.py
+msgid ""
+"Only the view is cropped to the area: the rest of the screen stays in the "
+"file"
+msgstr "Bara vyn beskärs till området: resten av skärmen finns kvar i filen"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"

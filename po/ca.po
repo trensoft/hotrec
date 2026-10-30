@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 20:35+0000\n"
+"POT-Creation-Date: 2026-10-30 06:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Catalan\n"
@@ -32,6 +32,14 @@ msgstr ""
 "Ctrl+Maj+F9: pantalla i so. Ctrl+Maj+F10: només pantalla. Ctrl+Maj+F11: "
 "només so. Ctrl+Maj+F12: pausa o represa. Qualsevol de les tres primeres "
 "atura i desa l'enregistrament."
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F7: area and sound. Ctrl+Shift+F8: area only. Both also stop and "
+"save the recording."
+msgstr ""
+"Ctrl+Maj+F7: àrea i so. Ctrl+Maj+F8: només àrea. Les dues també aturen i "
+"desen l'enregistrament."
 
 #: hotrec/indicator.py
 msgid "Paused"
@@ -168,6 +176,14 @@ msgstr ""
 #: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Enregistrament desat"
+
+#: hotrec/recorder.py
+msgid ""
+"Only the view is cropped to the area: the rest of the screen stays in the "
+"file"
+msgstr ""
+"Només la vista es retalla a l'àrea: la resta de la pantalla continua al "
+"fitxer"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"

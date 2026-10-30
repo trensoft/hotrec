@@ -280,7 +280,7 @@ class Recorder:
                 paused=bool(data.get("paused", False)),
                 region=area.as_list() if area else None,
             )
-        except (OSError, ValueError, KeyError, TypeError):
+        except (OSError, ValueError, KeyError, TypeError, AttributeError):  # [] or null: no dict
             return None
         if self.is_alive(state):
             return state
@@ -335,7 +335,10 @@ class Recorder:
             return self._toggle_region(mode)
         with self.locked():
             state = self.read_state()
-            return self._stop(state) if state else self._start(mode)
+            if not state:
+                return self._start(mode)
+            clean = self._halt(state)
+        return self._finish(state, clean)  # the lock is free while the area is cut out
 
     def _toggle_region(self, mode: str) -> int:
         """The key of an area mode: stop and save what is recording, else let the user draw the
@@ -344,8 +347,9 @@ class Recorder:
         it: a recording that started meanwhile is left alone."""
         with self.locked():
             state = self.read_state()
-            if state:
-                return self._stop(state)
+            clean = self._halt(state) if state else False
+        if state:
+            return self._finish(state, clean)
         with open(self.dir / "select.lock", "a") as handle:
             try:
                 fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -394,7 +398,10 @@ class Recorder:
     def stop(self) -> int:
         with self.locked():
             state = self.read_state()
-            return self._stop(state) if state else 0
+            if not state:
+                return 0
+            clean = self._halt(state)
+        return self._finish(state, clean)
 
     def pause(self) -> int:
         """Pause or resume. Nothing recording: nothing happens."""
@@ -569,7 +576,9 @@ class Recorder:
         except ProcessLookupError:
             pass
 
-    def _stop(self, state: State) -> int:
+    def _halt(self, state: State) -> bool:
+        """End the recording process and forget the state; call it with the lock held. Returns
+        whether it ended by itself after the first signal (the file is complete then)."""
         if state.paused:
             self._send(state, signal.SIGCONT)  # a stopped process cannot see SIGINT
         self._send(state, signal.SIGINT)
@@ -581,6 +590,12 @@ class Recorder:
                 self._send(state, signal.SIGKILL)
                 self._wait_gone(state, KILL_WAIT_SECONDS)
         self.clear_state()
+        return clean
+
+    def _finish(self, state: State, clean: bool) -> int:
+        """What the user is told about a recording that has ended, after the area is cut out of
+        it. Runs without the lock: the cut can take minutes for a long recording, and a key
+        pressed meanwhile (a new recording, pause) must not wait for it."""
         if clean and Path(state.file).is_file():
             area = Region.from_list(state.region)
             if area is not None and not self._cut_out(Path(state.file), area):
@@ -590,6 +605,19 @@ class Recorder:
                         "the whole screen is in it"
                     ),
                     state.file,
+                )
+                return 0
+            if area is not None:  # a view cut, not a redaction: say what the file still holds
+                self.notify(
+                    _("Recording saved"),
+                    "%s\n%s"
+                    % (
+                        state.file,
+                        _(
+                            "Only the view is cropped to the area: "
+                            "the rest of the screen stays in the file"
+                        ),
+                    ),
                 )
                 return 0
             self.notify(_("Recording saved"), state.file)

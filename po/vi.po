@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 20:35+0000\n"
+"POT-Creation-Date: 2026-10-30 06:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Vietnamese\n"
@@ -32,6 +32,14 @@ msgstr ""
 "Ctrl+Shift+F9: màn hình và âm thanh. Ctrl+Shift+F10: chỉ màn hình. "
 "Ctrl+Shift+F11: chỉ âm thanh. Ctrl+Shift+F12: tạm dừng hoặc tiếp tục. Bất kỳ "
 "phím nào trong ba phím đầu đều dừng và lưu bản ghi."
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F7: area and sound. Ctrl+Shift+F8: area only. Both also stop and "
+"save the recording."
+msgstr ""
+"Ctrl+Shift+F7: vùng và âm thanh. Ctrl+Shift+F8: chỉ vùng. Cả hai cũng dừng "
+"và lưu bản ghi."
 
 #: hotrec/indicator.py
 msgid "Paused"
@@ -167,6 +175,14 @@ msgstr ""
 #: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Đã lưu bản ghi"
+
+#: hotrec/recorder.py
+msgid ""
+"Only the view is cropped to the area: the rest of the screen stays in the "
+"file"
+msgstr ""
+"Chỉ khung nhìn được cắt theo vùng: phần còn lại của màn hình vẫn nằm trong "
+"tệp"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"

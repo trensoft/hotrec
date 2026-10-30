@@ -246,7 +246,7 @@ def test_a_recorder_that_is_already_gone_is_not_an_error_to_stop(world, env):
     recorder.kill = vanish
     # the process disappears before the signal: read_state saw it alive, _send tolerates the race;
     # no file was written, so the user is told it may be incomplete
-    assert recorder._stop(state) == 1
+    assert recorder._finish(state, recorder._halt(state)) == 1
     assert world.notes == [("The recording may be incomplete", state.file)]
     assert recorder.read_state() is None
 
@@ -659,3 +659,10 @@ def test_the_other_encoder_words_get_the_general_text(line):
 )
 def test_other_logs_are_no_encoder_problem(log):
     assert rec.encoder_problem(log) is None
+
+
+@pytest.mark.parametrize("text", ["[]", "null", "5", '"a"', "[1, 2]"])
+def test_a_state_file_that_is_no_object_is_no_recording(world, env, text):
+    recorder = world.recorder(env)
+    (recorder.dir / "state.json").write_text(text, encoding="utf-8")
+    assert recorder.read_state() is None

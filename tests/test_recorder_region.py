@@ -3,6 +3,7 @@
 
 """The area modes of the recorder: the choice of the area, the recording, the cut at the stop."""
 
+import fcntl
 import json
 import subprocess
 from pathlib import Path
@@ -25,6 +26,7 @@ class Ffmpeg:
         self.size = size
         self.fail = False
         self.missing = False
+        self.during_cut = None  # called when the cut starts, to look at the world meanwhile
         self.output = b"cropped video"
         self.calls = []
         self.selector_result = (0, AREA.to_json(), "")
@@ -38,6 +40,8 @@ class Ffmpeg:
                 return subprocess.CompletedProcess(
                     command, 1, "", INFO % self.size if self.size else ""
                 )
+            if self.during_cut:
+                self.during_cut()
             if self.fail:
                 return subprocess.CompletedProcess(command, 1, "", "Invalid data found")
             Path(command[-1]).write_bytes(self.output)
@@ -217,7 +221,14 @@ def test_the_stop_cuts_the_area_out_without_encoding_and_replaces_the_file(world
     assert cut[-1] != str(path) and cut[-1].endswith(".mkv")  # written next to it first
     assert path.read_bytes() == b"cropped video"
     assert [p.name for p in path.parent.iterdir()] == [path.name]  # no temporary file left
-    assert world.notes == [("Recording saved", str(path))]
+    # a view cut, not a redaction: the notification says the rest of the screen is still in the file
+    assert world.notes == [
+        (
+            "Recording saved",
+            "%s\nOnly the view is cropped to the area: the rest of the screen stays in the file"
+            % path,
+        )
+    ]
 
 
 def test_a_video_of_another_size_with_the_same_shape_is_cut_by_the_fractions(world, env, ff):
@@ -310,3 +321,35 @@ def test_the_state_of_an_older_version_has_no_area_and_is_read(world, env, ff):
     data["region"] = "rubbish"
     state_file.write_text(json.dumps(data))
     assert recorder.read_state().region is None
+
+
+def lock_is_free(recorder):
+    with open(recorder.dir / "lock", "a") as handle:
+        try:
+            fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            return False
+        return True
+
+
+@pytest.mark.parametrize("key", ["region-video-audio", rec.VIDEO_AUDIO, "stop"])
+def test_the_lock_is_free_while_the_area_is_cut_out(world, env, ff, key):
+    # the cut can take minutes; a key pressed meanwhile (new recording, pause) must not wait for it
+    recorder, _ = recorded(world, env, ff)
+    seen = []
+    ff.during_cut = lambda: seen.append((lock_is_free(recorder), recorder.read_state()))
+    assert (recorder.stop() if key == "stop" else recorder.toggle(key)) == 0
+    assert seen == [(True, None)]  # free, and the stopped recording is no longer "running"
+
+
+def test_a_recording_started_while_the_area_is_cut_out_is_a_recording_of_its_own(world, env, ff):
+    recorder, path = recorded(world, env, ff)
+    started = []
+    ff.during_cut = lambda: started.append(
+        recorder.toggle(rec.VIDEO) if lock_is_free(recorder) else None
+    )
+    assert recorder.toggle("region-video-audio") == 0
+    assert started == [0]
+    assert path.read_bytes() == b"cropped video"
+    state = recorder.read_state()
+    assert state is not None and state.mode == rec.VIDEO and state.file != str(path)

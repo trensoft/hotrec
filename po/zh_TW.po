@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 20:35+0000\n"
+"POT-Creation-Date: 2026-10-30 06:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Chinese (Traditional)\n"
@@ -31,6 +31,13 @@ msgid ""
 msgstr ""
 "Ctrl+Shift+F9：螢幕和聲音。Ctrl+Shift+F10：僅螢幕。Ctrl+Shift+F11：僅聲音。"
 "Ctrl+Shift+F12：暫停或繼續。前三個中的任何一個都會停止並儲存錄製。"
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F7: area and sound. Ctrl+Shift+F8: area only. Both also stop and "
+"save the recording."
+msgstr ""
+"Ctrl+Shift+F7：區域和聲音。Ctrl+Shift+F8：僅區域。兩者也會停止並儲存錄製。"
 
 #: hotrec/indicator.py
 msgid "Paused"
@@ -164,6 +171,12 @@ msgstr "錄製已儲存，但無法裁切出該區域：其中包含整個螢幕
 #: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "錄製已儲存"
+
+#: hotrec/recorder.py
+msgid ""
+"Only the view is cropped to the area: the rest of the screen stays in the "
+"file"
+msgstr "僅畫面被裁切到該區域：螢幕的其餘部分仍在檔案中"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"

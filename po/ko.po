@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 20:35+0000\n"
+"POT-Creation-Date: 2026-10-30 06:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Korean\n"
@@ -32,6 +32,14 @@ msgstr ""
 "Ctrl+Shift+F9: 화면과 소리. Ctrl+Shift+F10: 화면만. Ctrl+Shift+F11: 소리만. "
 "Ctrl+Shift+F12: 일시 중지 또는 계속. 처음 세 개 중 아무 키나 누르면 녹화를 멈"
 "추고 저장합니다."
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F7: area and sound. Ctrl+Shift+F8: area only. Both also stop and "
+"save the recording."
+msgstr ""
+"Ctrl+Shift+F7: 영역과 소리. Ctrl+Shift+F8: 영역만. 두 키 모두 녹화를 중지하"
+"고 저장하기도 합니다."
 
 #: hotrec/indicator.py
 msgid "Paused"
@@ -167,6 +175,13 @@ msgstr ""
 #: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "녹화를 저장했습니다"
+
+#: hotrec/recorder.py
+msgid ""
+"Only the view is cropped to the area: the rest of the screen stays in the "
+"file"
+msgstr ""
+"보이는 화면만 영역으로 잘립니다: 화면의 나머지는 파일에 그대로 남습니다"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"

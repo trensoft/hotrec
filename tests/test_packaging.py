@@ -279,3 +279,20 @@ def test_the_extension_passes_its_node_tests_against_a_fake_desktop():
         cwd=REPO,
     )
     assert result.returncode == 0, result.stdout[-3000:] + result.stderr[-1000:]
+
+
+AREA_IS_A_CROP = {
+    "README.md": ("does not black out the rest", "wrong part of the picture"),
+    "packaging/man/hotrec.1": ("does not black out the rest", "wrong part of the picture"),
+    "packaging/fedora/hotrec.spec": ("not a redaction", "wrong one, unnoticed"),
+    "docs/design.md": ("not a redaction", "with no warning"),
+}
+
+
+@pytest.mark.parametrize("name", sorted(AREA_IS_A_CROP))
+def test_the_docs_say_the_area_is_a_crop_of_the_view_and_name_the_monitor_limit(name):
+    """Petra's review of 0.1.5: the file keeps the whole screen (the cropping is metadata), and the
+    area is applied to the monitor the portal records, not the one it was drawn on."""
+    text = " ".join((REPO / name).read_text(encoding="utf-8").split())
+    for phrase in AREA_IS_A_CROP[name]:
+        assert phrase in text, (name, phrase)

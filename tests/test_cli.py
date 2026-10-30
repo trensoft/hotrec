@@ -162,8 +162,8 @@ def test_setup_says_so_in_a_notification(shortcuts):
     assert cli.main(["setup"]) == 0
     summary, body = FakeRecorder.notes[0]
     assert summary == "Keyboard shortcuts are set"
-    for key in ("F9", "F10", "F11", "F12"):
-        assert key in body
+    for key in ("F7", "F8", "F9", "F10", "F11", "F12"):
+        assert key in body  # the area keys too: the person is told they exist
 
 
 def test_setup_failure_is_a_notification_too(shortcuts):

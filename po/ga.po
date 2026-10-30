@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 20:35+0000\n"
+"POT-Creation-Date: 2026-10-30 06:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Irish\n"
@@ -32,6 +32,14 @@ msgstr ""
 "Ctrl+Shift+F9: scáileán agus fuaim. Ctrl+Shift+F10: scáileán amháin. "
 "Ctrl+Shift+F11: fuaim amháin. Ctrl+Shift+F12: sos nó athtosú. Stopann agus "
 "sábhálann ceann ar bith de na chéad trí cinn an taifeadadh."
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F7: area and sound. Ctrl+Shift+F8: area only. Both also stop and "
+"save the recording."
+msgstr ""
+"Ctrl+Shift+F7: limistéar agus fuaim. Ctrl+Shift+F8: limistéar amháin. "
+"Stopann an dá cheann an taifeadadh agus sábhálann siad é freisin."
 
 #: hotrec/indicator.py
 msgid "Paused"
@@ -168,6 +176,14 @@ msgstr ""
 #: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Taifeadadh sábháilte"
+
+#: hotrec/recorder.py
+msgid ""
+"Only the view is cropped to the area: the rest of the screen stays in the "
+"file"
+msgstr ""
+"Ní ghearrtar ach an radharc chuig an limistéar: fanann an chuid eile den "
+"scáileán sa chomhad"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"

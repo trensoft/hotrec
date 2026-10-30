@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 20:35+0000\n"
+"POT-Creation-Date: 2026-10-30 06:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Finnish\n"
@@ -32,6 +32,14 @@ msgstr ""
 "Ctrl+Vaihto+F9: näyttö ja ääni. Ctrl+Vaihto+F10: vain näyttö. "
 "Ctrl+Vaihto+F11: vain ääni. Ctrl+Vaihto+F12: tauko tai jatka. Mikä tahansa "
 "kolmesta ensimmäisestä pysäyttää ja tallentaa tallenteen."
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F7: area and sound. Ctrl+Shift+F8: area only. Both also stop and "
+"save the recording."
+msgstr ""
+"Ctrl+Vaihto+F7: alue ja ääni. Ctrl+Vaihto+F8: vain alue. Molemmat myös "
+"pysäyttävät ja tallentavat tallenteen."
 
 #: hotrec/indicator.py
 msgid "Paused"
@@ -167,6 +175,12 @@ msgstr ""
 #: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Tallenne tallennettu"
+
+#: hotrec/recorder.py
+msgid ""
+"Only the view is cropped to the area: the rest of the screen stays in the "
+"file"
+msgstr "Vain näkymä rajataan alueeseen: loput näytöstä jää tiedostoon"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"

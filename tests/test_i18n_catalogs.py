@@ -119,6 +119,19 @@ def test_the_key_names_in_the_notification_survive(lang):
 
 
 @pytest.mark.parametrize("lang", LANGS)
+def test_the_area_keys_in_the_notification_and_the_crop_note_are_translated(lang):
+    seen = set()
+    for msgid, msgstr, _f in entries(PO / ("%s.po" % lang)):
+        if msgid.startswith("Ctrl+Shift+F7"):
+            seen.add("keys")
+            assert "F7" in msgstr and "F8" in msgstr, lang
+        if msgid.startswith("Only the view is cropped"):
+            seen.add("crop")
+            assert msgstr.strip() and msgstr != msgid, lang
+    assert seen == {"keys", "crop"}, lang
+
+
+@pytest.mark.parametrize("lang", LANGS)
 def test_the_key_names_in_the_shortcuts_window_survive(lang):
     """The keys are named as they are printed on the keyboard, whatever the language."""
     for msgid, msgstr, _f in entries(PO / ("%s.po" % lang)):

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 20:35+0000\n"
+"POT-Creation-Date: 2026-10-30 06:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Filipino\n"
@@ -33,6 +33,14 @@ msgstr ""
 "Ctrl+Shift+F9: screen at tunog. Ctrl+Shift+F10: screen lang. Ctrl+Shift+F11: "
 "tunog lang. Ctrl+Shift+F12: i-pause o ipagpatuloy. Ang alinman sa unang "
 "tatlo ay humihinto at nagse-save ng recording."
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F7: area and sound. Ctrl+Shift+F8: area only. Both also stop and "
+"save the recording."
+msgstr ""
+"Ctrl+Shift+F7: area at tunog. Ctrl+Shift+F8: area lang. Pareho rin silang "
+"humihinto at nagse-save ng recording."
 
 #: hotrec/indicator.py
 msgid "Paused"
@@ -171,6 +179,14 @@ msgstr ""
 #: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Na-save ang recording"
+
+#: hotrec/recorder.py
+msgid ""
+"Only the view is cropped to the area: the rest of the screen stays in the "
+"file"
+msgstr ""
+"Ang view lang ang kina-crop sa area: ang natitirang bahagi ng screen ay nasa "
+"file pa rin"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"

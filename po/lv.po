@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 20:35+0000\n"
+"POT-Creation-Date: 2026-10-30 06:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Latvian\n"
@@ -32,6 +32,14 @@ msgstr ""
 "Ctrl+Shift+F9: ekrāns un skaņa. Ctrl+Shift+F10: tikai ekrāns. "
 "Ctrl+Shift+F11: tikai skaņa. Ctrl+Shift+F12: pauzēt vai turpināt. Jebkurš no "
 "pirmajiem trim aptur un saglabā ierakstu."
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F7: area and sound. Ctrl+Shift+F8: area only. Both also stop and "
+"save the recording."
+msgstr ""
+"Ctrl+Shift+F7: apgabals un skaņa. Ctrl+Shift+F8: tikai apgabals. Abi arī "
+"aptur un saglabā ierakstu."
 
 #: hotrec/indicator.py
 msgid "Paused"
@@ -167,6 +175,12 @@ msgstr ""
 #: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Ieraksts saglabāts"
+
+#: hotrec/recorder.py
+msgid ""
+"Only the view is cropped to the area: the rest of the screen stays in the "
+"file"
+msgstr "Tikai skats tiek apcirsts līdz apgabalam: pārējais ekrāns paliek failā"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"

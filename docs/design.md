@@ -11,7 +11,10 @@ directory of ours), files:
 - `state.json`: `pid`, `started` (the start time of that pid from `/proc/<pid>/stat`), `mode`,
   `file`, `paused`. Written whole and renamed into place.
 - `lock`: held (`flock`) for the length of a command, so two quick key presses cannot both start
-  a recording: the second one finds the first one's recording and stops it.
+  a recording: the second one finds the first one's recording and stops it. At a stop it is held
+  until the recorder has ended and the state is cleared (`Recorder._halt`), and released before
+  the area is cropped (`Recorder._finish`): the crop can take minutes for a long recording, and a
+  key pressed meanwhile (a new recording, pause) must not wait for it.
 - `recorder.log`, `indicator.log`: output of the recorder and of the dot (not followed through
   symlinks); `indicator.lock`: the one dot.
 
@@ -124,17 +127,33 @@ The portal records the whole monitor, as for `video`. At the stop, after the rec
 `Recorder._cut_out` reads the size of the file (`ffmpeg -i`), turns the fractions into pixels
 (`region.crop_for`) and runs `ffmpeg -c copy -bsf:v h264_metadata=crop_left=..:crop_right=..:crop_top=..:crop_bottom=..`
 into a temporary file next to the recording, which replaces it only if ffmpeg succeeded and wrote
-something. Nothing is encoded again, so there is no encoder to be missing and it takes seconds. The
+something. Nothing is encoded again, so there is no encoder to be missing and it takes seconds.
+
+**This is a crop of the view, not a redaction, and the documentation says so** (README, man page,
+spec changelog, and the notification after an area recording, whose body says the rest of the screen
+stays in the file). The whole picture is still in the file: the cropping values are metadata, one
+`ffmpeg -c copy -bsf:v h264_metadata=crop_left=0:...` brings the whole screen back (measured by the
+reviewer: 1920x1088 again, the file size does not shrink), and some players and editors ignore the
+cropping. Taking the rest of the picture away needs encoding again, which needs an encoder (the
+Fedora ffmpeg has no software H.264 encoder) and a decision about which one; it is not done in
+0.1.5 (backlog). The
 cropping values are counted against the coded size (visible size rounded up to 16) in steps of 2 pixels;
 ffmpeg based players cut the left edge exactly only at a multiple of 64 pixels, so the left edge moves
 left to such a column. When the file does not have the shape of the monitor the area was drawn on
 (2% tolerance: the portal recorded another monitor), or ffmpeg fails, the whole screen stays and the
 notification says so.
 
+Known limit: the area is kept as fractions and the shape of the monitor, not as *which* monitor. With
+two monitors of the same shape the portal can record the other one, the shape check passes, and the
+area is cut from the wrong monitor's picture with no warning. It is in the README and the man page; a
+fix needs the monitor the selector window was on to be stored and compared with the one the portal
+records (not measured how, the portal does not necessarily say).
+
 Existing users: `hotrec autostart` runs `Shortcuts.add_missing()` once (marker
 `shortcuts-regions-added`), which adds only the entries that are not in the list, with their default keys,
 and leaves out a key another custom keybinding (or one of our entries) already has; nothing that is there
-is changed.
+is changed. Only the two area entries (`ADDED_IN_0_1_5`) are ever added: an F9-F12 entry that a person
+took out (`hotrec shortcuts remove`, or by hand) is not put back.
 
 ## The dot over a fullscreen video (0.1.4)
 

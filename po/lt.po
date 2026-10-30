@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 20:35+0000\n"
+"POT-Creation-Date: 2026-10-30 06:28+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
 "Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
 "Language-Team: Lithuanian\n"
@@ -33,6 +33,14 @@ msgstr ""
 "Ctrl+Shift+F9: ekranas ir garsas. Ctrl+Shift+F10: tik ekranas. "
 "Ctrl+Shift+F11: tik garsas. Ctrl+Shift+F12: pristabdyti arba tęsti. Bet "
 "kuris iš pirmųjų trijų sustabdo ir išsaugo įrašą."
+
+#: hotrec/cli.py
+msgid ""
+"Ctrl+Shift+F7: area and sound. Ctrl+Shift+F8: area only. Both also stop and "
+"save the recording."
+msgstr ""
+"Ctrl+Shift+F7: sritis ir garsas. Ctrl+Shift+F8: tik sritis. Abu taip pat "
+"sustabdo ir išsaugo įrašą."
 
 #: hotrec/indicator.py
 msgid "Paused"
@@ -169,6 +177,12 @@ msgstr ""
 #: hotrec/recorder.py
 msgid "Recording saved"
 msgstr "Įrašas išsaugotas"
+
+#: hotrec/recorder.py
+msgid ""
+"Only the view is cropped to the area: the rest of the screen stays in the "
+"file"
+msgstr "Tik vaizdas apkarpomas iki srities: likusi ekrano dalis lieka faile"
 
 #: hotrec/recorder.py
 msgid "The recording may be incomplete"
