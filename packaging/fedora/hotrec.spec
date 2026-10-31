@@ -1,7 +1,7 @@
 %global appid io.github.trensoft.hotrec
 
 Name:           hotrec
-Version:        0.1.5
+Version:        0.1.6
 Release:        1%{?dist}
 Summary:        Screen and audio recorder for GNOME on Wayland, with global keys and a tray indicator
 # The LICENSE file is the GPL-3.0 text; every .py carries SPDX-License-Identifier: GPL-3.0-or-later.
@@ -116,6 +116,12 @@ test -x %{buildroot}%{_bindir}/hotrec
 %{_datadir}/gnome-shell/extensions/hotrec-dot@trensoft.github.io/
 
 %changelog
+* Sat Oct 31 2026 TrenSoft <143960729+trensoft@users.noreply.github.com> - 0.1.6-1
+- Fix: the recording dot of the GNOME Shell extension was not drawn above a fullscreen video. A fullscreen
+  window that mutter unredirects (direct scanout) bypasses the compositor, so the top chrome the dot lives
+  in is not painted over it. While the dot shows, the extension now keeps unredirect disabled (the Shell does
+  the same while a notification is on screen) and gives it back when the dot goes away or the extension is
+  disabled. GNOME 48 and 49 use global.compositor, GNOME 47 the Meta.*_unredirect_for_display functions
 * Thu Oct 29 2026 TrenSoft <143960729+trensoft@users.noreply.github.com> - 0.1.5-1
 - New: recording an area of the screen. "hotrec region-video-audio" (Ctrl+Shift+F7, with sound) and
   "hotrec region-video" (Ctrl+Shift+F8, screen only) dim the screen, the user drags the area with the mouse

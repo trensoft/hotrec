@@ -2,8 +2,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 // A fake desktop for extension.js: a file system with /proc and the runtime directory, a main loop
-// whose timers the test advances by hand, the Shell's layout manager, and the dot widget. Needs
-// fake-gnome.mjs loaded first.
+// whose timers the test advances by hand, the Shell's layout manager, the dot widget, and the
+// compositor's unredirect counter (global.compositor on GNOME 48 and later, Meta.*_for_display on
+// 47). Needs fake-gnome.mjs loaded first.
+
+import assert from 'node:assert/strict';
 
 class Widget {
     constructor(props) {
@@ -47,7 +50,11 @@ const File = {
     },
 };
 
+// What the Meta namespace holds depends on the GNOME version; makeWorld fills it in.
+const Meta = {};
+
 globalThis.fakeModules = {
+    'gi://Meta': Meta,
     'gi://St': {Widget},
     'gi://Gio': {File, FileMonitorFlags: {NONE: 0}},
     'gi://GLib': {
@@ -80,8 +87,47 @@ globalThis.fakeModules = {
 };
 
 /** A fresh desktop for one test; the fakes above act on the latest one. */
-export function makeWorld({runtimeDir = '/run/user/1000', monitor = {x: 0, y: 0, width: 1920, height: 1080}} = {}) {
+export function makeWorld({
+    runtimeDir = '/run/user/1000',
+    monitor = {x: 0, y: 0, width: 1920, height: 1080},
+    api = 'compositor', // 'compositor': GNOME 48 and later; 'display': GNOME 47
+    unredirectThrows = false,
+} = {}) {
+    // mutter keeps a count: every disable needs its enable, an enable without one only warns
+    const unredirect = {disable: 0, enable: 0, depth: 0, underflows: 0, calls: []};
+    const count = (via, op) => {
+        if (unredirectThrows)
+            throw new Error('unredirect is not available');
+        unredirect.calls.push(`${via}:${op}`);
+        unredirect[op]++;
+        if (op === 'disable') {
+            unredirect.depth++;
+        } else if (unredirect.depth > 0) {
+            unredirect.depth--;
+        } else {
+            unredirect.underflows++;
+        }
+    };
+    const display = {name: 'display'};
+    for (const name of ['disable_unredirect_for_display', 'enable_unredirect_for_display'])
+        delete Meta[name];
+    if (api === 'display') {
+        for (const op of ['disable', 'enable']) {
+            Meta[`${op}_unredirect_for_display`] = d => {
+                assert.equal(d, display, 'the unredirect functions take global.display');
+                count('display', op);
+            };
+        }
+    }
+    globalThis.global = {
+        display,
+        compositor: api === 'compositor'
+            ? {disable_unredirect: () => count('compositor', 'disable'), enable_unredirect: () => count('compositor', 'enable')}
+            : {},
+    };
+
     const world = {
+        unredirect,
         env: runtimeDir === null ? {} : {XDG_RUNTIME_DIR: runtimeDir},
         files: new Map(),
         dirs: new Set(['/', '/run', '/run/user', runtimeDir].filter(Boolean)),

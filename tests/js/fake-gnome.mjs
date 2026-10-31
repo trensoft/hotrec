@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: 2026 TrenSoft
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-// Stands in for the GNOME Shell modules that extension.js imports (gi://St, gi://Gio, gi://GLib and
-// the resource:// modules of the Shell), so the extension can run under plain node. Load it with
-// `node --import ./fake-gnome.mjs`. Every fake delegates to `globalThis.world`, which each test
+// Stands in for the GNOME Shell modules that extension.js imports (gi://St, gi://Gio, gi://GLib,
+// gi://Meta and the resource:// modules of the Shell), so the extension can run under plain node.
+// Load it with `node --import ./fake-gnome.mjs`. Every fake delegates to `globalThis.world`, which each test
 // replaces with a fresh one (see world.mjs).
 import {registerHooks} from 'node:module';
 
@@ -12,6 +12,7 @@ const MODULES = {
     'gi://St': {default: 'St'},
     'gi://Gio': {default: 'Gio'},
     'gi://GLib': {default: 'GLib'},
+    'gi://Meta': {default: 'Meta'},
     'resource:///org/gnome/shell/extensions/extension.js': {names: ['Extension']},
     'resource:///org/gnome/shell/ui/main.js': {names: ['layoutManager']},
 };

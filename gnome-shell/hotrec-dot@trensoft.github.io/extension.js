@@ -4,12 +4,14 @@
 // A dot in the top right corner of the primary monitor while Hotrec records: red and blinking
 // while it records, yellow and steady while it is paused, gone otherwise. It is put in the
 // Shell's top chrome with trackFullscreen off, so it stays above a fullscreen window, as the
-// notifications do. Hotrec's state file is the only input; see logic.js. No timer runs while
-// nothing records.
+// notifications do. A fullscreen window that mutter unredirects (direct scanout) bypasses the
+// compositor, so the chrome is not drawn above it: while the dot shows, unredirect is disabled.
+// Hotrec's state file is the only input; see logic.js. No timer runs while nothing records.
 
 import St from 'gi://St';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
+import Meta from 'gi://Meta';
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
@@ -52,6 +54,7 @@ export default class HotrecDot extends Extension {
         this._lit = true;
         this._timer = 0;
         this._monitor = null;
+        this._unredirectHeld = false;
         this._dir = stateDirFor(GLib.getenv('XDG_RUNTIME_DIR'));
         if (this._dir === null) {
             console.warn('hotrec-dot: no XDG_RUNTIME_DIR, the dot stays off');
@@ -65,6 +68,7 @@ export default class HotrecDot extends Extension {
     disable() {
         this._unwatch();
         this._stopTimer();
+        this._releaseUnredirect();
         if (this._monitorsId) {
             Main.layoutManager.disconnect(this._monitorsId);
             this._monitorsId = 0;
@@ -145,8 +149,10 @@ export default class HotrecDot extends Extension {
         if (kind === null) {
             this._stopTimer();
             this._dot.hide();
+            this._releaseUnredirect();
             return;
         }
+        this._holdUnredirect();
         this._dot.set_style(`background-color: ${COLOURS[kind]}; border-radius: ${SIZE / 2}px;`);
         this._dot.opacity = kind === RECORDING && !this._lit ? DIM : 255;
         this._dot.show();
@@ -159,6 +165,48 @@ export default class HotrecDot extends Extension {
                 this._evaluate();
                 return this._timer ? GLib.SOURCE_CONTINUE : GLib.SOURCE_REMOVE;
             });
+        }
+    }
+
+    // The compositor counts the calls, so they must pair exactly: one disable when the dot
+    // appears, one enable when it goes (or the extension is disabled while it shows). _show runs
+    // again for every blink and colour change, hence the flag.
+    _holdUnredirect() {
+        if (this._unredirectHeld)
+            return;
+        try {
+            this._unredirect(true);
+        } catch (e) {
+            console.warn(`hotrec-dot: cannot disable unredirect: ${e.message}`);
+            return;
+        }
+        this._unredirectHeld = true;
+    }
+
+    // GNOME 48 and later: Meta.Compositor methods, reached as global.compositor. GNOME 47 has
+    // them as functions of the Meta namespace that take the display.
+    _unredirect(disable) {
+        const compositor = global.compositor;
+        if (typeof compositor?.disable_unredirect === 'function') {
+            if (disable)
+                compositor.disable_unredirect();
+            else
+                compositor.enable_unredirect();
+        } else if (disable) {
+            Meta.disable_unredirect_for_display(global.display);
+        } else {
+            Meta.enable_unredirect_for_display(global.display);
+        }
+    }
+
+    _releaseUnredirect() {
+        if (!this._unredirectHeld)
+            return;
+        this._unredirectHeld = false;
+        try {
+            this._unredirect(false);
+        } catch (e) {
+            console.warn(`hotrec-dot: cannot enable unredirect: ${e.message}`);
         }
     }
 
