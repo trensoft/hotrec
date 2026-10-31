@@ -230,6 +230,7 @@ def test_the_extension_imports_only_what_the_shell_and_the_package_have():
             "gi://St",
             "gi://Gio",
             "gi://GLib",
+            "gi://Meta",
             "resource:///org/gnome/shell/extensions/extension.js",
             "resource:///org/gnome/shell/ui/main.js",
             "./logic.js",
