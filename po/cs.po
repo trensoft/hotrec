@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Czech\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "O aplikaci"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Verze %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr "Záznamník obrazovky a zvuku pro GNOME, ovládaný klávesovými zkratkami."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Webové stránky"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Nahlásit problém"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Licence: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Zavřít"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Klávesové zkratky se nepodařilo nastavit"
 
@@ -62,52 +93,8 @@ msgid "Stop and save"
 msgstr "Zastavit a uložit"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Nastavit klávesové zkratky..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Klávesové zkratky"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "Klepněte na pole a stiskněte nové klávesy. Esc zruší."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "Ukládat videa do"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "Ukládat zvuk do"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Výchozí"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "Uložit"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Vybrat složku"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Složky se nepodařilo uložit"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Stiskněte klávesy..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Použijte Ctrl, Alt nebo Super spolu s klávesou."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "Dvě zkratky mají stejné klávesy."
+msgid "Settings…"
+msgstr "Nastavení…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -190,6 +177,133 @@ msgstr "Nahrávka může být neúplná"
 #: hotrec/selector.py
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr "Tažením vyberte oblast k nahrání. Esc nebo pravé tlačítko akci zruší."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Nastavení"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "Obnovit výchozí"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Klávesové zkratky"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Klepněte na pole a stiskněte nové klávesy. Esc zruší."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Video"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Video kodek"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (přehrajete kdekoli)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (přibližně poloviční velikost souboru)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Datový tok videa"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Snímková frekvence"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Formát video souboru"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 není k dispozici: grafická karta jej neumí kódovat."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"Videa H.265 mohou k přehrávání ve Windows a některých prohlížečích "
+"potřebovat dodatečný kodek."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Zvuk"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Zvukový kodek pro záznamy pouze se zvukem"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Datový tok zvuku s videem"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Datový tok zvuku pro záznamy pouze se zvukem"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr "Platí pouze pro záznamy pouze se zvukem. U videa je zvuk vždy AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Složky"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Videa se ukládají do"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "Zvukové záznamy se ukládají do"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Zvolit…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Vybrat složku"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Stiskněte klávesy..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Použijte Ctrl, Alt nebo Super spolu s klávesou."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Dvě zkratky mají stejné klávesy."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "Obnovit všechna nastavení na výchozí hodnoty?"
 
 #: hotrec/shellext.py
 msgid ""

@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Chinese (Traditional)\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "關於"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "版本 %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr "GNOME 的螢幕和聲音錄製器，由鍵盤快捷鍵驅動。"
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "網站"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "回報問題"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "授權條款：%s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "關閉"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "無法設定鍵盤快速鍵"
 
@@ -60,52 +91,8 @@ msgid "Stop and save"
 msgstr "停止並儲存"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "設定鍵盤快速鍵..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "鍵盤快速鍵"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "點選一個欄位，然後按下新的按鍵。按 Esc 取消。"
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "影片儲存至"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "音訊儲存至"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "預設"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "儲存"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "選擇資料夾"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "無法儲存資料夾設定"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "請按下按鍵..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "請將 Ctrl、Alt 或 Super 與按鍵一起使用。"
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "有兩個快速鍵使用了相同的按鍵。"
+msgid "Settings…"
+msgstr "設定…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -185,6 +172,131 @@ msgstr "錄製可能不完整"
 #: hotrec/selector.py
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr "拖曳以選擇要錄製的區域。按 Esc 或右鍵取消。"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "設定"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "恢復預設值"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "鍵盤快捷鍵"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "點選一個欄位，然後按下新的按鍵。按 Esc 取消。"
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "影片"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "影片編碼器"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (隨處可播放)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (檔案大小約為一半)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "影片位元率"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "影格率"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "影片檔案格式"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 無法使用：顯示卡無法為其編碼。"
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr "H.265 影片可能需要額外的編碼器才能在 Windows 和某些瀏覽器中播放。"
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "聲音"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "僅聲音錄製的音訊編碼器"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "包含影片時的聲音位元率"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "僅聲音錄製的聲音位元率"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr "僅適用於僅聲音錄製。對於影片，聲音始終為 AAC。"
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "資料夾"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "影片儲存至"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "錄音儲存至"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "選擇…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "選擇資料夾"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "請按下按鍵..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "請將 Ctrl、Alt 或 Super 與按鍵一起使用。"
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "有兩個快速鍵使用了相同的按鍵。"
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "將所有設定恢復為預設值？"
 
 #: hotrec/shellext.py
 msgid ""

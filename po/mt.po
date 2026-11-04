@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Maltese\n"
 "Language: mt\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +17,39 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==0 || (n%100>1 && n%100<11) ? "
 "1 : (n%100>10 && n%100<20) ? 2 : 3);\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "Dwar"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Verżjoni %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr ""
+"Rekorder tal-iskrin u tal-ħoss għal GNOME, immexxi minn shortcuts tat-"
+"tastiera."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Sit web"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Irrapporta problema"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Liċenzja: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Agħlaq"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Ma stajtx jiġu ssettjati x-shortcuts tat-tastiera"
 
@@ -63,53 +96,8 @@ msgid "Stop and save"
 msgstr "Waqqaf u ssejvja"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Issettja x-shortcuts tat-tastiera..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Shortcuts tat-tastiera"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr ""
-"Ikklikkja fuq qasam, imbagħad agħfas it-tasti l-ġodda. Esc jikkanċella."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "Issejvja l-vidjows f'"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "Issejvja l-awdjo f'"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Awtomatiku"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "Ssejvja"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Agħżel cartella"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Ma setgħux jiġu ssejvjati l-folders"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Agħfas it-tasti..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Uża Ctrl, Alt jew Super flimkien mat-tasta."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "Tnejn mix-shortcuts għandhom l-istess tasti."
+msgid "Settings…"
+msgstr "Settings…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -195,6 +183,136 @@ msgid "Drag the area to record. Esc or the right button cancels."
 msgstr ""
 "Kebbes biex tagħżel iż-żona li se tirreġistra. Esc jew il-buttuna tal-lemin "
 "jikkanċellaw."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Settings"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "Irrisettja għad-defaults"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Shortcuts tat-tastiera"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr ""
+"Ikklikkja fuq qasam, imbagħad agħfas it-tasti l-ġodda. Esc jikkanċella."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Vidjo"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Codec tal-vidjo"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (jaħdem kullimkien)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (madwar nofs id-daqs tal-fajl)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Bitrate tal-vidjo"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Frame rate"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Format tal-fajl tal-vidjo"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 mhuwiex disponibbli: il-karta grafika ma tistax tikkodifikah."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"Vidjos H.265 jista' jkollhom bżonn codec żejjed biex jaħdmu fuq Windows u "
+"f'xi browsers."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Ħoss"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Codec tal-ħoss għal reġistrazzjonijiet tal-ħoss biss"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Bitrate tal-ħoss bil-vidjo"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Bitrate tal-ħoss għal reġistrazzjonijiet tal-ħoss biss"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr ""
+"Japplika biss għal reġistrazzjonijiet tal-ħoss biss. Bil-vidjo, il-ħoss "
+"dejjem ikun AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Folders"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Il-vidjos jiġu ssejvjati f'"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "Ir-reġistrazzjonijiet tal-ħoss jiġu ssejvjati f'"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Agħżel…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Agħżel cartella"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Agħfas it-tasti..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Uża Ctrl, Alt jew Super flimkien mat-tasta."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Tnejn mix-shortcuts għandhom l-istess tasti."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "Irrisettja kull setting għall-valur default tiegħu?"
 
 #: hotrec/shellext.py
 msgid ""

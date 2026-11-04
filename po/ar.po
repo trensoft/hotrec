@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Arabic\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +17,37 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "لمحة"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "الإصدار %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr "مسجل شاشة وصوت لـ GNOME، يعمل باختصارات لوحة المفاتيح."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "موقع الويب"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "الإبلاغ عن مشكلة"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "الترخيص: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "أغلق"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "تعذّر ضبط اختصارات لوحة المفاتيح"
 
@@ -63,52 +94,8 @@ msgid "Stop and save"
 msgstr "إيقاف وحفظ"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "ضبط اختصارات لوحة المفاتيح..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "اختصارات لوحة المفاتيح"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "انقر على حقل ثم اضغط المفاتيح الجديدة. يلغي Esc العملية."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "حفظ مقاطع الفيديو في"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "حفظ الصوت في"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "الافتراضي"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "حفظ"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "اختر مجلدًا"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "تعذّر حفظ المجلدات"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "اضغط المفاتيح..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "استخدم Ctrl أو Alt أو Super مع المفتاح."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "لدى اختصارين المفاتيح نفسها."
+msgid "Settings…"
+msgstr "الإعدادات…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -189,6 +176,133 @@ msgstr "قد يكون التسجيل غير مكتمل"
 #: hotrec/selector.py
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr "اسحب لتحديد المنطقة المراد تسجيلها. يلغي Esc أو الزر الأيمن التحديد."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "الإعدادات"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "استعادة الافتراضيات"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "اختصارات لوحة المفاتيح"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "انقر على حقل ثم اضغط المفاتيح الجديدة. يلغي Esc العملية."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "فيديو"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "ترميز الفيديو"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (يعمل في كل مكان)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (حوالي نصف حجم الملف)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "معدل بت الفيديو"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "معدل الإطارات"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "صيغة ملف الفيديو"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 غير متوفر: بطاقة الرسوميات لا يمكنها ترميزه."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"قد تحتاج فيديوهات H.265 إلى ترميز إضافي لتشغيلها على Windows وفي بعض "
+"المتصفحات."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "صوت"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "ترميز الصوت للتسجيلات الصوتية فقط"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "معدل بت الصوت مع الفيديو"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "معدل بت الصوت للتسجيلات الصوتية فقط"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr "ينطبق فقط على التسجيلات الصوتية. مع الفيديو، يكون الصوت دائمًا AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "المجلدات"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "تُحفظ الفيديوهات في"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "تُحفظ التسجيلات الصوتية في"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "اختر…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "اختر مجلدًا"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "اضغط المفاتيح..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "استخدم Ctrl أو Alt أو Super مع المفتاح."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "لدى اختصارين المفاتيح نفسها."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "هل تريد إعادة كل إعداد إلى قيمته الافتراضية؟"
 
 #: hotrec/shellext.py
 msgid ""

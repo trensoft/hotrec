@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Irish\n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n==2 ? 1 : 2;\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "Maidir leis seo"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Leagan %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr ""
+"Taifeadán scáileáin agus fuaime le haghaidh GNOME, á stiúradh ag aicearraí "
+"méarchláir."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Suíomh Gréasáin"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Déan tuairisc ar fhadhb"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Ceadúnas: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Dún"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Níorbh fhéidir na aicearraí méarchláir a shocrú"
 
@@ -62,52 +95,8 @@ msgid "Stop and save"
 msgstr "Stop agus sábháil"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Socraigh aicearraí méarchláir..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Aicearraí méarchláir"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "Cliceáil ar réimse, ansin brúigh na heochracha nua. Cealaíonn Esc."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "Sábháil físeáin i"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "Sábháil fuaim i"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Réamhshocrú"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "Sábháil"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Roghnaigh fillteán"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Níorbh fhéidir na fillteáin a shábháil"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Brúigh na heochracha..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Úsáid Ctrl, Alt nó Super in éineacht leis an eochair."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "Tá na heochracha céanna ag dhá aicearra."
+msgid "Settings…"
+msgstr "Socruithe…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -193,6 +182,137 @@ msgstr "D'fhéadfadh an taifeadadh a bheith neamhiomlán"
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr ""
 "Tarraing an limistéar atá le taifeadadh. Cealaíonn Esc nó an cnaipe deas."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Socruithe"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "Athshocraigh go réamhshocruithe"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Aicearraí méarchláir"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Cliceáil ar réimse, ansin brúigh na heochracha nua. Cealaíonn Esc."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Físeán"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Codeic físeáin"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (seinntear i ngach áit)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (thart ar leath mhéid an chomhaid)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Ráta giotán físeáin"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Ráta frámaí"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Formáid an chomhaid físeáin"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "Níl H.265 ar fáil: ní féidir leis an gcárta grafaicí é a ionchódú."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"D'fhéadfadh go mbeadh codeic breise ag teastáil ó fhíseáin H.265 chun iad a "
+"sheinm ar Windows agus i roinnt brabhsálaithe."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Fuaim"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Codeic fuaime do thaifeadtaí fuaime amháin"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Ráta giotán fuaime le físeán"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Ráta giotán fuaime do thaifeadtaí fuaime amháin"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr ""
+"Baineann seo le taifeadtaí fuaime amháin. Le físeán, is AAC í an fhuaim i "
+"gcónaí."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Fillteáin"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Déantar físeáin a shábháil anseo"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "Déantar taifeadtaí fuaime a shábháil anseo"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Roghnaigh…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Roghnaigh fillteán"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Brúigh na heochracha..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Úsáid Ctrl, Alt nó Super in éineacht leis an eochair."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Tá na heochracha céanna ag dhá aicearra."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr ""
+"An bhfuil tú cinnte gur mhaith leat gach socrú a athshocrú go dtí an luach "
+"réamhshocraithe?"
 
 #: hotrec/shellext.py
 msgid ""

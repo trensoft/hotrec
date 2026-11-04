@@ -11,10 +11,14 @@ recording. The keys:
     VIDEO_FOLDER  where video recordings are saved; not set (or empty): FOLDER
     AUDIO_FOLDER  where sound-only recordings are saved; not set (or empty): FOLDER
     CONTAINER     mkv (plays back even when the recording was cut short) or mp4
+    VIDEO_CODEC   h264 (plays everywhere) or h265 (about half the file size; needs a graphics
+                  card that can encode it, and extra software to play on Windows)
     VIDEO_KBPS    video bit rate, kbit/s
     FPS           frames per second
-    AAC_KBPS      the sound of a video recording, kbit/s
-    MP3_KBPS      a sound-only recording, kbit/s
+    AAC_KBPS      the sound of a video recording, kbit/s (the sound of a video is always AAC)
+    AUDIO_CODEC   the codec of a sound-only recording: mp3, aac or opus
+    MP3_KBPS      a sound-only recording, kbit/s, whatever its codec (the name is from the days
+                  when MP3 was the only codec)
 
 There is no encoder key: video is always encoded by the graphics hardware (NVENC, VA-API).
 
@@ -35,6 +39,8 @@ CONF_NAME = "hotrec.conf"
 OLD_CONF_NAME = "felvetel.conf"
 
 CONTAINERS = ("mkv", "mp4")
+VIDEO_CODECS = ("h264", "h265")
+AUDIO_CODECS = ("mp3", "aac", "opus")
 
 # key: (default, lowest, highest)
 _NUMBERS: Dict[str, Tuple[int, int, int]] = {
@@ -43,7 +49,20 @@ _NUMBERS: Dict[str, Tuple[int, int, int]] = {
     "AAC_KBPS": (160, 32, 512),
     "MP3_KBPS": (192, 32, 320),
 }
-KEYS = ("FOLDER", "VIDEO_FOLDER", "AUDIO_FOLDER", "CONTAINER") + tuple(_NUMBERS)
+KEYS = (
+    "FOLDER",
+    "VIDEO_FOLDER",
+    "AUDIO_FOLDER",
+    "CONTAINER",
+    "VIDEO_CODEC",
+    "AUDIO_CODEC",
+) + tuple(_NUMBERS)
+# The choices, key: the values it may have.
+_CHOICES: Dict[str, Tuple[str, ...]] = {
+    "CONTAINER": CONTAINERS,
+    "VIDEO_CODEC": VIDEO_CODECS,
+    "AUDIO_CODEC": AUDIO_CODECS,
+}
 
 # The prototype's names, and what they became. KODOLO, the choice of encoder, has no successor.
 OLD_KEYS = {
@@ -68,6 +87,8 @@ class Config:
     mp3_kbps: int
     video_folder: str = ""  # "" = ``folder``
     audio_folder: str = ""
+    video_codec: str = "h264"
+    audio_codec: str = "mp3"  # of a sound-only recording
 
     def folder_path(self, env: Optional[Dict[str, str]] = None) -> Path:
         return Path(expand(self.folder, env))
@@ -184,14 +205,20 @@ def build(values: Dict[str, str], env: Optional[Dict[str, str]] = None) -> Tuple
             warnings.append("%s has both kinds of quote in it, using FOLDER" % key)
         else:
             config = replace(config, **{key.lower(): other.strip()})
-    container = values.get("CONTAINER")
-    if container is not None:
-        if container.lower() in CONTAINERS:
-            config = replace(config, container=container.lower())
+    for key, field in (
+        ("CONTAINER", "container"),
+        ("VIDEO_CODEC", "video_codec"),
+        ("AUDIO_CODEC", "audio_codec"),
+    ):
+        choice = values.get(key)
+        if choice is None:
+            continue
+        if choice.strip().lower() in _CHOICES[key]:
+            config = replace(config, **{field: choice.strip().lower()})
         else:
             warnings.append(
-                "CONTAINER=%s is not one of %s, using %s"
-                % (container, "/".join(CONTAINERS), config.container)
+                "%s=%s is not one of %s, using %s"
+                % (key, choice, "/".join(_CHOICES[key]), getattr(config, field))
             )
     for key, (default, low, high) in _NUMBERS.items():
         if key not in values:
@@ -214,18 +241,22 @@ def render(config: Config, header: str = "") -> str:
         "FOLDER=%s      # where recordings are saved\n"
         "%s"
         "CONTAINER=%s                  # mkv (plays back even if cut short) or mp4\n"
+        "VIDEO_CODEC=%s                # h264 (plays everywhere) or h265 (half the size)\n"
         "VIDEO_KBPS=%d              # video bit rate, kbit/s\n"
         "FPS=%d\n"
         "AAC_KBPS=%d                # the sound of a video recording, kbit/s\n"
-        "MP3_KBPS=%d                # a sound-only recording, kbit/s\n"
+        "AUDIO_CODEC=%s                # a sound-only recording: mp3, aac or opus\n"
+        "MP3_KBPS=%d                # a sound-only recording, kbit/s, whatever its codec\n"
         % (
             header,
             _quote(config.folder),
             _folder_lines(config),
             config.container,
+            config.video_codec,
             config.video_kbps,
             config.fps,
             config.aac_kbps,
+            config.audio_codec,
             config.mp3_kbps,
         )
     )

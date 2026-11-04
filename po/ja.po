@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "このアプリケーションについて"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "バージョン %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr ""
+"GNOME 用の画面および音声レコーダー。キーボードショートカットで操作します。"
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "ウェブサイト"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "問題を報告する"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "ライセンス: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "閉じる"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "キーボードショートカットを設定できませんでした"
 
@@ -62,52 +94,8 @@ msgid "Stop and save"
 msgstr "停止して保存"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "キーボードショートカットを設定..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "キーボードショートカット"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "欄をクリックしてから、新しいキーを押してください。Esc で取り消します。"
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "動画の保存先"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "音声の保存先"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "既定"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "保存"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "フォルダーを選択"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "フォルダーを保存できませんでした"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "キーを押してください..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "キーと一緒に Ctrl、Alt、または Super を使ってください。"
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "2 つのショートカットが同じキーになっています。"
+msgid "Settings…"
+msgstr "設定…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -191,6 +179,134 @@ msgstr "録画が不完全な可能性があります"
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr ""
 "ドラッグして録画する範囲を選んでください。Esc または右ボタンで取り消します。"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "設定"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "デフォルトに戻す"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "キーボードショートカット"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "欄をクリックしてから、新しいキーを押してください。Esc で取り消します。"
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "ビデオ"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "ビデオコーデック"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (どこでも再生可能)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (ファイルサイズが約半分)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "ビデオのビットレート"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "フレームレート"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "ビデオのファイル形式"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 は利用できません: グラフィックカードがエンコードできません。"
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"H.265 のビデオは、Windows や一部のブラウザーで再生するために追加のコーデック"
+"が必要になる場合があります。"
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "サウンド"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "音声のみの録音用サウンドコーデック"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "ビデオ付きのサウンドビットレート"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "音声のみの録音のサウンドビットレート"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr ""
+"音声のみの録音にのみ適用されます。ビデオの場合、サウンドは常に AAC です。"
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "フォルダー"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "ビデオの保存先"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "録音の保存先"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "選択…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "フォルダーを選択"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "キーを押してください..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "キーと一緒に Ctrl、Alt、または Super を使ってください。"
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "2 つのショートカットが同じキーになっています。"
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "すべての設定をデフォルト値に戻しますか?"
 
 #: hotrec/shellext.py
 msgid ""

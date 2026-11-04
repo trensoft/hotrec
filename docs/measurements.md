@@ -47,3 +47,12 @@
 - The packages: the names in `docs/installation-layout.md` are not checked against EPEL 10 or
   Fedora, and nothing was built as an RPM.
 - Translations by a native speaker (none), RTL display of Arabic and Hebrew in a notification.
+- The Settings and About windows: the logic against a stand-in for GTK 3 (every control, the
+  writes, the refusals, the reset), not the real widgets; how they look, whether they fit a small
+  screen, and the folder chooser and the question dialog of the real GTK are unseen.
+- `gpu-screen-recorder --info` and `--list-supported-video-codecs`, whose output `hotrec/codecs.py`
+  parses as remembered from the program's source: not run against a real 6.x. Until this is checked
+  on the PC (NVENC) and the laptop (VA-API), H.265 may be greyed out on a card that can do it; the
+  settings file can still say `VIDEO_CODEC=h265`.
+- H.265 recordings in general (`-k hevc`, MKV and MP4, playback), the `aac` and `libopus` encoders
+  of the installed ffmpeg for a sound-only recording, and that an area recording stays H.264.

@@ -92,11 +92,12 @@ class Menu:
 
     @property
     def items(self):
-        """The commands of the menu: not the grey key lines at the top, not the separators."""
-        return [i for i in self.all if not i.no_show_all and not i.separator]
+        """The commands of the menu: not the separators."""
+        return [i for i in self.all if not i.separator]
 
     @property
     def key_lines(self):
+        """Lines the dot hides until it has something to say: there are none any more."""
         return [i for i in self.all if i.no_show_all]
 
     def append(self, item):
@@ -265,9 +266,7 @@ def test_missing_gtk_is_a_message_not_a_traceback(tmp_path, monkeypatch, capsys)
     assert "GTK 3" in capsys.readouterr().err
 
 
-def test_a_resident_dot_stays_while_nothing_records_and_offers_the_three_modes(
-    tmp_path, monkeypatch
-):
+def test_a_resident_dot_stays_while_nothing_records_and_offers_the_commands(tmp_path, monkeypatch):
     spawned = []
     monkeypatch.setattr(indicator, "_spawn", lambda *args: spawned.append(args))
     recorder = StubRecorder(tmp_path, None)
@@ -276,6 +275,7 @@ def test_a_resident_dot_stays_while_nothing_records_and_offers_the_three_modes(
     dot = toolkit.indicator
     assert dot.args == (APP_ID, APP_ID + "-symbolic", "app-status")
     labels = [item.label for item in dot.menu.items]
+    # the order of the menu: the five ways to start, pause, stop, then Settings and About
     assert labels == [
         "Record screen and sound",
         "Record screen only",
@@ -284,9 +284,10 @@ def test_a_resident_dot_stays_while_nothing_records_and_offers_the_three_modes(
         "Record area only",
         "Pause",
         "Stop and save",
-        "Set keyboard shortcuts...",
+        "Settings…",
+        "About",
     ]
-    assert [item.sensitive for item in dot.menu.items] == [True] * 5 + [False, False, True]
+    assert [item.sensitive for item in dot.menu.items] == [True] * 5 + [False, False, True, True]
     assert not toolkit.quit_called  # nothing recording does not end a resident dot
     assert dot.icons[-1] == (APP_ID + "-symbolic", "Hotrec")
     for item in dot.menu.items[:5]:
@@ -320,7 +321,7 @@ def test_a_resident_dot_while_recording_cannot_start_another(tmp_path):
     toolkit = Toolkit([], recorder)
     indicator.run(recorder, toolkit.triple(), resident=True)
     sensitive = [i.sensitive for i in toolkit.indicator.menu.items]
-    assert sensitive == [False] * 5 + [True, True, True]  # the last: the keys window
+    assert sensitive == [False] * 5 + [True] * 4  # pause, stop, and the two windows
     assert toolkit.indicator.args[1] == APP_ID + "-recording"
 
 
@@ -340,42 +341,50 @@ def keys_of(g_bindings):
     return {s.slug: g_bindings.get(s.slug) for s in sc.SHORTCUTS}
 
 
-def test_the_top_of_the_menu_lists_the_keys_grey_and_not_clickable(tmp_path, monkeypatch):
-    monkeypatch.setattr(
-        indicator,
-        "_key_source",
-        lambda: KeySource(
-            keys_of(
-                {
-                    "video-audio": "<Primary><Shift>F9",
-                    "video": "<Control><Shift>f10",
-                    "audio": "<Primary><Alt>r",
-                    "pause": "<Super>F12",
-                    "region-video-audio": "<Primary><Shift>F7",
-                    "region-video": "<Primary><Shift>F8",
-                }
-            )
-        ),
-    )
+ALL_KEYS = {
+    "video-audio": "<Primary><Shift>F9",
+    "video": "<Control><Shift>f10",
+    "audio": "<Primary><Alt>r",
+    "pause": "<Super>F12",
+    "region-video-audio": "<Primary><Shift>F7",
+    "region-video": "<Primary><Shift>F8",
+}
+
+
+def test_each_command_line_carries_its_keys_and_there_is_no_grey_key_list(tmp_path, monkeypatch):
+    monkeypatch.setattr(indicator, "_key_source", lambda: KeySource(keys_of(ALL_KEYS)))
     recorder = StubRecorder(tmp_path, None)
     toolkit = Toolkit([], recorder)
     indicator.run(recorder, toolkit.triple(), resident=True)
     menu = toolkit.indicator.menu
-    assert menu.all[:6] == menu.key_lines  # at the top
-    assert [i.label for i in menu.key_lines] == [
-        "Ctrl+Shift+F9 - Record screen and sound",
-        "Ctrl+Shift+F10 - Record screen only",
-        "Ctrl+Alt+R - Record sound only",
-        "Super+F12 - Pause or resume recording",
-        "Ctrl+Shift+F7 - Record area and sound",
-        "Ctrl+Shift+F8 - Record area only",
+    assert [i.label for i in menu.items] == [
+        "Record screen and sound (Ctrl+Shift+F9)",
+        "Record screen only (Ctrl+Shift+F10)",
+        "Record sound only (Ctrl+Alt+R)",
+        "Record area and sound (Ctrl+Shift+F7)",
+        "Record area only (Ctrl+Shift+F8)",
+        "Pause (Super+F12)",
+        "Stop and save",
+        "Settings…",
+        "About",
     ]
-    assert all(not i.sensitive and i.visible for i in menu.key_lines)
-    assert all("activate" not in i.handlers for i in menu.key_lines)
-    assert menu.all[6].separator
+    assert menu.key_lines == []  # the grey duplicate list is gone: the first line is a command
+    assert not menu.all[0].separator and "activate" in menu.all[0].handlers
+    assert [i.separator for i in menu.all].count(True) == 1  # only before Settings
+    assert menu.all[-3].separator
 
 
-def test_the_key_lines_are_there_in_the_dot_of_a_recording_too(tmp_path, monkeypatch):
+def test_the_pause_line_keeps_its_keys_when_it_turns_into_resume(tmp_path, monkeypatch):
+    monkeypatch.setattr(indicator, "_key_source", lambda: KeySource(keys_of(ALL_KEYS)))
+    running = rec.State(1, 2, "video", "/f")
+    recorder = StubRecorder(tmp_path, running)
+    toolkit = Toolkit([rec.State(1, 2, "video", "/f", paused=True)], recorder)
+    indicator.run(recorder, toolkit.triple(), resident=True)
+    pause_item = toolkit.indicator.menu.items[5]
+    assert pause_item.label == "Resume (Super+F12)"
+
+
+def test_the_dot_of_a_recording_has_pause_with_its_keys_and_stop(tmp_path, monkeypatch):
     monkeypatch.setattr(
         indicator, "_key_source", lambda: KeySource(keys_of({"pause": "<Primary><Shift>F12"}))
     )
@@ -383,18 +392,31 @@ def test_the_key_lines_are_there_in_the_dot_of_a_recording_too(tmp_path, monkeyp
     toolkit = Toolkit([], recorder)
     indicator.run(recorder, toolkit.triple())
     menu = toolkit.indicator.menu
-    assert [i.label for i in menu.items] == ["Pause", "Stop and save"]  # no keys window here
-    assert [(i.label, i.visible) for i in menu.key_lines] == [
-        ("", False),
-        ("", False),
-        ("", False),
-        ("Ctrl+Shift+F12 - Pause or resume recording", True),
-        ("", False),
-        ("", False),
+    assert [i.label for i in menu.items] == ["Pause (Ctrl+Shift+F12)", "Stop and save"]
+    assert len(menu.all) == 2  # no start lines, no Settings, no About here
+
+
+def test_a_command_without_keys_is_just_its_name(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        indicator, "_key_source", lambda: KeySource(keys_of({"audio": "<Primary><Shift>F11"}))
+    )
+    recorder = StubRecorder(tmp_path, None)
+    toolkit = Toolkit([], recorder)
+    indicator.run(recorder, toolkit.triple(), resident=True)
+    labels = [i.label for i in toolkit.indicator.menu.items]
+    assert labels[:6] == [
+        "Record screen and sound",
+        "Record screen only",
+        "Record sound only (Ctrl+Shift+F11)",
+        "Record area and sound",
+        "Record area only",
+        "Pause",
     ]
 
 
-def test_without_gnome_settings_the_key_lines_are_hidden_not_a_failure(tmp_path, monkeypatch):
+def test_without_gnome_settings_the_lines_have_no_keys_and_it_is_not_a_failure(
+    tmp_path, monkeypatch
+):
     class Gone:
         def bindings(self):
             raise sc.ShortcutError("gsettings not found")
@@ -403,10 +425,10 @@ def test_without_gnome_settings_the_key_lines_are_hidden_not_a_failure(tmp_path,
     recorder = StubRecorder(tmp_path, None)
     toolkit = Toolkit([], recorder)
     assert indicator.run(recorder, toolkit.triple(), resident=True) == 0
-    assert not any(i.visible for i in toolkit.indicator.menu.key_lines)
+    assert "(" not in "".join(i.label for i in toolkit.indicator.menu.items)
 
 
-def test_the_key_lines_follow_a_change_in_the_gnome_settings(tmp_path, monkeypatch):
+def test_the_keys_follow_a_change_in_the_gnome_settings(tmp_path, monkeypatch):
     source = KeySource(keys_of({"video": "<Primary><Shift>F10"}))
     monkeypatch.setattr(indicator, "_key_source", lambda: source)
     recorder = StubRecorder(tmp_path, None)
@@ -420,23 +442,20 @@ def test_the_key_lines_follow_a_change_in_the_gnome_settings(tmp_path, monkeypat
 
     toolkit.main = main
     indicator.run(recorder, toolkit.triple(), resident=True)
-    assert toolkit.indicator.menu.key_lines[1].label == "Ctrl+Alt+V - Record screen only"
+    assert toolkit.indicator.menu.items[1].label == "Record screen only (Ctrl+Alt+V)"
 
 
-def test_the_keys_item_opens_one_window_and_shows_it_again_while_it_is_open(tmp_path, monkeypatch):
-    class Window:
-        closed = False
-        presented = 0
+class FakeWindow:
+    closed = False
 
-        def present(self):
-            self.presented += 1
+    def __init__(self):
+        self.presented = 0
 
-    opened = []
+    def present(self):
+        self.presented += 1
 
-    def open_window(*args):
-        opened.append((args, Window()))
-        return opened[-1][1]
 
+def fake_gi(monkeypatch):
     fake_gdk = object()
     monkeypatch.setitem(
         sys.modules,
@@ -444,12 +463,25 @@ def test_the_keys_item_opens_one_window_and_shows_it_again_while_it_is_open(tmp_
         types.SimpleNamespace(repository=None, require_version=lambda name, version: None),
     )
     monkeypatch.setitem(sys.modules, "gi.repository", types.SimpleNamespace(Gdk=fake_gdk))
-    monkeypatch.setattr(indicator.keys_window, "open_window", open_window)
+    return fake_gdk
+
+
+def test_the_settings_item_opens_one_window_and_shows_it_again_while_it_is_open(
+    tmp_path, monkeypatch
+):
+    opened = []
+
+    def open_window(*args):
+        opened.append((args, FakeWindow()))
+        return opened[-1][1]
+
+    fake_gdk = fake_gi(monkeypatch)
+    monkeypatch.setattr(indicator.settings_window, "open_window", open_window)
     recorder = StubRecorder(tmp_path, None)
     toolkit = Toolkit([], recorder)
     indicator.run(recorder, toolkit.triple(), resident=True)
-    item = toolkit.indicator.menu.items[-1]
-    assert item.label == "Set keyboard shortcuts..."
+    item = toolkit.indicator.menu.items[-2]
+    assert item.label == "Settings…"
     item.handlers["activate"](item)
     args, window = opened[0]
     assert args[0] is toolkit.Gtk and args[1] is fake_gdk
@@ -462,6 +494,54 @@ def test_the_keys_item_opens_one_window_and_shows_it_again_while_it_is_open(tmp_
     assert len(opened) == 2  # a closed one is replaced
 
 
+def test_the_about_item_opens_one_window_and_shows_it_again_while_it_is_open(tmp_path, monkeypatch):
+    opened = []
+
+    def open_about(*args):
+        opened.append((args, FakeWindow()))
+        return opened[-1][1]
+
+    monkeypatch.setattr(indicator.about_window, "open_about", open_about)
+    recorder = StubRecorder(tmp_path, None)
+    toolkit = Toolkit([], recorder)
+    indicator.run(recorder, toolkit.triple(), resident=True)
+    item = toolkit.indicator.menu.items[-1]
+    assert item.label == "About"
+    item.handlers["activate"](item)
+    args, window = opened[0]
+    assert args == (toolkit.Gtk, APP_ID)
+    item.handlers["activate"](item)
+    assert len(opened) == 1 and window.presented == 1
+    window.closed = True
+    item.handlers["activate"](item)
+    assert len(opened) == 2
+
+
+def test_a_saved_key_change_refreshes_the_lines_at_once(tmp_path, monkeypatch):
+    """The Settings window calls back after it installed new keys: the menu shows them without
+    waiting for the minute."""
+    source = KeySource(keys_of({"video": "<Primary><Shift>F10"}))
+    monkeypatch.setattr(indicator, "_key_source", lambda: source)
+    callbacks = []
+
+    def open_window(Gtk, Gdk, key_source, installer, on_saved, icon):
+        callbacks.append(on_saved)
+        return FakeWindow()
+
+    fake_gi(monkeypatch)
+    monkeypatch.setattr(indicator.settings_window, "open_window", open_window)
+    recorder = StubRecorder(tmp_path, None)
+    toolkit = Toolkit([], recorder)
+    indicator.run(recorder, toolkit.triple(), resident=True)
+    menu = toolkit.indicator.menu
+    assert menu.items[1].label == "Record screen only (Ctrl+Shift+F10)"
+    settings = menu.items[-2]
+    settings.handlers["activate"](settings)
+    source.bindings_now = keys_of({"video": "<Primary><Alt>v"})
+    callbacks[0]()
+    assert menu.items[1].label == "Record screen only (Ctrl+Alt+V)"
+
+
 def test_the_installer_needs_hotrec_on_the_path(monkeypatch):
     monkeypatch.setattr(indicator.shutil, "which", lambda name: None)
     with pytest.raises(sc.ShortcutError):
@@ -470,6 +550,19 @@ def test_the_installer_needs_hotrec_on_the_path(monkeypatch):
     assert indicator._installer().command == "/usr/bin/hotrec"
 
 
-def test_key_lines_skip_a_shortcut_without_keys():
-    lines = indicator.key_lines(KeySource(keys_of({"audio": "<Primary><Shift>F11"})))
-    assert lines == [None, None, "Ctrl+Shift+F11 - Record sound only", None, None, None]
+def test_key_labels_skip_a_shortcut_without_keys():
+    labels = indicator.key_labels(KeySource(keys_of({"audio": "<Primary><Shift>F11"})))
+    assert labels == {
+        "video-audio": None,
+        "video": None,
+        "audio": "Ctrl+Shift+F11",
+        "pause": None,
+        "region-video-audio": None,
+        "region-video": None,
+    }
+
+
+def test_with_keys_puts_the_keys_in_brackets_only_when_there_are_some():
+    assert indicator.with_keys("Pause", "Ctrl+Shift+F12") == "Pause (Ctrl+Shift+F12)"
+    assert indicator.with_keys("Pause", None) == "Pause"
+    assert indicator.with_keys("Pause", "") == "Pause"

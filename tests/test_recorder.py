@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2026 TrenSoft
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import datetime
 import json
 import os
 import signal
@@ -666,3 +667,62 @@ def test_a_state_file_that_is_no_object_is_no_recording(world, env, text):
     recorder = world.recorder(env)
     (recorder.dir / "state.json").write_text(text, encoding="utf-8")
     assert recorder.read_state() is None
+
+
+# -- the codecs (Settings window) -------------------------------------------------------------
+
+
+def test_the_video_codec_of_the_settings_reaches_gsr_under_its_own_name():
+    h265 = config.Config("/f", "mkv", 12000, 30, 160, 192, video_codec="h265")
+    command = rec.video_command(h265, True, Path("/f/x.mkv"))
+    assert command[command.index("-k") + 1] == "hevc"  # gsr says hevc where the settings say h265
+    h264 = rec.video_command(CFG, True, Path("/f/x.mkv"))
+    assert h264[h264.index("-k") + 1] == "h264"
+    assert CFG.video_codec == "h264"  # today's default stays
+
+
+def test_the_sound_of_a_video_is_always_aac_whatever_the_sound_only_codec_is():
+    cfg = config.Config("/f", "mkv", 12000, 30, 160, 192, audio_codec="mp3")
+    for codec in ("mp3", "aac", "opus"):
+        command = rec.video_command(
+            config.Config("/f", "mkv", 12000, 30, 160, 192, audio_codec=codec),
+            True,
+            Path("/f/x.mkv"),
+        )
+        assert command[command.index("-ac") + 1] == "aac"
+    assert cfg.audio_codec == "mp3"
+
+
+@pytest.mark.parametrize(
+    "codec,encoder,extension",
+    [("mp3", "libmp3lame", "mp3"), ("aac", "aac", "aac"), ("opus", "libopus", "opus")],
+)
+def test_the_sound_only_codec_reaches_ffmpeg_and_names_the_file(codec, encoder, extension):
+    cfg = config.Config("/f", "mkv", 12000, 30, 160, 256, audio_codec=codec)
+    command = rec.audio_command(cfg, "m.monitor", Path("/f/x." + extension))
+    assert command[command.index("-c:a") + 1] == encoder
+    assert command[command.index("-b:a") + 1] == "256k"  # the one sound-only bit rate, any codec
+    assert " -n " in " " + " ".join(command) + " "  # still never overwrites
+    path = rec.recording_path(Path("/f"), rec.AUDIO, cfg, datetime.datetime(2026, 10, 29, 10, 30))
+    assert path.name == "2026-10-29_103000_audio." + extension
+
+
+def test_the_sound_codec_does_not_change_the_extension_of_a_video(tmp_path):
+    cfg = config.Config("/f", "mp4", 12000, 30, 160, 192, audio_codec="opus")
+    path = rec.recording_path(
+        tmp_path, rec.VIDEO_AUDIO, cfg, datetime.datetime(2026, 10, 29, 10, 30)
+    )
+    assert path.name.endswith("_video-audio.mp4")
+
+
+def test_a_recording_started_after_the_settings_changed_uses_them(world, env, tmp_path):
+    settings(env, 'FOLDER="%s/all"\nVIDEO_CODEC=h265\nAUDIO_CODEC=opus\nMP3_KBPS=96\n' % tmp_path)
+    video = start(world, env, rec.VIDEO)
+    gsr = [c for c in world.popen_calls if c[0] == rec.GSR][-1]
+    assert gsr[gsr.index("-k") + 1] == "hevc"
+    video.toggle(rec.VIDEO)  # stop
+    audio = start(world, env, rec.AUDIO)
+    ffmpeg = [c for c in world.popen_calls if c[0] == rec.FFMPEG][-1]
+    assert ffmpeg[ffmpeg.index("-c:a") + 1] == "libopus"
+    assert ffmpeg[ffmpeg.index("-b:a") + 1] == "96k"
+    assert audio.read_state().file.endswith("_audio.opus")

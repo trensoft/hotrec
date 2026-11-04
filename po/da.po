@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Danish\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "Om"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Version %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr "Skærm- og lydoptager til GNOME, drevet af tastaturgenveje."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Websted"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Rapportér et problem"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Licens: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Luk"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Tastaturgenvejene kunne ikke indstilles"
 
@@ -62,52 +93,8 @@ msgid "Stop and save"
 msgstr "Stop og gem"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Indstil tastaturgenveje..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Tastaturgenveje"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "Klik på et felt, og tryk derefter på de nye taster. Esc annullerer."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "Gem videoer i"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "Gem lyd i"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Standard"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "Gem"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Vælg en mappe"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Mapperne kunne ikke gemmes"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Tryk på tasterne..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Brug Ctrl, Alt eller Super sammen med tasten."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "To genveje har de samme taster."
+msgid "Settings…"
+msgstr "Indstillinger…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -191,6 +178,133 @@ msgstr "Optagelsen er muligvis ufuldstændig"
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr ""
 "Træk for at vælge området, der skal optages. Esc eller højre knap annullerer."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Indstillinger"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "Nulstil til standarder"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Tastaturgenveje"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Klik på et felt, og tryk derefter på de nye taster. Esc annullerer."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Video"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Video-codec"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (afspilles overalt)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (omkring halv filstørrelse)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Video-bitrate"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Billedhastighed"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Videofilformat"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 er ikke tilgængelig: grafikkortet kan ikke kode den."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"H.265-videoer kan kræve et ekstra codec for at spille på Windows og i visse "
+"browsere."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Lyd"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Lyd-codec til optagelser med kun lyd"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Lyd-bitrate med video"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Lyd-bitrate til optagelser med kun lyd"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr "Gælder kun for optagelser med kun lyd. Med video er lyden altid AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Mapper"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Videoer gemmes i"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "Lydoptagelser gemmes i"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Vælg…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Vælg en mappe"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Tryk på tasterne..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Brug Ctrl, Alt eller Super sammen med tasten."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "To genveje har de samme taster."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "Nulstil alle indstillinger til deres standardværdi?"
 
 #: hotrec/shellext.py
 msgid ""

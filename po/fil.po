@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Filipino\n"
 "Language: fil\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +17,39 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1 && n != 2 && n != 3 && (n%10 == 4 "
 "|| n%10 == 6 || n%10 == 9));\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "Patungkol"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Bersyon %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr ""
+"Screen at sound recorder para sa GNOME, pinapagana ng mga shortcut sa "
+"keyboard."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Website"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Mag-ulat ng problema"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Lisensya: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Isara"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Hindi maitakda ang mga keyboard shortcut"
 
@@ -63,54 +96,8 @@ msgid "Stop and save"
 msgstr "Ihinto at i-save"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Itakda ang mga keyboard shortcut..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Mga keyboard shortcut"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr ""
-"Mag-click sa isang field, saka pindutin ang mga bagong key. Kinakansela ng "
-"Esc."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "I-save ang mga video sa"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "I-save ang audio sa"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Default"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "I-save"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Pumili ng folder"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Hindi na-save ang mga folder"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Pindutin ang mga key..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Gamitin ang Ctrl, Alt, o Super kasama ng key."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "Dalawang shortcut ang may parehong key."
+msgid "Settings…"
+msgstr "Mga Setting…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -197,6 +184,137 @@ msgid "Drag the area to record. Esc or the right button cancels."
 msgstr ""
 "I-drag para piliin ang area na ire-record. Kinakansela ng Esc o ng kanang "
 "button."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Mga Setting"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "I-reset sa mga default"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Mga shortcut sa keyboard"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr ""
+"Mag-click sa isang field, saka pindutin ang mga bagong key. Kinakansela ng "
+"Esc."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Video"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Video codec"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (nagpe-play kahit saan)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (kalahati ng laki ng file)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Video bitrate"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Frame rate"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Format ng video file"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "Hindi available ang H.265: hindi ito ma-encode ng graphics card."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"Ang mga H.265 video ay maaaring mangailangan ng dagdag na codec upang mag-"
+"play sa Windows at sa ilang mga browser."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Tunog"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Sound codec para sa mga recording na tunog lamang"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Sound bitrate na may video"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Sound bitrate para sa mga recording na tunog lamang"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr ""
+"Nalalapat lamang sa mga recording na tunog lamang. Sa video, ang tunog ay "
+"palaging AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Mga Folder"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Naka-save ang mga video sa"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "Naka-save ang mga sound recording sa"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Pumili…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Pumili ng folder"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Pindutin ang mga key..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Gamitin ang Ctrl, Alt, o Super kasama ng key."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Dalawang shortcut ang may parehong key."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "I-reset ang bawat setting sa default nitong value?"
 
 #: hotrec/shellext.py
 msgid ""

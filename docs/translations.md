@@ -7,12 +7,13 @@ Romanian, Slovak, Slovenian, Serbian (Cyrillic), Swedish, Norwegian Bokmål (`nb
 Russian, Japanese, Simplified Chinese (`zh_CN`), Traditional Chinese (`zh_TW`), Arabic, Hebrew,
 Hindi, Filipino (`fil`), Indonesian, Thai, Vietnamese, Korean.
 
-**Who translated them.** With AI assistance; no native speaker has read them. The header of each
-says `Last-Translator: AI-assisted (Claude), not reviewed by a native speaker`. The tests check that
+**Who translated them.** With AI assistance; no native speaker has read them. The strings of the Settings and About windows come from a Gemini translation (kept word for word)
+and were checked by machine for placeholders, script and copied languages; the older strings were
+written with Claude. The header of each says `Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native speaker`. The tests check that
 a catalog is whole, has the right header and placeholders, is in the script of its language and is
 wired in; not that the language is good. Corrections: a pull request on `po/<lang>.po`.
 
-There is no per-language glossary file yet: the interface has 27 strings,
+There is no per-language glossary file yet: the interface has 71 strings,
 and the words that must agree (record, pause, resume, stop, save) are in them all.
 
 ## What is translated

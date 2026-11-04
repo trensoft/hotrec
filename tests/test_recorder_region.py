@@ -353,3 +353,42 @@ def test_a_recording_started_while_the_area_is_cut_out_is_a_recording_of_its_own
     assert path.read_bytes() == b"cropped video"
     state = recorder.read_state()
     assert state is not None and state.mode == rec.VIDEO and state.file != str(path)
+
+
+# -- H.265 and the area (Settings window) -----------------------------------------------------
+
+
+def test_an_area_recording_is_h264_even_when_the_settings_say_h265(world, env, ff, caplog):
+    """The area is cut out by rewriting the H.264 headers; an H.265 stream would come back from
+    that command unchanged or not at all. So the area keys record H.264, and the log says so."""
+    rec.config.set_values({"VIDEO_CODEC": "h265"}, env)
+    recorder = region_recorder(world, env, ff)
+    with caplog.at_level("WARNING"):
+        assert recorder.toggle("region-video") == 0
+    gsr = world.popen_calls[0]
+    assert gsr[gsr.index("-k") + 1] == "h264"
+    assert "an area recording is always H.264, not h265" in caplog.text
+
+
+def test_a_screen_recording_next_to_it_stays_h265(world, env, ff):
+    rec.config.set_values({"VIDEO_CODEC": "h265"}, env)
+    recorder = region_recorder(world, env, ff)
+    assert recorder.toggle("video") == 0
+    gsr = world.popen_calls[0]
+    assert gsr[gsr.index("-k") + 1] == "hevc"
+
+
+def test_an_area_recording_with_h264_settings_says_nothing_about_it(world, env, ff, caplog):
+    recorder = region_recorder(world, env, ff)
+    with caplog.at_level("WARNING"):
+        recorder.toggle("region-video-audio")
+    assert "always H.264" not in caplog.text
+
+
+def test_video_command_for_an_area_is_h264_and_otherwise_the_same():
+    cfg = rec.config.Config("/f", "mkv", 12000, 30, 160, 192, video_codec="h265")
+    area = rec.video_command(cfg, True, Path("/f/x.mkv"), area=True)
+    screen = rec.video_command(cfg, True, Path("/f/x.mkv"))
+    assert area[area.index("-k") + 1] == "h264" and screen[screen.index("-k") + 1] == "hevc"
+    area[area.index("-k") + 1] = "hevc"
+    assert area == screen

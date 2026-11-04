@@ -321,3 +321,72 @@ def test_set_values_refuses_what_cannot_be_written(env):
 def test_set_values_leaves_no_temporary_file(env):
     config.set_values({"VIDEO_FOLDER": "/v"}, env)
     assert [p.name for p in config.config_path(env).parent.iterdir()] == ["hotrec.conf"]
+
+
+# -- the codecs (Settings window) -------------------------------------------------------------
+
+
+def test_the_codecs_default_to_what_hotrec_always_did(env):
+    cfg, warnings = config.load(env)
+    assert (cfg.video_codec, cfg.audio_codec) == ("h264", "mp3")
+    assert warnings == []
+
+
+def test_the_codec_keys_are_read_in_any_case(env):
+    path = config.config_path(env)
+    path.parent.mkdir(parents=True)
+    path.write_text("VIDEO_CODEC=H265\nAUDIO_CODEC=Opus\n")
+    cfg, warnings = config.load(env)
+    assert (cfg.video_codec, cfg.audio_codec) == ("h265", "opus")
+    assert warnings == []
+
+
+def test_a_codec_that_is_not_one_is_reported_and_replaced_by_the_default(env):
+    path = config.config_path(env)
+    path.parent.mkdir(parents=True)
+    path.write_text("VIDEO_CODEC=av1\nAUDIO_CODEC=flac\n")
+    cfg, warnings = config.load(env)
+    assert (cfg.video_codec, cfg.audio_codec) == ("h264", "mp3")
+    assert "VIDEO_CODEC=av1 is not one of h264/h265, using h264" in warnings
+    assert "AUDIO_CODEC=flac is not one of mp3/aac/opus, using mp3" in warnings
+
+
+def test_the_new_file_names_the_codec_keys_with_todays_values(env):
+    config.load(env)
+    text = config.config_path(env).read_text()
+    assert "\nVIDEO_CODEC=h264 " in text and "\nAUDIO_CODEC=mp3 " in text
+    values, problems = config.parse(text)
+    assert problems == [] and values["VIDEO_CODEC"] == "h264" and values["AUDIO_CODEC"] == "mp3"
+    assert config.build(values, env)[1] == []  # the file the program writes is one it accepts
+
+
+def test_set_values_writes_and_removes_the_codec_keys(env):
+    config.set_values({"VIDEO_CODEC": "h265"}, env)
+    assert config.load(env)[0].video_codec == "h265"
+    config.set_values({"VIDEO_CODEC": ""}, env)
+    assert config.load(env)[0].video_codec == "h264"
+    with pytest.raises(ValueError):
+        config.set_values({"VIDEO_CODECS": "h265"}, env)
+
+
+def test_the_old_prototype_import_keeps_the_default_codecs(env):
+    old = config.old_config_path(env)
+    old.parent.mkdir(parents=True)
+    old.write_text("MAPPA=/x\nMP3_KBPS=256\n")
+    cfg, _warnings = config.load(env)
+    assert (cfg.video_codec, cfg.audio_codec, cfg.mp3_kbps) == ("h264", "mp3", 256)
+
+
+def test_every_key_the_window_resets_is_a_key_of_the_file():
+    assert set(config.KEYS) == {
+        "FOLDER",
+        "VIDEO_FOLDER",
+        "AUDIO_FOLDER",
+        "CONTAINER",
+        "VIDEO_CODEC",
+        "AUDIO_CODEC",
+        "VIDEO_KBPS",
+        "FPS",
+        "AAC_KBPS",
+        "MP3_KBPS",
+    }

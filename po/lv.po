@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Latvian\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "Par"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Versija %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr ""
+"Ekrāna un skaņas ierakstītājs GNOME videi, vadāms ar tastatūras "
+"īsinājumtaustiņiem."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Tīmekļa vietne"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Ziņot par problēmu"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Licence: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Aizvērt"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Neizdevās iestatīt tastatūras īsinājumtaustiņus"
 
@@ -62,52 +95,8 @@ msgid "Stop and save"
 msgstr "Apturēt un saglabāt"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Iestatīt tastatūras īsinājumtaustiņus..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Tastatūras īsinājumtaustiņi"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "Noklikšķiniet uz lauka un nospiediet jaunos taustiņus. Esc atceļ."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "Saglabāt video mapē"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "Saglabāt skaņu mapē"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Noklusējums"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "Saglabāt"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Izvēlēties mapi"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Neizdevās saglabāt mapes"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Nospiediet taustiņus..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Izmantojiet Ctrl, Alt vai Super kopā ar taustiņu."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "Diviem īsinājumtaustiņiem ir vieni un tie paši taustiņi."
+msgid "Settings…"
+msgstr "Iestatījumi…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -189,6 +178,135 @@ msgstr "Ieraksts var būt nepilnīgs"
 #: hotrec/selector.py
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr "Velciet, lai izvēlētos ierakstāmo apgabalu. Esc vai labā poga atceļ."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Iestatījumi"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "Atiestatīt uz noklusējuma"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Tastatūras īsinājumtaustiņi"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Noklikšķiniet uz lauka un nospiediet jaunos taustiņus. Esc atceļ."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Video"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Video kodeks"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (tiek atskaņots visur)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (aptuveni puse no faila lieluma)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Video bitu pārraides ātrums"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Kadru ātrums"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Video faila formāts"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 nav pieejams: videokarte nevar to kodēt."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"H.265 video var būt nepieciešams papildu kodeks, lai to atskaņotu "
+"operētājsistēmā Windows un dažās pārlūkprogrammās."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Skaņa"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Skaņas kodeks tikai skaņas ierakstiem"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Skaņas bitu pārraides ātrums ar video"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Skaņas bitu pārraides ātrums tikai skaņas ierakstiem"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr ""
+"Attiecas tikai uz ierakstiem, kuros ir tikai skaņa. Ar video skaņa vienmēr "
+"ir AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Mapes"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Video tiek saglabāti"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "Skaņas ieraksti tiek saglabāti"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Izvēlēties…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Izvēlēties mapi"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Nospiediet taustiņus..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Izmantojiet Ctrl, Alt vai Super kopā ar taustiņu."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Diviem īsinājumtaustiņiem ir vieni un tie paši taustiņi."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "Vai atiestatīt katru iestatījumu uz tā noklusējuma vērtību?"
 
 #: hotrec/shellext.py
 msgid ""

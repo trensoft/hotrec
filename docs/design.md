@@ -27,9 +27,9 @@ removed and the next key starts a new recording.
 
 | Mode | Program | Pause | Stop |
 |---|---|---|---|
-| `video-audio`, `video` | `gpu-screen-recorder -w portal -restore-portal-session yes -f FPS -k h264 -encoder gpu -bm cbr -q KBPS [-a default_output -ac aac -ab KBPS] -o FILE` | SIGUSR2 (the recorder toggles) | SIGINT |
-| `region-video-audio`, `region-video` | the same `gpu-screen-recorder` command as `video-audio` / `video` (the whole monitor), after the area was drawn; at the stop `ffmpeg -c copy -bsf:v h264_metadata=crop_*` rewrites the area into the file (see "The area") | SIGUSR2 | SIGINT, then the cut |
-| `audio` | `ffmpeg -n -f pulse -i <default sink>.monitor -c:a libmp3lame -b:a KBPS FILE` | SIGSTOP / SIGCONT | SIGINT |
+| `video-audio`, `video` | `gpu-screen-recorder -w portal -restore-portal-session yes -f FPS -k h264|hevc -encoder gpu -bm cbr -q KBPS [-a default_output -ac aac -ab KBPS] -o FILE` | SIGUSR2 (the recorder toggles) | SIGINT |
+| `region-video-audio`, `region-video` | the same `gpu-screen-recorder` command as `video-audio` / `video` (the whole monitor, but always `-k h264`: the cut below works on H.264 headers), after the area was drawn; at the stop `ffmpeg -c copy -bsf:v h264_metadata=crop_*` rewrites the area into the file (see "The area") | SIGUSR2 | SIGINT, then the cut |
+| `audio` | `ffmpeg -n -f pulse -i <default sink>.monitor -c:a libmp3lame\|aac\|libopus -b:a KBPS FILE` (`.mp3`, `.aac`, `.opus`) | SIGSTOP / SIGCONT | SIGINT |
 
 Starting: the recorder is a new session (`start_new_session`), its output goes to `recorder.log`.
 If it is gone within 1.5 s the user gets a notification with the log path, and no state is written.
@@ -41,7 +41,7 @@ screen is chosen, so the recorder can also end well after the start: `read_state
 removes the state, and, for a video recording whose log shows an encoder failure, sends "The recording
 stopped" with the same text (a cancelled screen choice and sound recordings end quietly, as before).
 
-Folders: `FOLDER` is the default; `VIDEO_FOLDER` and `AUDIO_FOLDER` (set in the shortcuts window or by hand)
+Folders: `FOLDER` is the default; `VIDEO_FOLDER` and `AUDIO_FOLDER` (set in the Settings window or by hand)
 override it per kind. A chosen folder is used when it can be made and written (an unplugged drive cannot);
 else the recording goes to `FOLDER` and the log says why.
 A missing program is named ("gpu-screen-recorder is not installed"). The sound-only mode needs the
@@ -89,28 +89,69 @@ writes no marker, so the next login tries again. Either way it then becomes the 
 `hotrec indicator` (started by a recording, one at a time) shows `...-recording` or `...-paused`
 (red or yellow) and a menu; it polls the state twice a second and quits when nothing records.
 The resident one (`hotrec autostart`) does not quit: while nothing records it shows the Hotrec
-symbolic icon, the three start entries are usable and Pause and Stop are greyed; while a recording
+symbolic icon, the five start entries are usable and Pause and Stop are greyed; while a recording
 runs it is the other way round. The lock makes a second dot, resident or not, exit at once.
 GTK 3 and an AppIndicator library (Ayatana first, then the old one) are imported only here.
 
-The top of the menu holds six grey lines, "Ctrl+Shift+F9 - Record screen and sound", read from
-GNOME (`Shortcuts.bindings()`) when the dot starts, after the window below saved, and every
-minute (`KEYS_REREAD_TICKS`); a shortcut without keys, or GNOME's settings missing, leaves its line
-hidden. The resident dot has "Set keyboard shortcuts..." at the bottom.
+The resident menu, in this order: the five ways to start (screen and sound, screen, sound, area and
+sound, area), Pause/Resume, Stop and save, a separator, Settings..., About. Each command line carries its
+keys, "Record screen and sound (Ctrl+Shift+F9)", read from GNOME (`Shortcuts.bindings()`) when the dot
+starts, right after the Settings window changed a key, and every minute (`KEYS_REREAD_TICKS`); a
+shortcut without keys, or GNOME's settings missing, leaves the line as the bare name. Pause keeps its
+keys when it turns into Resume. The dot of a single recording (not resident) has Pause and Stop only.
+There is no separate list of the keys: the lines are the keys.
 
-## The shortcuts window
+## The Settings window
 
-`hotrec/keys_window.py` (GTK 3, opened from the resident dot, one at a time): a row per shortcut, a
-button with its keys; a click waits for the next key combination (the keyboard is grabbed for the
-wait, so the keys the shell already owns, such as the shortcut being changed, reach the window),
-Escape gives up. A bare letter is refused; the function keys may stand alone. Save calls
-`Shortcuts.install(keys)`, the code of `hotrec setup`, with the new accelerators: a key of another
-custom keybinding is a `ShortcutConflict` (compared as keys, not as text, so `<Control>f9` equals
-`<Primary>F9`) and nothing is written; two of ours with the same keys are refused before GNOME is
-touched. Shortcuts that are not installed yet show the default keys (Ctrl+Shift+F7 to F12), which
-is what Save would set; `hotrec autostart` installs exactly these, so the first window shows them
-as they are. At the bottom right: "0.1.5 by TrenSoft" (not translated), as in the settings window of
-Slideshow Lock. There is no separate About window.
+`hotrec/settings_window.py` (GTK 3, opened from the resident dot, one at a time) holds every setting
+of the program in one place; `hotrec/about_window.py` is the About window beside it (name, version,
+the one-line description, Website and Report a problem as link buttons, the license id, Close; its
+lines are Hotrec's own translated strings, not `Gtk.AboutDialog`'s).
+
+Every control writes the moment it changes (`config.set_values` into `~/.config/hotrec.conf`, or for
+a key `Shortcuts.install`); there is no Save. While the controls are set from the file nothing is
+written (`applying`), and a write that fails is shown in the window (the error text, which names the
+file) and the controls go back to what the file has, so the window never says what the file does not.
+
+- *Keyboard shortcuts*: a row per shortcut, a button with its keys; a click waits for the next key
+  combination (the keyboard is grabbed for the wait, so the keys the shell already owns, such as the
+  shortcut being changed, reach the window), Escape gives up. A bare letter is refused; the function
+  keys may stand alone. A new combination calls `Shortcuts.install(keys)`, the code of `hotrec setup`,
+  with all six accelerators: a key of another custom keybinding is a `ShortcutConflict` (compared as
+  keys, not as text, so `<Control>f9` equals `<Primary>F9`) and nothing is written; two of ours with
+  the same keys are refused before GNOME is touched; either way the row goes back to its old keys.
+  Shortcuts that are not installed yet show the default keys (Ctrl+Shift+F7 to F12), which is what
+  the next change would set; `hotrec autostart` installs exactly these. The menu is told
+  (`on_saved`) and shows the new keys at once.
+- *Video*: `VIDEO_CODEC` as two radio buttons (H.264, H.265), `VIDEO_KBPS` a slider over
+  `VIDEO_BITRATE_STEPS` (25 steps from 500 to 100000 kbit/s, each 1.14 to 1.33 times the one before,
+  so it is exponential; 12000, the default, is a step), `FPS` a slider over 10 to 144, `CONTAINER`
+  two radio buttons. A value in the file that is not a step is shown by the nearest step (by ratio),
+  with its real number as the text, and stays until the slider is moved.
+- *H.265 is offered only if the card can encode it* (`hotrec/codecs.py`): the recorder is asked
+  (`gpu-screen-recorder --info`, then `--list-supported-video-codecs`; 8 s deadline, once per process)
+  and only a codec it names counts; a missing program, a failure, a timeout and an answer that is
+  not understood all mean "not offered". Then the H.265 button is greyed and the line "H.265 is not
+  available: the graphics card cannot encode it." shows; when H.265 is chosen the line about extra
+  codecs for Windows and browsers shows. `VIDEO_CODEC=h265` in the file works regardless.
+- *Sound*: `AUDIO_CODEC` (MP3, AAC, Opus) is the codec of a **sound-only** recording only; the sound
+  of a video is always AAC (`-ac aac`). Its note ("Applies only to sound-only recordings...") shows
+  whenever the codec is not AAC. `AAC_KBPS` (inside a video) and `MP3_KBPS` (sound-only, whatever the
+  codec; the key keeps the old name so existing files keep working) are sliders over
+  `SOUND_BITRATE_STEPS`, 32 to 320 in 10 fixed steps.
+- *Folders*: a label with the folder and "Choose...", which opens the portal's folder chooser;
+  choosing `FOLDER` again unsets the key.
+- *Reset to defaults*: asks "Reset every setting to its default value?", then removes every key
+  from the file (so each has its default) and installs the six default keys.
+- At the bottom right: "0.1.6 by TrenSoft" (the version, not translated).
+
+**An area recording is always H.264** (`video_command(..., area=True)`, with a log warning when the
+file says otherwise): the area is cut out by rewriting H.264 headers (`h264_metadata`). The HEVC
+counterpart (`hevc_metadata`, and the coded-size rounding of an H.265 stream) is not measured, so
+it is not guessed.
+
+What is not in the window, on purpose: loudness normalising, a mono/stereo choice, presets, an
+"advanced" mode (decisions of the owner, 2026-10-31).
 
 ## The area (0.1.5)
 
@@ -178,6 +219,19 @@ UUID is added to `org.gnome.shell enabled-extensions` unless it is already there
 `disabled-extensions`, the marker is written and one notification says it; a running Shell loads a new
 extension at the next login, which the notification says. An extension the user turns off later is not
 turned on again. If `gsettings` fails nothing is written and the next login tries again.
+
+**Direct scanout is off while the dot shows, and that has a side effect.** A fullscreen window that
+mutter "unredirects" (direct scanout) bypasses the compositor, so the top chrome the dot lives in is
+not painted above it: the dot would be missing exactly when it is wanted, over a fullscreen video.
+While the dot shows, `extension.js` therefore keeps unredirect disabled (`global.compositor.
+disable_unredirect()` on GNOME 48 and later, `Meta.disable_unredirect_for_display(global.display)` on
+47) and gives it back when the dot goes (or the extension is turned off); the calls are counted by
+mutter, so they pair exactly (`_unredirectHeld`). For the length of a recording, or a pause, a
+fullscreen video or game is composited like any window instead of scanned out directly: somewhat more
+GPU work and power, and the frame pacing of a fullscreen game can be less smooth. The recording
+itself is not affected. If the call throws, the dot still shows, one warning is logged, and the call is
+not repeated while the dot stays (`_unredirectFailed`; before this, `_show` retried and warned at every
+blink, twice a second); the next appearance of the dot tries once more.
 
 Not measured: a run in a real GNOME Shell, and whether the portal screen recording contains the dot (the
 monitor stream is the whole stage, so it probably does). If it does, the tray dot is the fallback: turn the

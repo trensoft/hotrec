@@ -11,8 +11,8 @@ recording and, when something is, stops and saves it, whichever mode that one is
 - ``region-video-audio`` and ``region-video``: the same recording of the whole monitor, with the
   area chosen with the mouse first (``select_region``, a window of its own, see ``selector``).
   When the recording is stopped the area is cut out without encoding the video again (``region``).
-- ``audio``: ``ffmpeg`` records the monitor of the default sound output as MP3. Pause is SIGSTOP
-  and SIGCONT, stop is SIGINT.
+- ``audio``: ``ffmpeg`` records the monitor of the default sound output as MP3 (or AAC or Opus,
+  as the settings say). Pause is SIGSTOP and SIGCONT, stop is SIGINT.
 
 What is running is kept in ``$XDG_RUNTIME_DIR/hotrec/state.json`` (pid, the start time of that
 pid so a reused pid is not mistaken for the recorder, mode, file, paused). The commands take a
@@ -133,8 +133,15 @@ def state_dir(env: Optional[Dict[str, str]] = None) -> Path:
     return path
 
 
-def video_command(cfg: config.Config, with_sound: bool, out: Path) -> List[str]:
-    """``gpu-screen-recorder`` through the desktop portal; H.264 from the graphics hardware."""
+# What gpu-screen-recorder calls the video codecs of the settings (``-k``).
+_GSR_CODEC = {"h264": "h264", "h265": "hevc"}
+
+
+def video_command(cfg: config.Config, with_sound: bool, out: Path, area: bool = False) -> List[str]:
+    """``gpu-screen-recorder`` through the desktop portal; H.264 or H.265 from the graphics
+    hardware. The sound of a video is always AAC, whatever the sound-only codec is. An ``area``
+    recording is always H.264: the area is cut out by rewriting the H.264 headers (see ``region``),
+    which does not work on an H.265 stream."""
     command = [
         GSR,
         "-w",
@@ -144,7 +151,7 @@ def video_command(cfg: config.Config, with_sound: bool, out: Path) -> List[str]:
         "-f",
         str(cfg.fps),
         "-k",
-        "h264",
+        _GSR_CODEC["h264" if area else cfg.video_codec],
         "-encoder",
         "gpu",
         "-bm",
@@ -157,8 +164,15 @@ def video_command(cfg: config.Config, with_sound: bool, out: Path) -> List[str]:
     return command + ["-o", str(out)]
 
 
+# The sound-only codecs: ffmpeg's encoder and the file extension (each is a format that can be
+# written to the end and played back after a stop; none needs the file to be finished by a seek).
+_AUDIO_ENCODER = {"mp3": "libmp3lame", "aac": "aac", "opus": "libopus"}
+_AUDIO_EXTENSION = {"mp3": "mp3", "aac": "aac", "opus": "opus"}
+
+
 def audio_command(cfg: config.Config, monitor: str, out: Path) -> List[str]:
-    """``ffmpeg``: the monitor of the sound output, as MP3. Never overwrites a file."""
+    """``ffmpeg``: the monitor of the sound output, in the codec of the settings (MP3 unless chosen
+    otherwise). Never overwrites a file."""
     return [
         FFMPEG,
         "-hide_banner",
@@ -170,7 +184,7 @@ def audio_command(cfg: config.Config, monitor: str, out: Path) -> List[str]:
         "-i",
         monitor,
         "-c:a",
-        "libmp3lame",
+        _AUDIO_ENCODER[cfg.audio_codec],
         "-b:a",
         "%dk" % cfg.mp3_kbps,
         str(out),
@@ -180,7 +194,7 @@ def audio_command(cfg: config.Config, monitor: str, out: Path) -> List[str]:
 def recording_path(folder: Path, mode: str, cfg: config.Config, now: datetime) -> Path:
     """``<folder>/2026-10-29_103000_video-audio.mkv``; a second recording in the same second gets
     ``-2`` before the extension."""
-    extension = "mp3" if mode == AUDIO else cfg.container
+    extension = _AUDIO_EXTENSION[cfg.audio_codec] if mode == AUDIO else cfg.container
     stem = "%s_%s" % (now.strftime("%Y-%m-%d_%H%M%S"), mode)
     path = folder / ("%s.%s" % (stem, extension))
     number = 2
@@ -485,7 +499,10 @@ class Recorder:
         if mode == AUDIO:
             command = audio_command(cfg, self.default_monitor(), out)
         else:
-            command = video_command(cfg, mode in WITH_SOUND, out)
+            area_mode = mode in REGION_MODES
+            if area_mode and cfg.video_codec != "h264":
+                _LOG.warning("[config] an area recording is always H.264, not %s", cfg.video_codec)
+            command = video_command(cfg, mode in WITH_SOUND, out, area=area_mode)
         log_path = self.dir / "recorder.log"
         flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | getattr(os, "O_NOFOLLOW", 0)
         log_fd = os.open(log_path, flags, 0o600)

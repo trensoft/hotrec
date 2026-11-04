@@ -317,10 +317,54 @@ for (const [api, via] of [['compositor', 'GNOME 48/49: global.compositor'], ['di
     });
 }
 
+// A console.warn the extension makes, kept instead of printed.
+function warnings(body) {
+    const original = console.warn;
+    const seen = [];
+    console.warn = text => seen.push(String(text));
+    try {
+        body();
+    } finally {
+        console.warn = original;
+    }
+    return seen;
+}
+
 test('unredirect: if the call fails the dot still shows and nothing is given back that was not taken', () => {
-    const {world, dot, extension} = start(showing, {unredirectThrows: true});
-    assert.equal(dot.visible, true);
-    world.tick(); // tries again at every blink: nothing was taken
-    extension.disable();
-    assert.equal(world.unredirect.enable, 0);
+    const seen = warnings(() => {
+        const {world, dot, extension} = start(showing, {unredirectThrows: true});
+        assert.equal(dot.visible, true);
+        world.tick();
+        extension.disable();
+        assert.equal(world.unredirect.enable, 0);
+    });
+    assert.equal(seen.length, 1, seen.join('\n')); // the failure of the start, not of the tick
+});
+
+test('unredirect: a call that fails is tried once for the whole time the dot shows, and warned about once', () => {
+    const seen = warnings(() => {
+        const {world} = start(showing, {unredirectThrows: true});
+        for (let i = 0; i < 10; i++)
+            world.tick(); // ten blinks would have been ten attempts and ten warnings
+        assert.equal(world.unredirect.attempts, 1);
+    });
+    assert.equal(seen.length, 1, seen.join('\n'));
+    assert.match(seen[0], /cannot disable unredirect/);
+});
+
+test('unredirect: after a failure the next appearance of the dot tries again, once', () => {
+    const seen = warnings(() => {
+        const {world} = start(w => w.dirs.add(`${RUN}/hotrec`), {unredirectThrows: true});
+        for (let i = 0; i < 3; i++) {
+            world.proc(4242, 'S', 555);
+            world.writeState(recording());
+            world.emit(STATE);
+            world.tick();
+            world.tick();
+            world.files.delete(STATE);
+            world.emit(STATE);
+        }
+        assert.equal(world.unredirect.attempts, 3);
+    });
+    assert.equal(seen.length, 3, seen.join('\n'));
 });

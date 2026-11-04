@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Lithuanian\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +17,39 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "(n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "Apie"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Versija %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr ""
+"Ekrano ir garso įrašymo programa, skirta GNOME, valdoma sparčiaisiais "
+"klavišais."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Svetainė"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Pranešti apie problemą"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Licencija: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Užverti"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Nepavyko nustatyti spartaus klavišų"
 
@@ -63,52 +96,8 @@ msgid "Stop and save"
 msgstr "Sustabdyti ir išsaugoti"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Nustatyti sparčiuosius klavišus..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Spartieji klavišai"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "Spustelėkite lauką, tada paspauskite naujus klavišus. Esc atšaukia."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "Įrašyti vaizdo įrašus į"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "Įrašyti garsą į"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Numatytasis"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "Įrašyti"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Pasirinkti aplanką"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Nepavyko įrašyti aplankų"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Paspauskite klavišus..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Naudokite Ctrl, Alt arba Super kartu su klavišu."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "Du spartieji klavišai turi tuos pačius klavišus."
+msgid "Settings…"
+msgstr "Nustatymai…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -193,6 +182,133 @@ msgid "Drag the area to record. Esc or the right button cancels."
 msgstr ""
 "Vilkite, kad pasirinktumėte įrašomą sritį. Esc arba dešinysis mygtukas "
 "atšaukia."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Nustatymai"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "Atkurti numatytuosius"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Spartieji klavišai"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Spustelėkite lauką, tada paspauskite naujus klavišus. Esc atšaukia."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Vaizdas"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Vaizdo kodekas"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (veikia visur)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (apie pusę failo dydžio)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Vaizdo bitų dažnis"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Kadrų dažnis"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Vaizdo failo formatas"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 neprieinamas: vaizdo plokštė negali jo koduoti."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"H.265 vaizdo įrašams gali prireikti papildomo kodeko, kad juos būtų galima "
+"paleisti sistemoje Windows ir kai kuriose naršyklėse."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Garsas"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Garso kodekas tik garso įrašams"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Garso bitų dažnis su vaizdu"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Garso bitų dažnis tik garso įrašams"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr "Taikoma tik garso įrašams. Su vaizdu garsas visada yra AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Aplankai"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Vaizdo įrašai išsaugomi"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "Garso įrašai išsaugomi"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Pasirinkti…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Pasirinkti aplanką"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Paspauskite klavišus..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Naudokite Ctrl, Alt arba Super kartu su klavišu."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Du spartieji klavišai turi tuos pačius klavišus."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "Atkurti visų nustatymų numatytąsias reikšmes?"
 
 #: hotrec/shellext.py
 msgid ""

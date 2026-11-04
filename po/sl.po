@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Slovenian\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +17,38 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
 "n%100==4 ? 2 : 3);\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "O programu"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Različica %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr ""
+"Snemalnik zaslona in zvoka za GNOME, voden s tipkovničnimi bližnjicami."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Spletno mesto"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Prijavi težavo"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Licenca: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Zapri"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Bližnjic na tipkovnici ni bilo mogoče nastaviti"
 
@@ -63,52 +95,8 @@ msgid "Stop and save"
 msgstr "Ustavi in shrani"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Nastavi bližnjice na tipkovnici..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Bližnjice na tipkovnici"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "Kliknite polje in pritisnite nove tipke. Esc prekliče."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "Shrani videe v"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "Shrani zvok v"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Privzeto"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "Shrani"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Izberi mapo"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Map ni bilo mogoče shraniti"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Pritisnite tipke..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Uporabite Ctrl, Alt ali Super skupaj s tipko."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "Dve bližnjici imata enaki tipki."
+msgid "Settings…"
+msgstr "Nastavitve…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -190,6 +178,133 @@ msgstr "Posnetek je morda nepopoln"
 #: hotrec/selector.py
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr "Povlecite, da izberete območje snemanja. Esc ali desni gumb prekliče."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Nastavitve"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "Ponastavi na privzeto"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Tipkovnične bližnjice"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Kliknite polje in pritisnite nove tipke. Esc prekliče."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Video"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Video kodek"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (predvaja se povsod)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (približno polovica velikosti datoteke)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Bitna hitrost videa"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Hitrost sličic"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Format video datoteke"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 ni na voljo: grafična kartica ga ne more kodirati."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"Videoposnetki H.265 morda potrebujejo dodaten kodek za predvajanje v sistemu "
+"Windows in nekaterih brskalnikih."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Zvok"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Zvočni kodek za snemanje samo zvoka"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Bitna hitrost zvoka z videom"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Bitna hitrost zvoka za snemanje samo zvoka"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr "Velja samo za snemanje samo zvoka. Pri videu je zvok vedno AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Mape"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Videoposnetki so shranjeni v"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "Zvočni posnetki so shranjeni v"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Izberi…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Izberi mapo"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Pritisnite tipke..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Uporabite Ctrl, Alt ali Super skupaj s tipko."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Dve bližnjici imata enaki tipki."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "Ponastavi vse nastavitve na privzete vrednosti?"
 
 #: hotrec/shellext.py
 msgid ""
