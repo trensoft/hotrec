@@ -52,7 +52,7 @@ def build_parser() -> argparse.ArgumentParser:
         (REGION_VIDEO, "record an area of the screen only"),
         (VIDEO_AUDIO, "record the screen and the sound"),
         (VIDEO, "record the screen only"),
-        (AUDIO, "record the sound only (MP3)"),
+        (AUDIO, "record the sound only (MP3 by default)"),
     ):
         commands.add_parser(mode, help="%s; or stop and save the running recording" % text)
     commands.add_parser("pause", help="pause or resume the running recording")

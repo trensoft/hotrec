@@ -29,9 +29,11 @@ press is a separate function, so the logic runs under test without a display.
 
 from __future__ import annotations
 
+import locale
 import logging
 import math
 import os
+import threading
 from typing import Any, Callable, Dict, FrozenSet, List, Mapping, Optional, Sequence
 
 from hotrec import DEVELOPER, _, __version__, codecs, config
@@ -75,6 +77,8 @@ EventToKeys = Callable[[Any], Optional[str]]
 ChooseFolder = Callable[[Any, str, str], Optional[str]]  # (window, title, current) -> folder
 
 Confirm = Callable[[Any, str], bool]  # (window, question) -> yes
+# (work, done): run ``work`` and hand its answer to ``done`` on the main thread, some time later.
+Probe = Callable[[Callable[[], FrozenSet[str]], Callable[[FrozenSet[str]], None]], None]
 
 # The two folder rows: kind, the settings key it is saved under.
 FOLDER_KEYS = (("video", "VIDEO_FOLDER"), ("audio", "AUDIO_FOLDER"))
@@ -105,7 +109,8 @@ def rate_text(kbps: int) -> str:
     """ "800 kbit/s", and from 1000 on "12.0 Mbit/s"."""
     if kbps < 1000:
         return _("%d kbit/s") % kbps
-    return _("%.1f Mbit/s") % (kbps / 1000)
+    # The decimal separator of the user's locale (GTK has set it): "12,0" where a comma is used.
+    return locale.format_string(_("%.1f Mbit/s"), kbps / 1000)
 
 
 def version_text() -> str:
@@ -164,6 +169,7 @@ class SettingsWindow:
         choose_folder: ChooseFolder = lambda _window, _title, _current: None,
         confirm: Confirm = lambda _window, _question: False,
         video_codecs: Callable[[], FrozenSet[str]] = lambda: frozenset(),
+        probe: Probe = lambda work, done: done(work()),
     ) -> None:
         self._Gtk = Gtk
         self._shortcuts = shortcuts  # reads the keys now
@@ -176,7 +182,7 @@ class SettingsWindow:
         self._write_config = write_config
         self._choose_folder = choose_folder
         self._confirm = confirm
-        self.h265_possible = "h265" in video_codecs()
+        self.h265_possible: Optional[bool] = None  # None while the recorder is being asked
         self.cfg = load_config()
         self.closed = False
         self.waiting: Optional[str] = None  # the slug whose new keys are awaited
@@ -228,6 +234,7 @@ class SettingsWindow:
         self.show_config()
         window.show_all()
         self._show_notes()  # after show_all, which shows every label; the notes decide themselves
+        probe(video_codecs, self._codecs_known)  # H.265 stays off until the answer comes
 
     # -- building ------------------------------------------------------------------------------
 
@@ -321,7 +328,7 @@ class SettingsWindow:
             self.codec_buttons,
             "VIDEO_CODEC",
         )
-        self.codec_buttons["h265"].set_sensitive(self.h265_possible)
+        self.codec_buttons["h265"].set_sensitive(bool(self.h265_possible))
         self._slider(grid, 1, _("Video bitrate"), "VIDEO_KBPS", VIDEO_BITRATE_STEPS)
         self._slider(grid, 2, _("Frame rate"), "FPS", FPS_STEPS)
         self._radios(
@@ -338,6 +345,9 @@ class SettingsWindow:
         )
         self.h265_play_note = self._note(
             box, _("H.265 videos may need an extra codec to play on Windows and in some browsers.")
+        )
+        self.area_note = self._note(
+            box, _("Area recordings are always H.264, even when H.265 is chosen.")
         )
 
     def _build_sound(self, box: Any) -> None:
@@ -410,8 +420,9 @@ class SettingsWindow:
 
     def _show_notes(self) -> None:
         cfg = self.cfg
-        self.h265_missing_note.set_visible(not self.h265_possible)
-        self.h265_play_note.set_visible(self.h265_possible and cfg.video_codec == "h265")
+        self.h265_missing_note.set_visible(self.h265_possible is False)
+        self.h265_play_note.set_visible(bool(self.h265_possible) and cfg.video_codec == "h265")
+        self.area_note.set_visible(cfg.video_codec == "h265")
         self.sound_note.set_visible(cfg.audio_codec != "aac")
 
     def _folder_text(self, kind: str) -> str:
@@ -475,6 +486,15 @@ class SettingsWindow:
 
     def present(self) -> None:
         self.window.present()
+
+    def _codecs_known(self, found: FrozenSet[str]) -> None:
+        """The answer of the recorder (on the main thread): H.265 is offered when it can encode it.
+        An answer that comes after the window was closed is dropped."""
+        if self.closed:
+            return
+        self.h265_possible = "h265" in found
+        self.codec_buttons["h265"].set_sensitive(self.h265_possible)
+        self._show_notes()
 
     def _destroyed(self, *_args: Any) -> None:
         self.closed = True
@@ -593,11 +613,34 @@ _PROBED: Optional[FrozenSet[str]] = None
 
 def _probed_codecs() -> FrozenSet[str]:
     """What the recorder can encode, asked once per process: the answer does not change while the
-    dot runs, and asking takes a moment."""
+    dot runs, and asking takes a moment. An empty answer is not kept (the recorder may have been
+    busy or missing for a moment), the next window asks again."""
     global _PROBED
     if _PROBED is None:
-        _PROBED = codecs.video_codecs()
+        found = codecs.video_codecs()
+        if not found:
+            return found
+        _PROBED = found
     return _PROBED
+
+
+def background_probe(idle_add: Callable[..., Any]) -> Probe:
+    """A ``probe`` that runs the work in a thread of its own and hands the answer to ``idle_add``
+    (``GLib.idle_add``): the question to the recorder takes seconds, and the window must not wait
+    for it on the main thread."""
+
+    def probe(work: Callable[[], FrozenSet[str]], done: Callable[[FrozenSet[str]], None]) -> None:
+        def run() -> None:
+            try:
+                found = work()
+            except Exception as error:  # a failed question is "not offered", never a crash
+                _LOG.warning("[settings] the codec question failed: %s", error)
+                found = frozenset()
+            idle_add(done, found)
+
+        threading.Thread(target=run, name="hotrec-codec-probe", daemon=True).start()
+
+    return probe
 
 
 def open_window(
@@ -609,6 +652,7 @@ def open_window(
     icon_name: Optional[str] = None,
 ) -> SettingsWindow:
     """The window for the real GTK 3 and Gdk."""
+    from gi.repository import GLib  # type: ignore
 
     def grab(window: Any) -> None:
         """Take the keyboard from the desktop while the keys are awaited, so that pressing a key
@@ -673,4 +717,5 @@ def open_window(
         choose_folder,
         confirm,
         _probed_codecs,
+        background_probe(GLib.idle_add),
     )

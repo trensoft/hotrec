@@ -253,6 +253,12 @@ msgstr ""
 "Windows και ορισμένα προγράμματα περιήγησης."
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr ""
+"Οι εγγραφές μιας περιοχής είναι πάντα H.264, ακόμη και όταν έχει "
+"επιλεγεί το H.265."
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "Ήχος"
 

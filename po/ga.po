@@ -249,6 +249,12 @@ msgstr ""
 "sheinm ar Windows agus i roinnt brabhsálaithe."
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr ""
+"Is H.264 i gcónaí a bhíonn i dtaifeadtaí limistéir, fiú nuair a "
+"roghnaítear H.265."
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "Fuaim"
 

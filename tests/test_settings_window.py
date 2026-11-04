@@ -192,6 +192,7 @@ def build(
     choices=None,
     codecs=frozenset({"h264", "h265"}),
     installer=None,
+    probe=None,
 ):
     gtk = FakeGtk()
     grabs = [] if grabs is None else grabs
@@ -210,6 +211,7 @@ def build(
         choose_folder=choices.choose,
         confirm=choices.confirm,
         video_codecs=lambda: codecs,
+        **({} if probe is None else {"probe": probe}),
     )
     return window, gtk
 
@@ -678,6 +680,63 @@ def test_h265_already_in_the_file_is_shown_even_if_the_card_cannot(env):
     assert "VIDEO_CODEC" in conf_text(env)
 
 
+class LaterProbe:
+    """A probe whose answer comes when the test says so (the real one comes from a thread)."""
+
+    def __init__(self):
+        self.work = None
+        self.done = None
+
+    def __call__(self, work, done):
+        self.work, self.done = work, done
+
+
+def test_the_window_opens_without_waiting_for_the_codec_question(env):
+    probe = LaterProbe()
+    window, _gtk = build(Gsettings(), env, probe=probe, codecs=frozenset({"h264"}))
+    assert probe.work() == {"h264"}  # the question is handed over, not answered by the window
+    assert window.h265_possible is None
+    assert window.codec_buttons["h265"].sensitive is False
+    assert window.h265_missing_note.visible is False  # nothing is known yet: no claim either way
+
+
+def test_h265_is_offered_when_the_answer_comes_that_the_card_can(env):
+    probe = LaterProbe()
+    window, _gtk = build(Gsettings(), env, probe=probe)
+    probe.done(frozenset({"h264", "h265"}))
+    assert window.h265_possible is True
+    assert window.codec_buttons["h265"].sensitive is True
+    assert window.h265_missing_note.visible is False
+
+
+def test_the_missing_note_shows_when_the_answer_comes_that_the_card_cannot(env):
+    probe = LaterProbe()
+    window, _gtk = build(Gsettings(), env, probe=probe)
+    probe.done(frozenset())
+    assert window.h265_possible is False
+    assert window.codec_buttons["h265"].sensitive is False
+    assert window.h265_missing_note.visible is True
+
+
+def test_an_answer_after_the_window_was_closed_is_dropped(env):
+    probe = LaterProbe()
+    window, _gtk = build(Gsettings(), env, probe=probe)
+    window._destroyed()
+    probe.done(frozenset({"h264", "h265"}))
+    assert window.h265_possible is None
+    assert window.codec_buttons["h265"].sensitive is False
+
+
+def test_the_note_that_an_area_is_always_h264_shows_with_h265_chosen(env):
+    window, _gtk = build(Gsettings(), env)
+    assert window.area_note.visible is False  # H.264 chosen: nothing to say
+    window.codec_buttons["h265"].set_active(True)
+    assert window.area_note.visible is True
+    assert window.area_note.label == "Area recordings are always H.264, even when H.265 is chosen."
+    window.codec_buttons["h264"].set_active(True)
+    assert window.area_note.visible is False
+
+
 def test_the_video_bitrate_slider_writes_the_step_it_is_on(env):
     window, _gtk = build(Gsettings(), env)
     steps = settings_window.VIDEO_BITRATE_STEPS
@@ -1050,3 +1109,11 @@ def test_the_settings_apply_from_the_next_recording_through_the_real_config_load
     assert command[command.index("-ac") + 1] == "aac"  # the sound of a video is AAC whatever else
     audio = rec.audio_command(cfg, "x.monitor", rec.Path("/f.opus"))
     assert audio[audio.index("-c:a") + 1] == "libopus"
+
+
+def test_the_rate_text_follows_the_decimal_separator_of_the_locale(monkeypatch):
+    comma = {"decimal_point": ",", "thousands_sep": "", "grouping": []}
+    monkeypatch.setattr(settings_window.locale, "localeconv", lambda: comma)
+    assert settings_window.rate_text(12000) == "12,0 Mbit/s"
+    assert settings_window.rate_text(15500) == "15,5 Mbit/s"
+    assert settings_window.rate_text(800) == "800 kbit/s"

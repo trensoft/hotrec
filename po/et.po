@@ -243,6 +243,10 @@ msgstr ""
 "lisakoodekit."
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr "Piirkonna salvestused on alati H.264, isegi kui H.265 on valitud."
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "Heli"
 

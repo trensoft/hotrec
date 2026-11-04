@@ -86,6 +86,13 @@ def test_the_help_has_no_cpu_mode(capsys):
     assert "cpu" not in out.lower() and "x264" not in out
 
 
+def test_the_help_says_the_sound_is_mp3_by_default(capsys):
+    with pytest.raises(SystemExit):
+        cli.main(["--help"])
+    out = " ".join(capsys.readouterr().out.split())
+    assert "record the sound only (MP3 by default)" in out
+
+
 class FakeShortcuts:
     made = []
     error = None

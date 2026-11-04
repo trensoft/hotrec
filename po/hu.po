@@ -247,6 +247,12 @@ msgstr ""
 "kellhet."
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr ""
+"A képernyőterület felvétele mindig H.264, akkor is, ha H.265 van "
+"kiválasztva."
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "Hang"
 

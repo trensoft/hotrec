@@ -243,6 +243,12 @@ msgstr ""
 "आवश्यकता हो सकती है।"
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr ""
+"क्षेत्र की रिकॉर्डिंग हमेशा H.264 में होती है, भले ही H.265 चुना गया "
+"हो।"
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "ध्वनि"
 
