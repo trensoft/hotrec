@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Greek\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "Περί"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Έκδοση %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr ""
+"Εφαρμογή εγγραφής οθόνης και ήχου για το GNOME, ελεγχόμενη με συντομεύσεις "
+"πληκτρολογίου."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Ιστότοπος"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Αναφορά προβλήματος"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Άδεια: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Κλείσιμο"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Δεν ήταν δυνατός ο ορισμός των συντομεύσεων πληκτρολογίου"
 
@@ -62,52 +95,8 @@ msgid "Stop and save"
 msgstr "Διακοπή και αποθήκευση"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Ορισμός συντομεύσεων πληκτρολογίου..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Συντομεύσεις πληκτρολογίου"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "Κάντε κλικ σε ένα πεδίο και πατήστε τα νέα πλήκτρα. Το Esc ακυρώνει."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "Αποθήκευση βίντεο στο"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "Αποθήκευση ήχου στο"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Προεπιλογή"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "Αποθήκευση"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Επιλογή φακέλου"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Δεν ήταν δυνατή η αποθήκευση των φακέλων"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Πατήστε τα πλήκτρα..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Χρησιμοποιήστε Ctrl, Alt ή Super μαζί με το πλήκτρο."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "Δύο συντομεύσεις έχουν τα ίδια πλήκτρα."
+msgid "Settings…"
+msgstr "Ρυθμίσεις…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -195,6 +184,136 @@ msgid "Drag the area to record. Esc or the right button cancels."
 msgstr ""
 "Σύρετε για να επιλέξετε την περιοχή εγγραφής. Το Esc ή το δεξί κουμπί "
 "ακυρώνει."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Ρυθμίσεις"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "Επαναφορά προεπιλογών"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Συντομεύσεις πληκτρολογίου"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Κάντε κλικ σε ένα πεδίο και πατήστε τα νέα πλήκτρα. Το Esc ακυρώνει."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Βίντεο"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Κωδικοποιητής βίντεο"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (αναπαράγεται παντού)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (περίπου το μισό μέγεθος αρχείου)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Ρυθμός μετάδοσης βίντεο (bitrate)"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Ρυθμός καρέ"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Μορφή αρχείου βίντεο"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr ""
+"Το H.265 δεν είναι διαθέσιμο: η κάρτα γραφικών δεν μπορεί να το "
+"κωδικοποιήσει."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"Τα βίντεο H.265 ίσως χρειαστούν επιπλέον κωδικοποιητή για αναπαραγωγή σε "
+"Windows και ορισμένα προγράμματα περιήγησης."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Ήχος"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Κωδικοποιητής ήχου για εγγραφές μόνο ήχου"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Ρυθμός μετάδοσης ήχου με βίντεο"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Ρυθμός μετάδοσης ήχου για εγγραφές μόνο ήχου"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr ""
+"Ισχύει μόνο για εγγραφές μόνο ήχου. Στα βίντεο, ο ήχος είναι πάντα AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Φάκελοι"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Τα βίντεο αποθηκεύονται στο"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "Οι εγγραφές ήχου αποθηκεύονται στο"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Επιλογή…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Επιλογή φακέλου"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Πατήστε τα πλήκτρα..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Χρησιμοποιήστε Ctrl, Alt ή Super μαζί με το πλήκτρο."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Δύο συντομεύσεις έχουν τα ίδια πλήκτρα."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "Επαναφορά όλων των ρυθμίσεων στην προεπιλεγμένη τους τιμή;"
 
 #: hotrec/shellext.py
 msgid ""

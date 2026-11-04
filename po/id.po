@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Indonesian\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "Tentang"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Versi %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr ""
+"Perekam layar dan suara untuk GNOME, dikendalikan oleh pintasan papan ketik."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Situs Web"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Laporkan masalah"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Lisensi: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Tutup"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Pintasan papan ketik tidak dapat diatur"
 
@@ -62,52 +94,8 @@ msgid "Stop and save"
 msgstr "Hentikan dan simpan"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Atur pintasan papan ketik..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Pintasan papan ketik"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "Klik sebuah kolom, lalu tekan tombol baru. Esc membatalkan."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "Simpan video di"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "Simpan audio di"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Bawaan"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "Simpan"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Pilih folder"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Folder tidak dapat disimpan"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Tekan tombolnya..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Gunakan Ctrl, Alt, atau Super bersama tombol."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "Dua pintasan memiliki tombol yang sama."
+msgid "Settings…"
+msgstr "Pengaturan…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -192,6 +180,134 @@ msgstr "Rekaman mungkin tidak lengkap"
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr ""
 "Seret untuk memilih area yang direkam. Esc atau tombol kanan membatalkan."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Pengaturan"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "Setel ulang ke baku"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Pintasan papan ketik"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Klik sebuah kolom, lalu tekan tombol baru. Esc membatalkan."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Video"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Kodek video"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (bisa diputar di mana saja)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (ukuran berkas sekitar setengahnya)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Laju bit video"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Laju bingkai"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Format berkas video"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 tidak tersedia: kartu grafis tidak dapat mengenkodenya."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"Video H.265 mungkin membutuhkan kodek ekstra untuk diputar di Windows dan di "
+"beberapa peramban."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Suara"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Kodek suara untuk rekaman suara-saja"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Laju bit suara dengan video"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Laju bit suara untuk rekaman suara-saja"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr ""
+"Hanya berlaku untuk rekaman suara-saja. Dengan video, suara selalu AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Folder"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Video disimpan di"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "Rekaman suara disimpan di"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Pilih…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Pilih folder"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Tekan tombolnya..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Gunakan Ctrl, Alt, atau Super bersama tombol."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Dua pintasan memiliki tombol yang sama."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "Setel ulang semua pengaturan ke nilai bakunya?"
 
 #: hotrec/shellext.py
 msgid ""

@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Korean\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "정보"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "버전 %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr "키보드 단축키로 제어되는 GNOME용 화면 및 소리 녹화기."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "웹사이트"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "문제 신고"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "라이선스: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "닫기"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "키보드 단축키를 설정할 수 없습니다"
 
@@ -62,52 +93,8 @@ msgid "Stop and save"
 msgstr "중지하고 저장"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "키보드 단축키 설정..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "키보드 단축키"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "필드를 클릭한 다음 새 키를 누르세요. Esc를 누르면 취소됩니다."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "동영상 저장 위치"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "오디오 저장 위치"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "기본값"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "저장"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "폴더 선택"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "폴더를 저장하지 못했습니다"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "키를 누르세요..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "키와 함께 Ctrl, Alt 또는 Super를 사용하세요."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "두 단축키가 같은 키를 사용합니다."
+msgid "Settings…"
+msgstr "설정…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -191,6 +178,134 @@ msgstr "녹화가 불완전할 수 있습니다"
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr ""
 "드래그하여 녹화할 영역을 선택하세요. Esc 또는 오른쪽 버튼으로 취소합니다."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "설정"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "기본값으로 초기화"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "키보드 단축키"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "필드를 클릭한 다음 새 키를 누르세요. Esc를 누르면 취소됩니다."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "비디오"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "비디오 코덱"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (어디서나 재생 가능)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (파일 크기 약 절반)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "비디오 비트레이트"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "프레임 속도"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "비디오 파일 형식"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265를 사용할 수 없음: 그래픽 카드가 인코딩할 수 없습니다."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"H.265 비디오는 Windows 및 일부 브라우저에서 재생하기 위해 추가 코덱이 필요할 "
+"수 있습니다."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "소리"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "소리만 녹음할 때 사용할 사운드 코덱"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "비디오가 포함된 사운드 비트레이트"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "소리만 녹음할 때의 사운드 비트레이트"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr ""
+"소리만 녹음하는 경우에만 적용됩니다. 비디오의 경우 소리는 항상 AAC입니다."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "폴더"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "비디오 저장 위치"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "소리 녹음 저장 위치"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "선택…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "폴더 선택"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "키를 누르세요..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "키와 함께 Ctrl, Alt 또는 Super를 사용하세요."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "두 단축키가 같은 키를 사용합니다."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "모든 설정을 기본값으로 초기화하시겠습니까?"
 
 #: hotrec/shellext.py
 msgid ""

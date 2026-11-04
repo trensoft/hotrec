@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Hebrew\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "אודות"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "גרסה %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr "מקליט מסך ושמע עבור GNOME, מופעל על ידי קיצורי מקלדת."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "אתר אינטרנט"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "דיווח על בעיה"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "רישיון: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "סגירה"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "לא ניתן היה להגדיר את קיצורי המקלדת"
 
@@ -62,52 +93,8 @@ msgid "Stop and save"
 msgstr "עצירה ושמירה"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "הגדרת קיצורי מקלדת..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "קיצורי מקלדת"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "לחצו על שדה ואז הקישו את המקשים החדשים. Esc מבטל."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "שמירת סרטונים ב"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "שמירת שמע ב"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "ברירת מחדל"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "שמירה"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "בחירת תיקייה"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "לא ניתן היה לשמור את התיקיות"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "הקישו את המקשים..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "השתמשו ב-Ctrl, ב-Alt או ב-Super יחד עם המקש."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "לשני קיצורים יש אותם מקשים."
+msgid "Settings…"
+msgstr "הגדרות…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -188,6 +175,132 @@ msgstr "ההקלטה עשויה להיות חלקית"
 #: hotrec/selector.py
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr "גררו כדי לבחור את האזור להקלטה. Esc או הלחצן הימני מבטלים."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "הגדרות"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "איפוס לברירות המחדל"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "קיצורי מקלדת"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "לחצו על שדה ואז הקישו את המקשים החדשים. Esc מבטל."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "וידאו"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "מקודד וידאו"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (מתנגן בכל מקום)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (בערך חצי מגודל הקובץ)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "קצב נתונים (וידאו)"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "קצב פריימים"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "פורמט קובץ וידאו"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 אינו זמין: כרטיס המסך אינו יכול לקודד אותו."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"סרטוני H.265 עשויים לדרוש מקודד נוסף כדי להתנגן ב-Windows ובחלק מהדפדפנים."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "שמע"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "מקודד שמע להקלטות שמע בלבד"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "קצב נתוני שמע עם וידאו"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "קצב נתוני שמע להקלטות שמע בלבד"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr "חל רק על הקלטות שמע בלבד. בוידאו, השמע הוא תמיד AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "תיקיות"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "סרטונים נשמרים ב-"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "הקלטות שמע נשמרות ב-"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "בחירה…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "בחירת תיקייה"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "הקישו את המקשים..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "השתמשו ב-Ctrl, ב-Alt או ב-Super יחד עם המקש."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "לשני קיצורים יש אותם מקשים."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "לאפס כל הגדרה לערך ברירת המחדל שלה?"
 
 #: hotrec/shellext.py
 msgid ""

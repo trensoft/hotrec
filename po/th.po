@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Thai\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "เกี่ยวกับ"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "เวอร์ชัน %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr "เครื่องบันทึกหน้าจอและเสียงสำหรับ GNOME ควบคุมด้วยแป้นพิมพ์ลัด"
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "เว็บไซต์"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "รายงานปัญหา"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "สัญญาอนุญาต: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "ปิด"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "ไม่สามารถตั้งค่าแป้นพิมพ์ลัดได้"
 
@@ -62,52 +93,8 @@ msgid "Stop and save"
 msgstr "หยุดและบันทึก"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "ตั้งค่าแป้นพิมพ์ลัด..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "แป้นพิมพ์ลัด"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "คลิกที่ช่อง แล้วกดแป้นใหม่ กด Esc เพื่อยกเลิก"
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "บันทึกวิดีโอไว้ที่"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "บันทึกเสียงไว้ที่"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "ค่าเริ่มต้น"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "บันทึก"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "เลือกโฟลเดอร์"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "ไม่สามารถบันทึกโฟลเดอร์ได้"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "กดแป้น..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "ใช้ Ctrl, Alt หรือ Super ร่วมกับแป้นนั้น"
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "แป้นพิมพ์ลัดสองรายการใช้แป้นเดียวกัน"
+msgid "Settings…"
+msgstr "ตั้งค่า…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -188,6 +175,131 @@ msgstr "การบันทึกอาจไม่สมบูรณ์"
 #: hotrec/selector.py
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr "ลากเพื่อเลือกพื้นที่ที่จะบันทึก กด Esc หรือปุ่มขวาเพื่อยกเลิก"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "ตั้งค่า"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "รีเซ็ตเป็นค่าเริ่มต้น"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "แป้นพิมพ์ลัด"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "คลิกที่ช่อง แล้วกดแป้นใหม่ กด Esc เพื่อยกเลิก"
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "วิดีโอ"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "ตัวแปลงรหัสวิดีโอ"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (เล่นได้ทุกที่)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (ขนาดไฟล์ประมาณครึ่งหนึ่ง)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "บิตเรตวิดีโอ"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "อัตราเฟรม"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "รูปแบบไฟล์วิดีโอ"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "ไม่มี H.265: การ์ดจอไม่สามารถเข้ารหัสได้"
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr "วิดีโอ H.265 อาจต้องใช้ตัวแปลงรหัสเพิ่มเติมเพื่อเล่นบน Windows และในบางเบราว์เซอร์"
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "เสียง"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "ตัวแปลงรหัสเสียงสำหรับการบันทึกเสียงเท่านั้น"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "บิตเรตเสียงเมื่อมีวิดีโอ"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "บิตเรตเสียงสำหรับการบันทึกเสียงเท่านั้น"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr "นำไปใช้กับการบันทึกเสียงเท่านั้น หากมีวิดีโอ เสียงจะเป็น AAC เสมอ"
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "โฟลเดอร์"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "วิดีโอถูกบันทึกไว้ใน"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "เสียงที่บันทึกถูกบันทึกไว้ใน"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "เลือก…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "เลือกโฟลเดอร์"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "กดแป้น..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "ใช้ Ctrl, Alt หรือ Super ร่วมกับแป้นนั้น"
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "แป้นพิมพ์ลัดสองรายการใช้แป้นเดียวกัน"
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "รีเซ็ตการตั้งค่าทั้งหมดเป็นค่าเริ่มต้นหรือไม่?"
 
 #: hotrec/shellext.py
 msgid ""

@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Finnish\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "Tietoja"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Versio %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr "Ruudun ja äänen tallennin GNOMElle, jota ohjataan pikanäppäimillä."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Verkkosivusto"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Ilmoita ongelmasta"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Lisenssi: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Sulje"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Pikanäppäimiä ei voitu asettaa"
 
@@ -62,52 +93,8 @@ msgid "Stop and save"
 msgstr "Pysäytä ja tallenna"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Aseta pikanäppäimet..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Pikanäppäimet"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "Napsauta kenttää ja paina uusia näppäimiä. Esc peruuttaa."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "Tallenna videot kansioon"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "Tallenna ääni kansioon"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Oletus"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "Tallenna"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Valitse kansio"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Kansioiden tallennus epäonnistui"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Paina näppäimiä..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Käytä Ctrl-, Alt- tai Super-näppäintä yhdessä näppäimen kanssa."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "Kahdella pikanäppäimellä on samat näppäimet."
+msgid "Settings…"
+msgstr "Asetukset…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -189,6 +176,133 @@ msgstr "Tallenne voi olla puutteellinen"
 #: hotrec/selector.py
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr "Vedä tallennettava alue. Esc tai oikea painike peruuttaa."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Asetukset"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "Palauta oletukset"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Pikanäppäimet"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Napsauta kenttää ja paina uusia näppäimiä. Esc peruuttaa."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Video"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Videokoodekki"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (toistuu kaikkialla)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (noin puolet tiedostokoosta)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Videon bittinopeus"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Ruudunpäivitysnopeus"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Videon tiedostomuoto"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 ei ole saatavilla: näytönohjain ei voi koodata sitä."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"H.265-videot saattavat vaatia ylimääräisen koodekin toistuakseen Windowsissa "
+"ja joissakin selaimissa."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Ääni"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Äänikoodekki pelkille äänitallenteille"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Äänen bittinopeus videon kanssa"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Äänen bittinopeus pelkille äänitallenteille"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr "Koskee vain pelkkiä äänitallenteita. Videon kanssa ääni on aina AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Kansiot"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Videot tallennetaan sijaintiin"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "Äänitallenteet tallennetaan sijaintiin"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Valitse…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Valitse kansio"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Paina näppäimiä..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Käytä Ctrl-, Alt- tai Super-näppäintä yhdessä näppäimen kanssa."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Kahdella pikanäppäimellä on samat näppäimet."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "Palautetaanko kaikki asetukset oletusarvoihinsa?"
 
 #: hotrec/shellext.py
 msgid ""

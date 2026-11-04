@@ -85,7 +85,9 @@ def test_header(lang):
     assert head["Content-Type"] == "text/plain; charset=UTF-8"
     assert head["Language"] == lang
     assert re.fullmatch(r"nplurals=\d+; plural=.+;", head["Plural-Forms"]), head["Plural-Forms"]
-    assert head["Last-Translator"] == "AI-assisted (Claude), not reviewed by a native speaker"
+    assert (
+        head["Last-Translator"] == "AI-assisted (Claude, Gemini), not reviewed by a native speaker"
+    )
 
 
 @pytest.mark.parametrize("lang", LANGS)
@@ -102,12 +104,10 @@ def test_every_string_is_translated_once(lang):
 
 @pytest.mark.parametrize("lang", LANGS)
 def test_placeholders_match(lang):
+    placeholder = r"%(?:\.\d)?[sdf]"  # %s, %d, and %.1f of the bit rate
     for msgid, msgstr, _f in entries(PO / ("%s.po" % lang)):
-        assert sorted(re.findall(r"%[sd]", msgid)) == sorted(re.findall(r"%[sd]", msgstr)), (
-            lang,
-            msgid,
-        )
-        assert not re.search(r"%(?![sd%])", msgstr.replace("%%", "")), (lang, msgid)
+        assert re.findall(placeholder, msgid) == re.findall(placeholder, msgstr), (lang, msgid)
+        assert not re.search(r"%(?![sdf%]|\.\d)", msgstr.replace("%%", "")), (lang, msgid)
 
 
 @pytest.mark.parametrize("lang", LANGS)
@@ -144,20 +144,65 @@ def test_the_key_names_in_the_shortcuts_window_survive(lang):
 
 
 @pytest.mark.parametrize("lang", LANGS)
-def test_the_shortcuts_window_and_menu_are_translated(lang):
+def test_the_settings_window_and_menu_are_translated(lang):
     translated = {m: s for m, s, _f in entries(PO / ("%s.po" % lang))}
     for msgid in (
-        "Set keyboard shortcuts...",
+        "Settings…",
+        "Settings",
+        "About",
         "Keyboard shortcuts",
         "Click a field, then press the new keys. Escape cancels.",
-        "Save",
         "Press the keys...",
         "Use Ctrl, Alt or Super together with the key.",
         "Two of the shortcuts have the same keys.",
     ):
         assert translated[msgid], (lang, msgid)
-    assert translated["Set keyboard shortcuts..."].endswith("...")
     assert translated["Press the keys..."].endswith("...")
+
+
+@pytest.mark.parametrize("lang", LANGS)
+def test_an_ellipsis_in_the_english_is_the_one_character_in_the_translation(lang):
+    """The Settings strings keep the character U+2026 where the English has it, not three dots."""
+    for msgid, msgstr, _f in entries(PO / ("%s.po" % lang)):
+        if msgid.endswith("\u2026"):
+            assert msgstr.endswith("\u2026"), (lang, msgid)
+            assert "..." not in msgstr, (lang, msgid)
+
+
+@pytest.mark.parametrize("lang", LANGS)
+def test_the_names_that_are_not_translated_survive(lang):
+    """Formats and units are written as they are everywhere (spec of the Settings translation)."""
+    translated = {m: s for m, s, _f in entries(PO / ("%s.po" % lang))}
+    for name in ("H.264", "H.265"):
+        for msgid, msgstr in translated.items():
+            if name in msgid:
+                assert name in msgstr, (lang, msgid)
+    assert "AAC" in translated[SOUND_NOTE]
+    assert "H.265" in translated[H265_NOTE] and "Windows" in translated[H265_NOTE]
+    for msgid in ("%d kbit/s", "%.1f Mbit/s", "%d fps"):
+        assert re.search(r"kbit/s|Mbit/s|fps", translated[msgid]) or lang in LOCALISED_UNITS, (
+            lang,
+            msgid,
+        )
+
+
+SOUND_NOTE = "Applies only to sound-only recordings. With video, the sound is always AAC."
+H265_NOTE = "H.265 videos may need an extra codec to play on Windows and in some browsers."
+LOCALISED_UNITS = {
+    "ar",
+    "he",
+    "hi",
+    "th",
+    "ja",
+    "ko",
+    "zh_CN",
+    "zh_TW",
+    "ru",
+    "uk",
+    "bg",
+    "sr",
+    "el",
+}
 
 
 NEW_IN_013 = (
@@ -166,11 +211,7 @@ NEW_IN_013 = (
     "The video encoder did not start. The graphics driver may lack hardware video encoding "
     "(VA-API or NVENC).",
     "The recording stopped",
-    "Save videos in",
-    "Save audio in",
     "Choose a folder",
-    "Default",
-    "Could not save the folders",
 )
 
 
@@ -215,15 +256,31 @@ def test_the_dot_extension_notifications_are_translated(lang):
 
 SAME_AS_ENGLISH = {"Hotrec"}
 PAUSE_IS_PAUSE = {"de", "fr", "da", "nb"}
-DEFAULT_IS_DEFAULT = {"fil"}  # the word Filipino desktops use
+# Units are written alike in every language. The rest is the list of what the Gemini translation of
+# the Settings strings (kept word for word, see docs/translations.md) leaves as the English word:
+# a word that really is the same ("Version", "Video", "Website" in the languages named) or that
+# Maltese and Filipino desktops keep in English. Any other string left in English fails the test.
+UNITS = {"%d kbit/s", "%.1f Mbit/s", "%d fps"}
+SAME_IN = {
+    "Version %s": {"de", "fr", "da", "sv"},
+    "Website": {"de", "nl", "fil"},
+    "Video": {"de", "it", "cs", "da", "et", "fi", "hr", "lv", "nl", "ro", "sk", "sl", "sv"}
+    | {"nb", "fil", "id", "vi"},
+    "Settings": {"mt"},
+    "Settings…": {"mt"},
+    "Frame rate": {"mt", "fil"},
+    "Folders": {"mt"},
+    "Video codec": {"fil"},
+    "Video bitrate": {"fil"},
+}
 
 
 @pytest.mark.parametrize("lang", LANGS)
 def test_nothing_was_left_in_english(lang):
     for msgid, msgstr, _f in entries(PO / ("%s.po" % lang)):
-        if msgid in SAME_AS_ENGLISH or (msgid == "Pause" and lang in PAUSE_IS_PAUSE):
+        if msgid in SAME_AS_ENGLISH or msgid in UNITS or lang in SAME_IN.get(msgid, ()):
             continue
-        if msgid == "Default" and lang in DEFAULT_IS_DEFAULT:
+        if msgid == "Pause" and lang in PAUSE_IS_PAUSE:
             continue
         assert msgstr != msgid, (lang, msgid)
 
@@ -248,7 +305,7 @@ SCRIPTS = {
 @pytest.mark.parametrize("lang", sorted(SCRIPTS))
 def test_the_script_of_the_language(lang):
     for msgid, msgstr, _f in entries(PO / ("%s.po" % lang)):
-        if msgid != "Hotrec":
+        if msgid != "Hotrec" and msgid not in UNITS:  # a unit may stay in Latin letters
             assert re.search(SCRIPTS[lang], msgstr), (lang, msgid)
 
 

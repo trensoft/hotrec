@@ -11,8 +11,8 @@ hotrec \- record the screen and the sound of a GNOME desktop with keyboard short
 .IR PATH ]
 .SH DESCRIPTION
 .B hotrec
-records the screen and the sound of the desktop (video, H.264 from the graphics hardware, with
-\fBgpu\-screen\-recorder\fR in portal mode) or the sound alone (MP3, with \fBffmpeg\fR). It is
+records the screen and the sound of the desktop (video, H.264 or H.265 from the graphics hardware, with
+\fBgpu\-screen\-recorder\fR in portal mode) or the sound alone (MP3 by default, or AAC or Opus, with \fBffmpeg\fR). It is
 meant to be run by keyboard shortcuts, which work in every window also on Wayland.
 .PP
 There is one recording at a time. A recording command starts a recording when nothing is
@@ -28,7 +28,7 @@ Record the screen and the sound (the sound output of the desktop).
 Record the screen only.
 .TP
 .B audio
-Record the sound output of the desktop only, as an MP3 file.
+Record the sound output of the desktop only, as an MP3 file (or AAC or Opus, see \fBAUDIO_CODEC\fR below).
 .TP
 .B region\-video\-audio
 Draw an area of the screen with the mouse and record that area with the sound. The screen is dimmed
@@ -101,14 +101,19 @@ the extension shows a dot over a fullscreen video and takes effect at the next l
 An extension the user turned off is not turned on again. A second \fBautostart\fR exits at once.
 .TP
 .B indicator
-The dot in the top bar. It is started by a recording and ends with it. Its menu starts with the
-six keyboard shortcuts as GNOME has them, in grey.
+The dot in the top bar. It is started by a recording and ends with it. Its menu has Pause (Resume)
+and Stop and save, and the keys of Pause as GNOME has them are in its line, "Pause (Ctrl+Shift+F12)".
 .PP
-The dot that \fBautostart\fR keeps has \fBSet keyboard shortcuts...\fR in its menu: a window with a
-field for each shortcut (click it, press the new keys, Escape gives up) and \fBSave\fR. The keys
-are written as \fBshortcuts install\fR writes them: a key that another custom shortcut uses is
-refused, and nothing of other programs is overwritten. A letter alone is refused as a shortcut; a
-function key may stand alone.
+The dot that \fBautostart\fR keeps has the whole menu: the five ways to start a recording, Pause,
+Stop and save, then \fBSettings...\fR and \fBAbout\fR. Each command line shows its keys in brackets.
+\fBSettings\fR is one window with every setting: the keyboard shortcuts (click a field, press the new
+keys, Escape gives up), the video codec, bit rate, frame rate and file format, the sound codec of a
+sound\-only recording and the two sound bit rates, and the folders. A control takes effect as you
+change it; there is no Save button, and \fBReset to defaults\fR asks first. The keys are written as
+\fBshortcuts install\fR writes them: a key that another custom shortcut uses is refused, and
+nothing of other programs is overwritten. A letter alone is refused as a shortcut; a function key
+may stand alone. H.265 can be chosen only when the graphics card can encode it. An area recording
+(\fBregion\-video\fR, \fBregion\-video\-audio\fR) is always H.264.
 .SH KEYS
 .TP
 .B Ctrl+Shift+F9
@@ -145,9 +150,14 @@ The settings (\fB$XDG_CONFIG_HOME\fR is honoured). Written on the first run; if 
 expand), \fBVIDEO_FOLDER\fR and \fBAUDIO_FOLDER\fR (the folder of video and of sound\-only
 recordings; not set, or empty: \fBFOLDER\fR; a folder that does not exist and cannot be made, or is
 not writable, is replaced by \fBFOLDER\fR), \fBCONTAINER\fR (\fBmkv\fR, the default, plays back even when a recording was cut short,
-or \fBmp4\fR), \fBVIDEO_KBPS\fR (12000), \fBFPS\fR (30), \fBAAC_KBPS\fR (160, the sound of a video
-recording), \fBMP3_KBPS\fR (192, a sound\-only recording). The file is read, never run; a wrong
-value is reported in the log and replaced by the default.
+or \fBmp4\fR), \fBVIDEO_CODEC\fR (\fBh264\fR, the default, or \fBh265\fR, about half the file size;
+needs a graphics card that can encode it, and an area recording is always H.264),
+\fBVIDEO_KBPS\fR (12000), \fBFPS\fR (30), \fBAAC_KBPS\fR (160, the sound of a video
+recording, which is always AAC), \fBAUDIO_CODEC\fR (\fBmp3\fR, the default, \fBaac\fR or \fBopus\fR: the codec of a
+sound\-only recording), \fBMP3_KBPS\fR (192, a sound\-only recording, whatever its codec). The file is
+read, never run; a wrong value is reported in the log and replaced by the default. The Settings
+window of the dot writes this file as you change a control; it offers H.265 only when the
+graphics card can encode it.
 .TP
 .I $XDG_RUNTIME_DIR/hotrec/
 What runs now (\fBstate.json\fR), the log of the recorder (\fBrecorder.log\fR) and of the dot.
@@ -159,7 +169,7 @@ The directory of the compiled catalogs, when they are not in the system one.
 0 on success, 1 when a command fails (a recording that did not start or may be incomplete, the
 shortcuts that could not be set), 2 for a command line that is not understood.
 .SH REQUIREMENTS
-\fBgpu\-screen\-recorder\fR and \fBffmpeg\fR (with MP3 support) on the PATH, \fBpactl\fR and
+\fBgpu\-screen\-recorder\fR and \fBffmpeg\fR (with MP3 support, and Opus for that codec) on the PATH, \fBpactl\fR and
 \fBnotify\-send\fR, \fBgsettings\fR for the shortcuts, GTK 3 with PyGObject and an AppIndicator
 library for the dot. The video encoder is the graphics hardware (NVENC, VA\-API).
 .SH SEE ALSO

@@ -55,6 +55,7 @@ export default class HotrecDot extends Extension {
         this._timer = 0;
         this._monitor = null;
         this._unredirectHeld = false;
+        this._unredirectFailed = false;
         this._dir = stateDirFor(GLib.getenv('XDG_RUNTIME_DIR'));
         if (this._dir === null) {
             console.warn('hotrec-dot: no XDG_RUNTIME_DIR, the dot stays off');
@@ -170,13 +171,17 @@ export default class HotrecDot extends Extension {
 
     // The compositor counts the calls, so they must pair exactly: one disable when the dot
     // appears, one enable when it goes (or the extension is disabled while it shows). _show runs
-    // again for every blink and colour change, hence the flag.
+    // again for every blink and colour change, hence the flag. A call that fails is not tried
+    // again while the dot stays: _show runs every BLINK_MS, and a retry (and its warning) twice a
+    // second for a whole recording would fill the journal for nothing. The next appearance of the
+    // dot, the next recording, tries once more.
     _holdUnredirect() {
-        if (this._unredirectHeld)
+        if (this._unredirectHeld || this._unredirectFailed)
             return;
         try {
             this._unredirect(true);
         } catch (e) {
+            this._unredirectFailed = true;
             console.warn(`hotrec-dot: cannot disable unredirect: ${e.message}`);
             return;
         }
@@ -200,6 +205,7 @@ export default class HotrecDot extends Extension {
     }
 
     _releaseUnredirect() {
+        this._unredirectFailed = false;
         if (!this._unredirectHeld)
             return;
         this._unredirectHeld = false;

@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Vietnamese\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "Giới thiệu"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Phiên bản %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr ""
+"Trình ghi màn hình và âm thanh cho GNOME, được điều khiển bằng phím tắt."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Trang web"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Báo cáo lỗi"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Giấy phép: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Đóng"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Không thể đặt phím tắt"
 
@@ -62,52 +94,8 @@ msgid "Stop and save"
 msgstr "Dừng và lưu"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Đặt phím tắt..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Phím tắt"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "Nhấp vào một ô rồi nhấn các phím mới. Esc để hủy."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "Lưu video vào"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "Lưu âm thanh vào"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Mặc định"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "Lưu"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Chọn thư mục"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Không thể lưu các thư mục"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Nhấn các phím..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Dùng Ctrl, Alt hoặc Super cùng với phím."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "Hai phím tắt có cùng tổ hợp phím."
+msgid "Settings…"
+msgstr "Cài đặt…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -191,6 +179,134 @@ msgstr "Bản ghi có thể chưa đầy đủ"
 #: hotrec/selector.py
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr "Kéo để chọn vùng cần ghi. Esc hoặc nút phải để hủy."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Cài đặt"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "Đặt lại về mặc định"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Phím tắt"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Nhấp vào một ô rồi nhấn các phím mới. Esc để hủy."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Video"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Bộ mã hóa video"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (phát ở mọi nơi)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (kích thước tệp chỉ bằng một nửa)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Tốc độ bit video"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Tốc độ khung hình"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Định dạng tệp video"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 không khả dụng: card đồ họa không thể mã hóa."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"Video H.265 có thể cần thêm bộ mã hóa để phát trên Windows và trong một số "
+"trình duyệt."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Âm thanh"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Bộ mã hóa âm thanh cho bản ghi chỉ có âm thanh"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Tốc độ bit âm thanh với video"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Tốc độ bit âm thanh cho bản ghi chỉ có âm thanh"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr ""
+"Chỉ áp dụng cho bản ghi chỉ có âm thanh. Với video, âm thanh luôn là AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Thư mục"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Video được lưu vào"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "Bản ghi âm được lưu vào"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Chọn…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Chọn thư mục"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Nhấn các phím..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Dùng Ctrl, Alt hoặc Super cùng với phím."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Hai phím tắt có cùng tổ hợp phím."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "Đặt lại mọi cài đặt về giá trị mặc định?"
 
 #: hotrec/shellext.py
 msgid ""

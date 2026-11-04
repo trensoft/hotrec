@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Brazilian Portuguese\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "Sobre"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Versão %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr "Gravador de tela e som para o GNOME, acionado por atalhos de teclado."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Site"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Relatar um problema"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Licença: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Fechar"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Não foi possível definir os atalhos de teclado"
 
@@ -62,52 +93,8 @@ msgid "Stop and save"
 msgstr "Parar e salvar"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Definir atalhos de teclado..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Atalhos de teclado"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "Clique em um campo e pressione as novas teclas. Esc cancela."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "Salvar os vídeos em"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "Salvar o áudio em"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Padrão"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "Salvar"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Escolher uma pasta"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Não foi possível salvar as pastas"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Pressione as teclas..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Use Ctrl, Alt ou Super junto com a tecla."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "Dois atalhos têm as mesmas teclas."
+msgid "Settings…"
+msgstr "Configurações…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -192,6 +179,134 @@ msgstr "A gravação pode estar incompleta"
 #: hotrec/selector.py
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr "Arraste para escolher a área a gravar. Esc ou o botão direito cancela."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Configurações"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "Restaurar os padrões"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Atalhos de teclado"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Clique em um campo e pressione as novas teclas. Esc cancela."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Vídeo"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Codec de vídeo"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (reproduz em qualquer lugar)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (cerca da metade do tamanho do arquivo)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Taxa de bits de vídeo"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Taxa de quadros"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Formato de arquivo de vídeo"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 não está disponível: a placa de vídeo não pode codificá-lo."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"Os vídeos H.265 podem precisar de um codec extra para reproduzir no Windows "
+"e em alguns navegadores."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Som"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Codec de som para gravações apenas de som"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Taxa de bits de som com vídeo"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Taxa de bits de som para gravações apenas de som"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr ""
+"Aplica-se apenas a gravações apenas de som. Com vídeo, o som é sempre AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Pastas"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Os vídeos são salvos em"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "As gravações de som são salvas em"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Escolher…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Escolher uma pasta"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Pressione as teclas..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Use Ctrl, Alt ou Super junto com a tecla."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Dois atalhos têm as mesmas teclas."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "Restaurar todas as configurações para o seu valor padrão?"
 
 #: hotrec/shellext.py
 msgid ""

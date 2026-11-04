@@ -8,7 +8,7 @@ keys here are GNOME's own custom shortcuts, so they work in every window.
 |---|---|
 | Ctrl+Shift+F9 | record the screen and the sound |
 | Ctrl+Shift+F10 | record the screen only |
-| Ctrl+Shift+F11 | record the sound only (MP3) |
+| Ctrl+Shift+F11 | record the sound only (MP3, or AAC or Opus in the settings) |
 | Ctrl+Shift+F12 | pause, and resume |
 | Ctrl+Shift+F7 | record an area of the screen, with the sound |
 | Ctrl+Shift+F8 | record an area of the screen only |
@@ -17,13 +17,31 @@ The same key stops and saves the recording that runs (any of F7 to F11 does, whi
 it). While a recording runs, a red blinking dot in the top bar shows it, a yellow steady one that it is paused;
 its menu has Pause/Resume and Stop and save.
 
-At the top of that menu, in grey, are the six keys as GNOME has them now ("Ctrl+Shift+F9 - Record
-screen and sound"). The dot that stays in the top bar after login also has **Set keyboard
-shortcuts...**: a small window with a field for each shortcut. Click a field, press the new keys
-(Escape gives up; a letter alone is refused, a function key may stand alone), then Save. The window
-writes the GNOME custom keybindings with the same code as `hotrec shortcuts install`, so a key that
-another program's custom shortcut already uses is refused and said so, and nothing of other
-programs is overwritten. The version and the maker are at the bottom of the window.
+The dot that stays in the top bar after login has the menu of the program. Each command is one
+line with its keys as GNOME has them now: **Record screen and sound (Ctrl+Shift+F9)**, **Record screen
+only**, **Record sound only**, **Record area and sound**, **Record area only**, **Pause** (it turns
+into **Resume**), **Stop and save**; then **Settings...** and, last, **About**.
+
+**Settings** is one window with everything in it, and every control takes effect as you change it
+(there is no Save button; "Reset to defaults" asks first, then puts every setting and the six keys
+back):
+
+- *Keyboard shortcuts*: a field for each shortcut. Click a field, press the new keys (Escape gives
+  up; a letter alone is refused, a function key may stand alone). The window writes the GNOME custom
+  keybindings with the same code as `hotrec shortcuts install`, so a key that another program's
+  custom shortcut already uses is refused and said so, and nothing of other programs is overwritten.
+- *Video*: the codec (H.264, or H.265 for about half the file size), the bit rate (a slider on an
+  exponential scale, 500 kbit/s to 100 Mbit/s), the frame rate and the file format (MKV or MP4).
+  **H.265 can be chosen only when the graphics card can encode it** (NVENC, or VA-API on Intel); the
+  window asks `gpu-screen-recorder` and, if it does not say so, shows why it is greyed out. H.265
+  videos may need an extra codec to play on Windows and in some browsers. **An area recording
+  (F7, F8) is always H.264**, because the area is cut out by rewriting the H.264 headers.
+- *Sound*: the codec of a **sound-only** recording (MP3, AAC or Opus; the sound of a video is always
+  AAC) and two bit rates on fixed steps from 32 to 320 kbit/s, one for the sound inside a video and
+  one for a sound-only recording.
+- *Folders*: where videos and where sound recordings are saved.
+
+The version and the maker are at the bottom of the window.
 
 **Recording an area** (F7, F8): the screen is dimmed on every monitor and the area is drawn with the
 mouse (drag with the left button; Escape or the right button gives up). The portal still records the
@@ -50,8 +68,9 @@ added at the next login, by `hotrec autostart`, and nothing else of theirs is to
 the first four that they took out is not put back.
 
 The screen is recorded by `gpu-screen-recorder` (portal mode: the desktop asks which screen, once,
-and remembers), encoded as H.264 by the graphics hardware (NVENC, VA-API). The sound of the video
-is AAC; a sound-only recording is `ffmpeg` writing MP3. There is no software encoder.
+and remembers), encoded as H.264 (or H.265, if you chose it) by the graphics hardware (NVENC,
+VA-API). The sound of the video is AAC; a sound-only recording is `ffmpeg` writing MP3 (or AAC or
+Opus, as the settings say). There is no software encoder.
 
 ## Set it up
 
@@ -85,6 +104,16 @@ there, the Shell knows the extension, takes the setting at once, and the notific
 again). Whether the screen recording itself contains the dot has to be seen on the real machine: if
 it does, switch the extension off and rely on the tray dot.
 
+**What it costs: direct scanout is off while the dot shows.** A fullscreen window that GNOME's
+compositor (mutter) "unredirects" is sent to the screen directly, past the compositor, and nothing
+the Shell draws (the dot included) is painted above it. So while the dot shows, the extension asks
+the compositor not to unredirect (`disable_unredirect`) and gives that back when the dot goes away,
+so it is off only while a recording or a pause is on. The side effect is that a fullscreen video or
+game is composited like any other window for that time: a little more GPU work and power, and the
+frame pacing of a fullscreen game can be slightly less smooth. It does not touch the recording
+itself. If the call fails (it is a different one on GNOME 47 and 48+) the dot still shows, the
+extension logs one warning and tries again at the next recording, not twice a second.
+
 From a checkout, without installing: `./run.sh shortcuts install --command "$PWD/run.sh"`.
 
 ## Settings
@@ -93,14 +122,21 @@ From a checkout, without installing: `./run.sh shortcuts install --command "$PWD
 
 ```
 FOLDER="$HOME/Videos/Hotrec"   # where recordings are saved
-# VIDEO_FOLDER=                # not set: the FOLDER above (the shortcuts window sets these two)
+# VIDEO_FOLDER=                # not set: the FOLDER above (the Settings window sets these two)
 # AUDIO_FOLDER=
 CONTAINER=mkv                  # mkv (plays back even if cut short) or mp4
+VIDEO_CODEC=h264               # h264 (plays everywhere) or h265 (half the size)
 VIDEO_KBPS=12000               # video bit rate, kbit/s
 FPS=30
 AAC_KBPS=160                   # the sound of a video recording, kbit/s
-MP3_KBPS=192                   # a sound-only recording, kbit/s
+AUDIO_CODEC=mp3                # a sound-only recording: mp3, aac or opus
+MP3_KBPS=192                   # a sound-only recording, kbit/s, whatever its codec
 ```
+
+The Settings window writes this file; you can also edit it by hand. `VIDEO_CODEC=h265` works from the
+file even where the window does not offer H.265, and then the recorder reports the failure if the
+card cannot encode it. `MP3_KBPS` keeps its name from the days when MP3 was the only codec of a
+sound-only recording.
 
 It applies from the next recording. The file is read, never run by a shell; a wrong value is
 logged and replaced by the default. If the prototype's `~/.config/felvetel.conf` exists when
@@ -109,11 +145,11 @@ logged and replaced by the default. If the prototype's `~/.config/felvetel.conf`
 ## Commands
 
 `hotrec video-audio | video | audio | region-video-audio | region-video | select-region | pause | stop | status | setup | autostart | shortcuts ... | indicator`;
-see `man hotrec`. Recordings are named `2026-10-29_103000_video-audio.mkv` (`_video`, `_audio.mp3`).
+see `man hotrec`. Recordings are named `2026-10-29_103000_video-audio.mkv` (`_video`, `_audio.mp3`; `.aac` or `.opus` for those codecs).
 
 ## Needs
 
-`gpu-screen-recorder`, `ffmpeg` with MP3 support, `pactl`, `notify-send`, `gsettings`; for the dot:
+`gpu-screen-recorder`, `ffmpeg` with MP3 support (and Opus, if you choose it), `pactl`, `notify-send`, `gsettings`; for the dot:
 PyGObject, GTK 3, an AppIndicator library, and the AppIndicator extension of GNOME Shell. Python
 3.9 or newer, no other Python package. How the files are laid out for a package:
 [docs/installation-layout.md](docs/installation-layout.md).

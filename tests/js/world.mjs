@@ -94,8 +94,9 @@ export function makeWorld({
     unredirectThrows = false,
 } = {}) {
     // mutter keeps a count: every disable needs its enable, an enable without one only warns
-    const unredirect = {disable: 0, enable: 0, depth: 0, underflows: 0, calls: []};
+    const unredirect = {disable: 0, enable: 0, depth: 0, underflows: 0, attempts: 0, calls: []};
     const count = (via, op) => {
+        unredirect.attempts++;
         if (unredirectThrows)
             throw new Error('unredirect is not available');
         unredirect.calls.push(`${via}:${op}`);

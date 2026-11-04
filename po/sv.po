@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Swedish\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "Om"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Version %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr "Skärm- och ljudinspelare för GNOME, styrd av tangentbordsgenvägar."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Webbplats"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Rapportera ett problem"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Licens: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Stäng"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Kortkommandona kunde inte ställas in"
 
@@ -62,53 +93,8 @@ msgid "Stop and save"
 msgstr "Stoppa och spara"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Ställ in kortkommandon..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Kortkommandon"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr ""
-"Klicka på ett fält och tryck sedan på de nya tangenterna. Esc avbryter."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "Spara videor i"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "Spara ljud i"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Standard"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "Spara"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Välj en mapp"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Det gick inte att spara mapparna"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Tryck på tangenterna..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Använd Ctrl, Alt eller Super tillsammans med tangenten."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "Två kortkommandon har samma tangenter."
+msgid "Settings…"
+msgstr "Inställningar…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -192,6 +178,134 @@ msgstr "Inspelningen kan vara ofullständig"
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr ""
 "Dra för att välja området som ska spelas in. Esc eller högerknappen avbryter."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Inställningar"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "Återställ till standard"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Tangentbordsgenvägar"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr ""
+"Klicka på ett fält och tryck sedan på de nya tangenterna. Esc avbryter."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Video"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Videokodek"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (spelas överallt)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (ungefär halva filstorleken)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Videobitrate"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Bildfrekvens"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Videofilformat"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 är inte tillgängligt: grafikkortet kan inte koda det."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"H.265-videor kan behöva en extra kodek för att spelas upp på Windows och i "
+"vissa webbläsare."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Ljud"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Ljudkodek för endast ljudinspelningar"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Ljudbitrate med video"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Ljudbitrate för endast ljudinspelningar"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr "Gäller endast för ljudinspelningar. Med video är ljudet alltid AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Mappar"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Videor sparas i"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "Ljudinspelningar sparas i"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Välj…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Välj en mapp"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Tryck på tangenterna..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Använd Ctrl, Alt eller Super tillsammans med tangenten."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Två kortkommandon har samma tangenter."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "Återställ alla inställningar till standardvärden?"
 
 #: hotrec/shellext.py
 msgid ""

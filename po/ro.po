@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Romanian\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +17,39 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "Despre"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Versiunea %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr ""
+"Înregistrator de ecran și sunet pentru GNOME, condus de scurtături de "
+"tastatură."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Pagină web"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Raportează o problemă"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Licență: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Închide"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Nu s-au putut seta scurtăturile de tastatură"
 
@@ -63,52 +96,8 @@ msgid "Stop and save"
 msgstr "Oprește și salvează"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Setează scurtăturile de tastatură..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Scurtături de tastatură"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "Faceți clic pe un câmp, apoi apăsați tastele noi. Esc anulează."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "Salvează videoclipurile în"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "Salvează sunetul în"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Implicit"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "Salvează"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Alegeți un dosar"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Dosarele nu au putut fi salvate"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Apăsați tastele..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Folosiți Ctrl, Alt sau Super împreună cu tasta."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "Două scurtături au aceleași taste."
+msgid "Settings…"
+msgstr "Configurări…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -193,6 +182,135 @@ msgstr "Înregistrarea ar putea fi incompletă"
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr ""
 "Trageți pentru a alege zona de înregistrat. Esc sau butonul drept anulează."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Configurări"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "Restabilește la implicite"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Scurtături de tastatură"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Faceți clic pe un câmp, apoi apăsați tastele noi. Esc anulează."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Video"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Codec video"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (redare oriunde)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (aproximativ jumătate din dimensiunea fișierului)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Rată de biți video"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Rată de cadre"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Format fișier video"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 nu este disponibil: placa video nu îl poate coda."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"Videoclipurile H.265 pot avea nevoie de un codec suplimentar pentru a fi "
+"redate pe Windows și în unele browsere."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Sunet"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Codec de sunet pentru înregistrări doar cu sunet"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Rată de biți sunet cu video"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Rată de biți sunet pentru înregistrări doar cu sunet"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr ""
+"Se aplică doar la înregistrările doar cu sunet. Cu video, sunetul este mereu "
+"AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Dosare"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Videoclipurile sunt salvate în"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "Înregistrările audio sunt salvate în"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Alegeți…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Alegeți un dosar"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Apăsați tastele..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Folosiți Ctrl, Alt sau Super împreună cu tasta."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Două scurtături au aceleași taste."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "Restabiliți fiecare setare la valoarea sa implicită?"
 
 #: hotrec/shellext.py
 msgid ""

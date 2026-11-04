@@ -5,9 +5,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hotrec\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 06:28+0000\n"
+"POT-Creation-Date: 2026-11-04 13:34+0000\n"
 "PO-Revision-Date: 2026-10-29 00:00+0000\n"
-"Last-Translator: AI-assisted (Claude), not reviewed by a native speaker\n"
+"Last-Translator: AI-assisted (Claude, Gemini), not reviewed by a native "
+"speaker\n"
 "Language-Team: Estonian\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +16,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: hotrec/cli.py hotrec/keys_window.py
+#: hotrec/about_window.py hotrec/indicator.py
+msgid "About"
+msgstr "Teave"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "Version %s"
+msgstr "Versioon %s"
+
+#: hotrec/about_window.py
+msgid "Screen and sound recorder for GNOME, driven by keyboard shortcuts."
+msgstr "Ekraani- ja helisalvesti GNOME'ile, mida juhitakse kiirklahvidega."
+
+#: hotrec/about_window.py
+msgid "Website"
+msgstr "Veebileht"
+
+#: hotrec/about_window.py
+msgid "Report a problem"
+msgstr "Teata probleemist"
+
+#: hotrec/about_window.py
+#, python-format
+msgid "License: %s"
+msgstr "Litsents: %s"
+
+#: hotrec/about_window.py hotrec/settings_window.py
+msgid "Close"
+msgstr "Sulge"
+
+#: hotrec/cli.py hotrec/settings_window.py
 msgid "Could not set the keyboard shortcuts"
 msgstr "Kiirklahve ei õnnestunud seada"
 
@@ -62,52 +93,8 @@ msgid "Stop and save"
 msgstr "Lõpeta ja salvesta"
 
 #: hotrec/indicator.py
-msgid "Set keyboard shortcuts..."
-msgstr "Määra kiirklahvid..."
-
-#: hotrec/keys_window.py
-msgid "Keyboard shortcuts"
-msgstr "Kiirklahvid"
-
-#: hotrec/keys_window.py
-msgid "Click a field, then press the new keys. Escape cancels."
-msgstr "Klõpsake väljal ja vajutage uusi klahve. Esc tühistab."
-
-#: hotrec/keys_window.py
-msgid "Save videos in"
-msgstr "Salvesta videod kausta"
-
-#: hotrec/keys_window.py
-msgid "Save audio in"
-msgstr "Salvesta heli kausta"
-
-#: hotrec/keys_window.py
-msgid "Default"
-msgstr "Vaikimisi"
-
-#: hotrec/keys_window.py
-msgid "Save"
-msgstr "Salvesta"
-
-#: hotrec/keys_window.py
-msgid "Choose a folder"
-msgstr "Vali kaust"
-
-#: hotrec/keys_window.py
-msgid "Could not save the folders"
-msgstr "Kaustade salvestamine ebaõnnestus"
-
-#: hotrec/keys_window.py
-msgid "Press the keys..."
-msgstr "Vajutage klahve..."
-
-#: hotrec/keys_window.py
-msgid "Use Ctrl, Alt or Super together with the key."
-msgstr "Kasutage klahviga koos Ctrl-, Alt- või Super-klahvi."
-
-#: hotrec/keys_window.py
-msgid "Two of the shortcuts have the same keys."
-msgstr "Kahel kiirklahvil on samad klahvid."
+msgid "Settings…"
+msgstr "Sätted…"
 
 #: hotrec/recorder.py
 msgid ""
@@ -189,6 +176,134 @@ msgstr "Lindistus võib olla poolik"
 #: hotrec/selector.py
 msgid "Drag the area to record. Esc or the right button cancels."
 msgstr "Lohistage lindistatav ala. Esc või parem nupp tühistab."
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d kbit/s"
+msgstr "%d kbit/s"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%.1f Mbit/s"
+msgstr "%.1f Mbit/s"
+
+#: hotrec/settings_window.py
+msgid "Settings"
+msgstr "Sätted"
+
+#: hotrec/settings_window.py
+msgid "Reset to defaults"
+msgstr "Taasta algseaded"
+
+#: hotrec/settings_window.py
+msgid "Keyboard shortcuts"
+msgstr "Kiirklahvid"
+
+#: hotrec/settings_window.py
+msgid "Click a field, then press the new keys. Escape cancels."
+msgstr "Klõpsake väljal ja vajutage uusi klahve. Esc tühistab."
+
+#: hotrec/settings_window.py
+msgid "Video"
+msgstr "Video"
+
+#: hotrec/settings_window.py
+msgid "Video codec"
+msgstr "Videokoodek"
+
+#: hotrec/settings_window.py
+msgid "H.264 (plays everywhere)"
+msgstr "H.264 (mängitav kõikjal)"
+
+#: hotrec/settings_window.py
+msgid "H.265 (about half the file size)"
+msgstr "H.265 (umbes poole väiksem fail)"
+
+#: hotrec/settings_window.py
+msgid "Video bitrate"
+msgstr "Video bitikiirus"
+
+#: hotrec/settings_window.py
+msgid "Frame rate"
+msgstr "Kaadrisagedus"
+
+#: hotrec/settings_window.py
+msgid "Video file format"
+msgstr "Videofaili vorming"
+
+#: hotrec/settings_window.py
+msgid "H.265 is not available: the graphics card cannot encode it."
+msgstr "H.265 pole saadaval: graafikakaart ei suuda seda kodeerida."
+
+#: hotrec/settings_window.py
+msgid ""
+"H.265 videos may need an extra codec to play on Windows and in some browsers."
+msgstr ""
+"H.265 videod võivad Windowsis ja mõnedes brauserites vajada esitamiseks "
+"lisakoodekit."
+
+#: hotrec/settings_window.py
+msgid "Sound"
+msgstr "Heli"
+
+#: hotrec/settings_window.py
+msgid "Sound codec for sound-only recordings"
+msgstr "Helikoodek ainult heliga salvestustele"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate with video"
+msgstr "Heli bitikiirus videoga"
+
+#: hotrec/settings_window.py
+msgid "Sound bitrate for sound-only recordings"
+msgstr "Heli bitikiirus ainult heliga salvestustele"
+
+#: hotrec/settings_window.py
+msgid ""
+"Applies only to sound-only recordings. With video, the sound is always AAC."
+msgstr ""
+"Kehtib ainult ainult heliga salvestustele. Video puhul on heli alati AAC."
+
+#: hotrec/settings_window.py
+msgid "Folders"
+msgstr "Kaustad"
+
+#: hotrec/settings_window.py
+msgid "Videos are saved in"
+msgstr "Videod salvestatakse asukohta"
+
+#: hotrec/settings_window.py
+msgid "Sound recordings are saved in"
+msgstr "Helisalvestised salvestatakse asukohta"
+
+#: hotrec/settings_window.py
+msgid "Choose…"
+msgstr "Vali…"
+
+#: hotrec/settings_window.py
+#, python-format
+msgid "%d fps"
+msgstr "%d fps"
+
+#: hotrec/settings_window.py
+msgid "Choose a folder"
+msgstr "Vali kaust"
+
+#: hotrec/settings_window.py
+msgid "Press the keys..."
+msgstr "Vajutage klahve..."
+
+#: hotrec/settings_window.py
+msgid "Use Ctrl, Alt or Super together with the key."
+msgstr "Kasutage klahviga koos Ctrl-, Alt- või Super-klahvi."
+
+#: hotrec/settings_window.py
+msgid "Two of the shortcuts have the same keys."
+msgstr "Kahel kiirklahvil on samad klahvid."
+
+#: hotrec/settings_window.py
+msgid "Reset every setting to its default value?"
+msgstr "Kas taastada kõikide sätete algväärtused?"
 
 #: hotrec/shellext.py
 msgid ""
