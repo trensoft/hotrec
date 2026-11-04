@@ -243,6 +243,10 @@ msgstr ""
 "ja joissakin selaimissa."
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr "Alueen tallenteet ovat aina H.264, vaikka H.265 olisi valittu."
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "Ääni"
 

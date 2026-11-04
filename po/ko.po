@@ -245,6 +245,10 @@ msgstr ""
 "수 있습니다."
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr "영역 녹화는 H.265를 선택해도 항상 H.264입니다."
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "소리"
 

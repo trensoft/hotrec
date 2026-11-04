@@ -346,6 +346,9 @@ class SettingsWindow:
         self.h265_play_note = self._note(
             box, _("H.265 videos may need an extra codec to play on Windows and in some browsers.")
         )
+        self.area_note = self._note(
+            box, _("Area recordings are always H.264, even when H.265 is chosen.")
+        )
 
     def _build_sound(self, box: Any) -> None:
         Gtk = self._Gtk
@@ -419,6 +422,7 @@ class SettingsWindow:
         cfg = self.cfg
         self.h265_missing_note.set_visible(self.h265_possible is False)
         self.h265_play_note.set_visible(bool(self.h265_possible) and cfg.video_codec == "h265")
+        self.area_note.set_visible(cfg.video_codec == "h265")
         self.sound_note.set_visible(cfg.audio_codec != "aac")
 
     def _folder_text(self, kind: str) -> str:

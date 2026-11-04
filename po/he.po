@@ -241,6 +241,10 @@ msgstr ""
 "סרטוני H.265 עשויים לדרוש מקודד נוסף כדי להתנגן ב-Windows ובחלק מהדפדפנים."
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr "הקלטות של אזור הן תמיד ב-H.264, גם כאשר H.265 נבחר."
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "שמע"
 

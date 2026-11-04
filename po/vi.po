@@ -246,6 +246,10 @@ msgstr ""
 "trình duyệt."
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr "Bản ghi một vùng luôn dùng H.264, kể cả khi đã chọn H.265."
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "Âm thanh"
 

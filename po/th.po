@@ -240,6 +240,10 @@ msgid ""
 msgstr "วิดีโอ H.265 อาจต้องใช้ตัวแปลงรหัสเพิ่มเติมเพื่อเล่นบน Windows และในบางเบราว์เซอร์"
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr "การบันทึกพื้นที่จะใช้ H.264 เสมอ แม้จะเลือก H.265 ไว้"
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "เสียง"
 

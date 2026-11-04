@@ -245,6 +245,10 @@ msgstr ""
 "operētājsistēmā Windows un dažās pārlūkprogrammās."
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr "Apgabala ieraksti vienmēr ir H.264, pat ja ir izvēlēts H.265."
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "Skaņa"
 

@@ -251,6 +251,12 @@ msgstr ""
 "f'xi browsers."
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr ""
+"Ir-reġistrazzjonijiet ta' żona dejjem huma H.264, anki jekk "
+"jintgħażel H.265."
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "Ħoss"
 

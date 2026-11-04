@@ -249,6 +249,10 @@ msgstr ""
 "paleisti sistemoje Windows ir kai kuriose naršyklėse."
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr "Srities įrašai visada yra H.264, net jei pasirinktas H.265."
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "Garsas"
 

@@ -244,6 +244,10 @@ msgstr ""
 "potřebovat dodatečný kodek."
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr "Nahrávky oblasti jsou vždy H.264, i když je zvoleno H.265."
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "Zvuk"
 

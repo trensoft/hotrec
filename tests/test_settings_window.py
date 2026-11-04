@@ -727,6 +727,16 @@ def test_an_answer_after_the_window_was_closed_is_dropped(env):
     assert window.codec_buttons["h265"].sensitive is False
 
 
+def test_the_note_that_an_area_is_always_h264_shows_with_h265_chosen(env):
+    window, _gtk = build(Gsettings(), env)
+    assert window.area_note.visible is False  # H.264 chosen: nothing to say
+    window.codec_buttons["h265"].set_active(True)
+    assert window.area_note.visible is True
+    assert window.area_note.label == "Area recordings are always H.264, even when H.265 is chosen."
+    window.codec_buttons["h264"].set_active(True)
+    assert window.area_note.visible is False
+
+
 def test_the_video_bitrate_slider_writes_the_step_it_is_on(env):
     window, _gtk = build(Gsettings(), env)
     steps = settings_window.VIDEO_BITRATE_STEPS

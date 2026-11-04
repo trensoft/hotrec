@@ -246,6 +246,12 @@ msgstr ""
 "e em alguns navegadores."
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr ""
+"As gravações de uma área são sempre H.264, mesmo que o H.265 esteja "
+"selecionado."
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "Som"
 

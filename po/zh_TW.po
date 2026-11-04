@@ -237,6 +237,10 @@ msgid ""
 msgstr "H.265 影片可能需要額外的編碼器才能在 Windows 和某些瀏覽器中播放。"
 
 #: hotrec/settings_window.py
+msgid "Area recordings are always H.264, even when H.265 is chosen."
+msgstr "區域錄製一律使用 H.264，即使選擇了 H.265。"
+
+#: hotrec/settings_window.py
 msgid "Sound"
 msgstr "聲音"
 
