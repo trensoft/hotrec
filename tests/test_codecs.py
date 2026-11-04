@@ -116,3 +116,66 @@ def test_the_probe_of_the_window_asks_once_per_process(monkeypatch):
     assert settings_window._probed_codecs() == {"h264"}
     assert settings_window._probed_codecs() == {"h264"}
     assert asked == [1]
+
+
+def test_an_empty_answer_is_not_kept_and_the_next_window_asks_again(monkeypatch):
+    from hotrec import settings_window
+
+    answers = [frozenset(), frozenset({"h264", "h265"})]
+    asked = []
+    monkeypatch.setattr(settings_window, "_PROBED", None)
+    monkeypatch.setattr(
+        settings_window.codecs, "video_codecs", lambda: asked.append(1) or answers[len(asked) - 1]
+    )
+    assert settings_window._probed_codecs() == frozenset()
+    assert settings_window._PROBED is None
+    assert settings_window._probed_codecs() == {"h264", "h265"}
+    assert settings_window._probed_codecs() == {"h264", "h265"}
+    assert asked == [1, 1]
+
+
+def test_the_background_probe_asks_off_the_calling_thread_and_answers_through_idle_add():
+    import threading
+
+    from hotrec import settings_window
+
+    caller = threading.get_ident()
+    asked_in = []
+    delivered = []
+    arrived = threading.Event()
+
+    def work():
+        asked_in.append(threading.get_ident())
+        return frozenset({"h264"})
+
+    def idle_add(callback, *args):
+        delivered.append((callback, args, threading.get_ident()))
+        arrived.set()
+
+    def done(found):
+        pass
+
+    settings_window.background_probe(idle_add)(work, done)
+    assert arrived.wait(5)
+    assert asked_in and asked_in[0] != caller  # not the thread that opened the window
+    assert delivered == [(done, (frozenset({"h264"}),), asked_in[0])]
+
+
+def test_the_background_probe_turns_a_failed_question_into_no_codecs():
+    import threading
+
+    from hotrec import settings_window
+
+    delivered = []
+    arrived = threading.Event()
+
+    def work():
+        raise RuntimeError("boom")
+
+    def idle_add(callback, *args):
+        delivered.append(args)
+        arrived.set()
+
+    settings_window.background_probe(idle_add)(work, lambda found: None)
+    assert arrived.wait(5)
+    assert delivered == [(frozenset(),)]
