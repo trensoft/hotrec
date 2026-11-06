@@ -14,7 +14,7 @@ _ = gettext.gettext
 
 APP_ID = "io.github.trensoft.hotrec"
 APP_NAME = "Hotrec"
-__version__ = "0.1.6"
+__version__ = "0.1.7"
 DEVELOPER = "TrenSoft"  # the maker, shown as "<version> by TrenSoft" in the Settings window
 WEBSITE = "https://github.com/trensoft/hotrec"
 ISSUES_URL = WEBSITE + "/issues"

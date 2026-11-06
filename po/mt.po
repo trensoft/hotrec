@@ -99,6 +99,10 @@ msgstr "Waqqaf u ssejvja"
 msgid "Settings…"
 msgstr "Settings…"
 
+#: hotrec/indicator.py
+msgid "Quit"
+msgstr "Oħroġ"
+
 #: hotrec/recorder.py
 msgid ""
 "The VA-API video driver is missing or does not work. On Intel graphics, "

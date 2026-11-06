@@ -310,7 +310,7 @@ def test_event_bare_escape():
 def test_the_version_line_is_the_version_and_the_maker():
     assert settings_window.version_text() == "%s by %s" % (__version__, DEVELOPER)
     assert settings_window.version_text().endswith(" by TrenSoft")
-    assert __version__ == "0.1.6"
+    assert __version__ == "0.1.7"
 
 
 def test_the_window_is_called_settings_and_has_the_four_sections_in_order(env):

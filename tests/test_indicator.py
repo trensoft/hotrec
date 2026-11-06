@@ -6,6 +6,7 @@ logic; whether the real ones draw the dot is a check on a real desktop)."""
 
 import fcntl
 import sys
+import threading
 import types
 
 import pytest
@@ -118,7 +119,7 @@ class Toolkit:
         self.indicator = None
         self.Menu = Menu
         self.IndicatorCategory = type("C", (), {"APPLICATION_STATUS": "app-status"})
-        self.IndicatorStatus = type("S", (), {"ACTIVE": "active"})
+        self.IndicatorStatus = type("S", (), {"ACTIVE": "active", "PASSIVE": "passive"})
         outer = self
 
         class FakeIndicator:
@@ -126,6 +127,7 @@ class Toolkit:
                 self.args = (app_id, icon, category)
                 self.theme = None
                 self.status = None
+                self.statuses = []
                 self.menu = None
                 self.icons = []
                 outer.indicator = self
@@ -139,6 +141,7 @@ class Toolkit:
 
             def set_status(self, status):
                 self.status = status
+                self.statuses.append(status)
 
             def set_menu(self, menu):
                 self.menu = menu
@@ -162,6 +165,9 @@ class Toolkit:
     def timeout_add(self, milliseconds, function):
         self.timer = (milliseconds, function)
 
+    def idle_add(self, function, *args):
+        function(*args)  # the real one runs it on the GTK thread; here it is the same thing
+
     def main(self):
         while self.states:
             self.recorder.current = self.states.pop(0)
@@ -179,9 +185,20 @@ class StubRecorder:
     def __init__(self, directory, current):
         self.dir = directory
         self.current = current
+        self.stopped = 0
+        self.stop_works = True
+        self.stop_fails = None
 
     def status(self):
         return self.current
+
+    def stop(self):
+        self.stopped += 1
+        if self.stop_fails is not None:
+            raise self.stop_fails
+        if self.stop_works:
+            self.current = None
+        return 0
 
 
 def test_the_dot_is_built_updated_and_quits_with_the_recording(tmp_path):
@@ -275,7 +292,7 @@ def test_a_resident_dot_stays_while_nothing_records_and_offers_the_commands(tmp_
     dot = toolkit.indicator
     assert dot.args == (APP_ID, APP_ID + "-symbolic", "app-status")
     labels = [item.label for item in dot.menu.items]
-    # the order of the menu: the five ways to start, pause, stop, then Settings and About
+    # the order of the menu: the five ways to start, pause, stop, then Settings, About and Quit
     assert labels == [
         "Record screen and sound",
         "Record screen only",
@@ -286,8 +303,9 @@ def test_a_resident_dot_stays_while_nothing_records_and_offers_the_commands(tmp_
         "Stop and save",
         "Settings…",
         "About",
+        "Quit",
     ]
-    assert [item.sensitive for item in dot.menu.items] == [True] * 5 + [False, False, True, True]
+    assert [item.sensitive for item in dot.menu.items] == [True] * 5 + [False, False] + [True] * 3
     assert not toolkit.quit_called  # nothing recording does not end a resident dot
     assert dot.icons[-1] == (APP_ID + "-symbolic", "Hotrec")
     for item in dot.menu.items[:5]:
@@ -321,8 +339,96 @@ def test_a_resident_dot_while_recording_cannot_start_another(tmp_path):
     toolkit = Toolkit([], recorder)
     indicator.run(recorder, toolkit.triple(), resident=True)
     sensitive = [i.sensitive for i in toolkit.indicator.menu.items]
-    assert sensitive == [False] * 5 + [True] * 4  # pause, stop, and the two windows
+    assert sensitive == [False] * 5 + [True] * 5  # pause, stop, the two windows and Quit
     assert toolkit.indicator.args[1] == APP_ID + "-recording"
+
+
+def wait_for_quit():
+    """The stop of Quit runs in a thread of its own: wait for it."""
+    for thread in threading.enumerate():
+        if thread.name == "hotrec-quit":
+            thread.join(10)
+            assert not thread.is_alive()
+
+
+def press_quit(toolkit):
+    item = toolkit.indicator.menu.items[-1]
+    assert item.label == "Quit"
+    item.handlers["activate"](item)
+    wait_for_quit()
+    return item
+
+
+def test_quit_is_the_last_row_after_about_and_only_in_the_resident_menu(tmp_path):
+    recorder = StubRecorder(tmp_path, None)
+    toolkit = Toolkit([], recorder)
+    indicator.run(recorder, toolkit.triple(), resident=True)
+    assert [i.label for i in toolkit.indicator.menu.items[-2:]] == ["About", "Quit"]
+    assert toolkit.indicator.menu.all[-1] is toolkit.indicator.menu.items[-1]
+
+    other = StubRecorder(tmp_path / "other", rec.State(1, 2, "video", "/f"))
+    (tmp_path / "other").mkdir()
+    plain = Toolkit([], other)
+    indicator.run(other, plain.triple())  # the dot of a recording
+    assert "Quit" not in [i.label for i in plain.indicator.menu.items]
+
+
+def test_quit_with_nothing_recording_ends_the_dot(tmp_path):
+    recorder = StubRecorder(tmp_path, None)
+    toolkit = Toolkit([], recorder)
+    indicator.run(recorder, toolkit.triple(), resident=True)
+    assert not toolkit.quit_called
+    item = press_quit(toolkit)
+    assert toolkit.quit_called
+    assert toolkit.indicator.statuses == ["active", "passive"]  # the dot is gone from the bar
+    assert item.sensitive is False  # no second press while it ends
+
+
+def test_quit_while_recording_stops_and_saves_first(tmp_path):
+    state = rec.State(1, 2, "video", "/f")
+    recorder = StubRecorder(tmp_path, state)
+    toolkit = Toolkit([], recorder)
+    indicator.run(recorder, toolkit.triple(), resident=True)
+    order = []
+    stop = recorder.stop
+    recorder.stop = lambda: (order.append("stop"), stop())[1]
+    toolkit.main_quit = lambda: order.append("quit")
+    press_quit(toolkit)
+    assert order == ["stop", "quit"]
+    assert recorder.current is None and recorder.stopped == 1
+
+
+def test_quit_saves_the_recording_like_stop_and_save_does(world, env, monkeypatch):
+    monkeypatch.setattr(indicator, "_spawn", lambda *args: None)
+    recorder = world.recorder(env)
+    assert recorder.toggle(rec.VIDEO_AUDIO) == 0
+    toolkit = Toolkit([], recorder)
+    indicator.run(recorder, toolkit.triple(), resident=True)
+    assert recorder.status() is not None
+    press_quit(toolkit)
+    assert recorder.status() is None  # the state is gone: nothing keeps recording
+    assert [note[0] for note in world.notes][-1] == "Recording saved"
+    assert toolkit.quit_called
+
+
+def test_quit_leaves_the_dot_when_the_recording_could_not_be_stopped(tmp_path):
+    state = rec.State(1, 2, "video", "/f")
+    recorder = StubRecorder(tmp_path, state)
+    recorder.stop_works = False
+    toolkit = Toolkit([], recorder)
+    indicator.run(recorder, toolkit.triple(), resident=True)
+    item = press_quit(toolkit)
+    assert not toolkit.quit_called and item.sensitive is True  # it can be tried again
+    assert toolkit.indicator.statuses == ["active"]
+
+
+def test_quit_survives_a_stop_that_raises(tmp_path):
+    recorder = StubRecorder(tmp_path, rec.State(1, 2, "video", "/f"))
+    recorder.stop_fails = OSError("gone")
+    toolkit = Toolkit([], recorder)
+    indicator.run(recorder, toolkit.triple(), resident=True)
+    item = press_quit(toolkit)
+    assert not toolkit.quit_called and item.sensitive is True
 
 
 def test_a_second_resident_dot_exits_at_once(tmp_path):
@@ -367,11 +473,12 @@ def test_each_command_line_carries_its_keys_and_there_is_no_grey_key_list(tmp_pa
         "Stop and save",
         "Settings…",
         "About",
+        "Quit",
     ]
     assert menu.key_lines == []  # the grey duplicate list is gone: the first line is a command
     assert not menu.all[0].separator and "activate" in menu.all[0].handlers
     assert [i.separator for i in menu.all].count(True) == 1  # only before Settings
-    assert menu.all[-3].separator
+    assert menu.all[-4].separator
 
 
 def test_the_pause_line_keeps_its_keys_when_it_turns_into_resume(tmp_path, monkeypatch):
@@ -393,7 +500,7 @@ def test_the_dot_of_a_recording_has_pause_with_its_keys_and_stop(tmp_path, monke
     indicator.run(recorder, toolkit.triple())
     menu = toolkit.indicator.menu
     assert [i.label for i in menu.items] == ["Pause (Ctrl+Shift+F12)", "Stop and save"]
-    assert len(menu.all) == 2  # no start lines, no Settings, no About here
+    assert len(menu.all) == 2  # no start lines, no Settings, About or Quit here
 
 
 def test_a_command_without_keys_is_just_its_name(tmp_path, monkeypatch):
@@ -480,7 +587,7 @@ def test_the_settings_item_opens_one_window_and_shows_it_again_while_it_is_open(
     recorder = StubRecorder(tmp_path, None)
     toolkit = Toolkit([], recorder)
     indicator.run(recorder, toolkit.triple(), resident=True)
-    item = toolkit.indicator.menu.items[-2]
+    item = toolkit.indicator.menu.items[-3]
     assert item.label == "Settings…"
     item.handlers["activate"](item)
     args, window = opened[0]
@@ -505,7 +612,7 @@ def test_the_about_item_opens_one_window_and_shows_it_again_while_it_is_open(tmp
     recorder = StubRecorder(tmp_path, None)
     toolkit = Toolkit([], recorder)
     indicator.run(recorder, toolkit.triple(), resident=True)
-    item = toolkit.indicator.menu.items[-1]
+    item = toolkit.indicator.menu.items[-2]
     assert item.label == "About"
     item.handlers["activate"](item)
     args, window = opened[0]
@@ -535,7 +642,7 @@ def test_a_saved_key_change_refreshes_the_lines_at_once(tmp_path, monkeypatch):
     indicator.run(recorder, toolkit.triple(), resident=True)
     menu = toolkit.indicator.menu
     assert menu.items[1].label == "Record screen only (Ctrl+Shift+F10)"
-    settings = menu.items[-2]
+    settings = menu.items[-3]
     settings.handlers["activate"](settings)
     source.bindings_now = keys_of({"video": "<Primary><Alt>v"})
     callbacks[0]()

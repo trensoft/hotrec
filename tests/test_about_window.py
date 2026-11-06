@@ -87,7 +87,7 @@ def test_the_addresses_and_the_license_are_the_ones_of_the_project():
     assert WEBSITE == "https://github.com/trensoft/hotrec"
     assert ISSUES_URL == WEBSITE + "/issues"
     assert LICENSE == "GPL-3.0-or-later"
-    assert __version__ == "0.1.6"
+    assert __version__ == "0.1.7"
 
 
 def test_close_closes_and_present_brings_the_window_forward():

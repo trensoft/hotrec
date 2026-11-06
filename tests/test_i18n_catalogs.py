@@ -254,6 +254,18 @@ def test_the_dot_extension_notifications_are_translated(lang):
     assert len(known) < len(translated[DOT_EXTENSION_TEXT]), lang
 
 
+@pytest.mark.parametrize("lang", LANGS)
+def test_the_quit_line_is_translated_once_in_every_catalog(lang):
+    found = [(m, s) for m, s, _f in entries(PO / ("%s.po" % lang)) if m == "Quit"]
+    assert len(found) == 1 and found[0][1].strip(), lang
+    assert found[0][1] != "Quit", lang
+
+
+def test_the_hungarian_quit_line_is_the_word_attila_chose():
+    translated = {m: s for m, s, _f in entries(PO / "hu.po")}
+    assert translated["Quit"] == "Kilépés"
+
+
 SAME_AS_ENGLISH = {"Hotrec"}
 PAUSE_IS_PAUSE = {"de", "fr", "da", "nb"}
 # Units are written alike in every language. The rest is the list of what the Gemini translation of

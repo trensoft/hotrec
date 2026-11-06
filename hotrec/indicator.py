@@ -8,9 +8,10 @@ the recording does: when the state says nothing is recording any more (stopped, 
 died), it quits. Started at login (``hotrec autostart``, ``resident=True``) it stays, shows the
 Hotrec icon while nothing records, and has the ways to start a recording in its menu too. Each
 command is one line with its keys as GNOME has them now ("Record screen and sound (Ctrl+Shift+F9)");
-the resident one ends with "Settings..." (the window in ``settings_window``) and "About" (the window
-in ``about_window``). There is only ever one: a second one exits at once. It needs the AppIndicator
-extension of GNOME Shell for the dot to show.
+the resident one ends with "Settings..." (the window in ``settings_window``), "About" (the window
+in ``about_window``) and "Quit" (a recording that runs is stopped and saved first, then the dot
+goes; the next login starts it again as before). There is only ever one: a second one exits at
+once. It needs the AppIndicator extension of GNOME Shell for the dot to show.
 
 GTK 3 and an AppIndicator library are loaded when the dot starts, not at import, so everything
 else in Hotrec (and the tests) works without them. Two libraries provide the same API; the
@@ -24,6 +25,7 @@ import logging
 import shutil
 import subprocess
 import sys
+import threading
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -193,13 +195,15 @@ def run(
     stop_item.connect("activate", lambda *_args: _spawn("stop"))
     menu.append(pause_item)
     menu.append(stop_item)
-    settings_item = about_item = None
+    settings_item = about_item = quit_item = None
     if resident:
         menu.append(Gtk.SeparatorMenuItem())
         settings_item = Gtk.MenuItem(label=_("Settings…"))
         about_item = Gtk.MenuItem(label=_("About"))
+        quit_item = Gtk.MenuItem(label=_("Quit"))
         menu.append(settings_item)
         menu.append(about_item)
+        menu.append(quit_item)
     menu.show_all()
     indicator.set_menu(menu)
 
@@ -235,6 +239,37 @@ def run(
     if settings_item is not None and about_item is not None:
         settings_item.connect("activate", open_settings)
         about_item.connect("activate", open_about)
+
+    def quit_dot(*_args: Any) -> None:
+        """Stop and save what records, as ``Stop and save`` does, then end the process. The stop
+        (which can cut an area out of a long recording) runs off the GTK thread. If a recording
+        is still there afterwards the dot stays, so it is never left running without one."""
+        if quit_item is None:
+            return
+        quit_item.set_sensitive(False)
+
+        def stop_then_quit() -> None:
+            try:
+                recorder.stop()
+                still_recording = recorder.status() is not None
+            except Exception:  # the dot is not to die on a surprise of the recorder
+                _LOG.exception("[quit] stopping the recording failed")
+                still_recording = True
+            if still_recording:
+                _LOG.warning("[quit] a recording is still running: the dot stays")
+                GLib.idle_add(quit_item.set_sensitive, True)
+                return
+            GLib.idle_add(finish_quit)
+
+        threading.Thread(target=stop_then_quit, name="hotrec-quit").start()
+
+    def finish_quit() -> bool:
+        indicator.set_status(AppIndicator.IndicatorStatus.PASSIVE)
+        Gtk.main_quit()
+        return False
+
+    if quit_item is not None:
+        quit_item.connect("activate", quit_dot)
 
     def show(current: Optional[View]) -> None:
         recording = current is not None

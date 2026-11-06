@@ -98,6 +98,10 @@ msgstr "Ustavi in shrani"
 msgid "Settings…"
 msgstr "Nastavitve…"
 
+#: hotrec/indicator.py
+msgid "Quit"
+msgstr "Izhod"
+
 #: hotrec/recorder.py
 msgid ""
 "The VA-API video driver is missing or does not work. On Intel graphics, "
