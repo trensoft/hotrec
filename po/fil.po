@@ -99,6 +99,10 @@ msgstr "Ihinto at i-save"
 msgid "Settings…"
 msgstr "Mga Setting…"
 
+#: hotrec/indicator.py
+msgid "Quit"
+msgstr "Umalis"
+
 #: hotrec/recorder.py
 msgid ""
 "The VA-API video driver is missing or does not work. On Intel graphics, "

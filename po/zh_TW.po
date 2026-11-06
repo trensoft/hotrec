@@ -94,6 +94,10 @@ msgstr "停止並儲存"
 msgid "Settings…"
 msgstr "設定…"
 
+#: hotrec/indicator.py
+msgid "Quit"
+msgstr "結束"
+
 #: hotrec/recorder.py
 msgid ""
 "The VA-API video driver is missing or does not work. On Intel graphics, "

@@ -94,7 +94,10 @@ runs it is the other way round. The lock makes a second dot, resident or not, ex
 GTK 3 and an AppIndicator library (Ayatana first, then the old one) are imported only here.
 
 The resident menu, in this order: the five ways to start (screen and sound, screen, sound, area and
-sound, area), Pause/Resume, Stop and save, a separator, Settings..., About. Each command line carries its
+sound, area), Pause/Resume, Stop and save, a separator, Settings..., About, Quit. Quit stops and saves a recording that runs
+(`Recorder.stop()`, in a thread off the GTK thread, as Stop and save does), then quits the GTK loop;
+if the recording is still there afterwards the dot stays and Quit works again. Autostart is not
+touched. Each command line carries its
 keys, "Record screen and sound (Ctrl+Shift+F9)", read from GNOME (`Shortcuts.bindings()`) when the dot
 starts, right after the Settings window changed a key, and every minute (`KEYS_REREAD_TICKS`); a
 shortcut without keys, or GNOME's settings missing, leaves the line as the bare name. Pause keeps its
@@ -143,7 +146,7 @@ file) and the controls go back to what the file has, so the window never says wh
   choosing `FOLDER` again unsets the key.
 - *Reset to defaults*: asks "Reset every setting to its default value?", then removes every key
   from the file (so each has its default) and installs the six default keys.
-- At the bottom right: "0.1.6 by TrenSoft" (the version, not translated).
+- At the bottom right: "0.1.7 by TrenSoft" (the version, not translated).
 
 **An area recording is always H.264** (`video_command(..., area=True)`, with a log warning when the
 file says otherwise): the area is cut out by rewriting H.264 headers (`h264_metadata`). The HEVC

@@ -20,7 +20,8 @@ its menu has Pause/Resume and Stop and save.
 The dot that stays in the top bar after login has the menu of the program. Each command is one
 line with its keys as GNOME has them now: **Record screen and sound (Ctrl+Shift+F9)**, **Record screen
 only**, **Record sound only**, **Record area and sound**, **Record area only**, **Pause** (it turns
-into **Resume**), **Stop and save**; then **Settings...** and, last, **About**.
+into **Resume**), **Stop and save**; then **Settings...**, **About** and, last, **Quit**. Quit stops and saves a running
+recording first, then ends the dot (the next login starts it again).
 
 **Settings** is one window with everything in it, and every control takes effect as you change it
 (there is no Save button; "Reset to defaults" asks first, then puts every setting and the six keys
