@@ -4,7 +4,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import {PAUSED, RECORDING, dotFor, parseProcStat, parseState, stateDirFor}
+import {PAUSED, RECORDING, chromeParams, dotFor, parseProcStat, parseState, shellMajor, stateDirFor}
     from '../../gnome-shell/hotrec-dot@trensoft.github.io/logic.js';
 
 const STAT = (state, started) =>
@@ -77,4 +77,23 @@ test('no dot without a state, without the process, for a reused pid or a dead on
     assert.equal(dotFor(state, {state: 'S', started: 556}), null); // the pid now belongs to another process
     assert.equal(dotFor(state, {state: 'Z', started: 555}), null);
     assert.equal(dotFor(state, {state: 'X', started: 555}), null);
+});
+
+test('shellMajor reads the major version of every PACKAGE_VERSION form the Shell has', () => {
+    for (const [text, major] of [['49.8', 49], ['50.6', 50], ['50', 50], ['50.rc', 50], ['51.alpha.1', 51], ['47.0', 47]])
+        assert.equal(shellMajor(text), major, text);
+    for (const bad of ['', 'x50', '5a', '.50', null, undefined, 50])
+        assert.equal(shellMajor(bad), null, String(bad));
+});
+
+test('chromeParams: affectsInputRegion only up to GNOME 49, where the Shell knows it', () => {
+    const old = {affectsInputRegion: false, affectsStruts: false, trackFullscreen: false};
+    const now = {affectsStruts: false, trackFullscreen: false};
+    assert.deepEqual(chromeParams('47.2'), old);
+    assert.deepEqual(chromeParams('49.8'), old);
+    assert.deepEqual(chromeParams('50.6'), now);
+    assert.deepEqual(chromeParams('51.1'), now);
+    assert.deepEqual(chromeParams('100.0'), now);
+    assert.deepEqual(chromeParams(undefined), now);
+    assert.deepEqual(chromeParams('garbage'), now);
 });

@@ -201,10 +201,14 @@ took out (`hotrec shortcuts remove`, or by hand) is not put back.
 
 ## The dot over a fullscreen video (0.1.4)
 
-`gnome-shell/hotrec-dot@trensoft.github.io/` (GNOME Shell 47-49, ES module extension; subpackage
+`gnome-shell/hotrec-dot@trensoft.github.io/` (GNOME Shell 47-51, ES module extension; subpackage
 `hotrec-gnome-shell-extension`, `Recommends:` of the main package). `extension.js` puts a `St.Widget` in
-`Main.layoutManager.addTopChrome` with `trackFullscreen: false`, `affectsInputRegion: false`, so it is
-above a fullscreen window and never takes a click; `logic.js` is the decision code without any GNOME API
+`Main.layoutManager.addTopChrome` with `trackFullscreen: false`, `affectsStruts: false`, so it is
+above a fullscreen window and takes no space; it is not `reactive`, so it never takes a click. Up to
+GNOME 49 the call also has `affectsInputRegion: false` (the input region counts on X11 only); GNOME 50
+dropped X11 and the parameter, and its `LayoutManager` throws `Unrecognized parameter` on it (measured in
+`layout.js` of Shell 49.8, 50.6 and 51), so `logic.js` `chromeParams` leaves it out from Shell 50 on, by
+`Config.PACKAGE_VERSION`. `logic.js` is the decision code without any GNOME API
 (tested with plain node, `tests/js/`, against a fake desktop).
 
 The signal is the state file Hotrec already keeps, `$XDG_RUNTIME_DIR/hotrec/state.json` (`pid`, `started`,

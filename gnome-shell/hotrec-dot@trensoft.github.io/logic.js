@@ -69,3 +69,28 @@ export function dotFor(state, proc) {
         return null;
     return state.paused ? PAUSED : RECORDING;
 }
+
+/**
+ * The major version of the Shell from its PACKAGE_VERSION ("49.8", "50.rc", "50.alpha.1"), or null
+ * when the text is not one.
+ */
+export function shellMajor(version) {
+    const match = typeof version === 'string' ? /^(\d+)(\.|$)/.exec(version) : null;
+    return match ? Number(match[1]) : null;
+}
+
+/**
+ * The parameters of addTopChrome for the dot. It must be above a fullscreen window (trackFullscreen
+ * off) and must not reserve screen space (affectsStruts off). Up to GNOME 49 it also says that the
+ * dot is not part of the input region (affectsInputRegion off: the region only counts on X11, and
+ * the dot takes no input); GNOME 50 dropped the X11 session and the parameter with it, and its
+ * LayoutManager throws "Unrecognized parameter" on it. A version that is not known gets the
+ * parameters of the newest Shell, as the dot cannot be shown at all with the one that throws.
+ */
+export function chromeParams(shellVersion) {
+    const params = {affectsStruts: false, trackFullscreen: false};
+    const major = shellMajor(shellVersion);
+    if (major !== null && major < 50)
+        params.affectsInputRegion = false;
+    return params;
+}

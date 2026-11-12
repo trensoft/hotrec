@@ -8,8 +8,14 @@ import assert from 'node:assert/strict';
 
 import {makeWorld} from './world.mjs';
 
+// Config.PACKAGE_VERSION is a constant of the Shell, so each version the tests run against is its own
+// import of extension.js (fake-gnome.mjs hands the `?shell=` of the URL to config.js).
+const SHELLS = ['47.0', '48.4', '49.8', '50.6', '50.rc', '51.alpha.1', 'unknown'];
 makeWorld();
-const {default: HotrecDot} = await import('../../gnome-shell/hotrec-dot@trensoft.github.io/extension.js');
+const CLASSES = new Map(await Promise.all(SHELLS.map(async version => [
+    version,
+    (await import(`../../gnome-shell/hotrec-dot@trensoft.github.io/extension.js?shell=${version}`)).default,
+])));
 
 const RUN = '/run/user/1000';
 const STATE = `${RUN}/hotrec/state.json`;
@@ -20,7 +26,7 @@ const started = [];
 function start(setup = () => {}, options) {
     const world = makeWorld(options);
     setup(world);
-    const extension = new HotrecDot();
+    const extension = new (CLASSES.get(world.shellVersion))();
     extension.enable();
     started.push({world, extension});
     return {world, extension, dot: world.chrome[0]?.actor};
@@ -49,6 +55,29 @@ test('the dot is put above fullscreen windows and never takes input', () => {
     const dot = world.chrome[0].actor;
     assert.equal(dot.reactive, false);
     assert.equal(dot.can_focus, false);
+});
+
+// layout.js of GNOME Shell 49.8 has affectsInputRegion (default true, only counts on X11); the one of
+// 50.6 has not, and its Params.parse throws "Unrecognized parameter" on it, so the extension is in
+// state ERROR and there is no dot. The fake desktop throws the same.
+for (const [version, params] of [
+    ['47.0', {affectsInputRegion: false, affectsStruts: false, trackFullscreen: false}],
+    ['48.4', {affectsInputRegion: false, affectsStruts: false, trackFullscreen: false}],
+    ['49.8', {affectsInputRegion: false, affectsStruts: false, trackFullscreen: false}],
+    ['50.6', {affectsStruts: false, trackFullscreen: false}],
+    ['50.rc', {affectsStruts: false, trackFullscreen: false}],
+    ['51.alpha.1', {affectsStruts: false, trackFullscreen: false}],
+]) {
+    test(`GNOME Shell ${version}: the dot is put in the top chrome with only the parameters that Shell knows`, () => {
+        const {world} = start(() => {}, {shellVersion: version});
+        assert.equal(world.chrome.length, 1);
+        assert.deepEqual(world.chrome[0].params, params);
+    });
+}
+
+test('a Shell whose version is not readable gets the parameters of the newest one', () => {
+    const {world} = start(() => {}, {shellVersion: 'unknown'});
+    assert.deepEqual(world.chrome[0].params, {affectsStruts: false, trackFullscreen: false});
 });
 
 test('the dot sits in the top right corner of the primary monitor, below the bar', () => {

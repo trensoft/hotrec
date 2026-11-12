@@ -29,14 +29,24 @@
 - The dot on a real desktop: GTK 3 and AppIndicator are not installed in the test environment;
   only the logic around them is tested, against a stand-in. Whether the AppIndicator extension
   shows the icon, and the icon theme lookup of the two icon names, is unchecked.
-- The Shell extension (0.1.4) in a real GNOME Shell: it loads (GNOME 47-49), the dot shows above a
-  fullscreen video, blinks, goes when the recording ends. Tested: `logic.js` and `extension.js` under
-  node (`tests/js`) against a fake desktop that has the Shell, Gio and GLib calls the extension makes;
-  the real signatures of `addTopChrome`, `Gio.FileMonitor` and `St.Widget` were not compared with the
-  GNOME Shell 47 sources. Whether a portal screen recording contains the dot is not known (the monitor
-  stream is the whole stage, so probably): then the extension is switched off and the tray dot stays.
-  That `gsettings set org.gnome.shell enabled-extensions` makes a running Shell load a new extension
-  without a login is not measured either (the notification says a login may be needed).
+- The Shell extension (0.1.4) on a real display: the dot above a playing fullscreen video, its blink,
+  that it goes when a real recording ends, and GNOME 47 and 48 at all. Tested: `logic.js` and
+  `extension.js` under node (`tests/js`) against a fake desktop that has the Shell, Gio and GLib calls
+  the extension makes; the real signatures of `addTopChrome`, `Gio.FileMonitor` and `St.Widget` were
+  not compared with the GNOME Shell 47 sources. The `addTopChrome` parameters were read out of
+  `layout.js` of GNOME Shell 49.8, 50.6 and 51 (the resources of the Fedora packages):
+  `affectsInputRegion` is there in 49 and gone in 50 and 51, where `Params.parse` throws on it; this is
+  why `chromeParams` leaves it out from Shell 50 on. With the packages built from the tree, the
+  extension was run in a headless `gnome-shell` (49.10, 50.6, 51.1: ENABLED, the dot 20x20 in the
+  corner, its red and yellow read back from a stage pixel, the blink, gone at the end, no error and no
+  line about hotrec-dot in the Shell log); the state file was written and removed by the probe, hotrec
+  itself did not run. A build with the 50 metadata and the old code goes to ERROR
+  `Unrecognized parameter "affectsInputRegion"`. That probe is not in the repository. A real display,
+  the dot above a playing fullscreen video and GNOME 47 and 48 were not measured by it.
+  Whether a portal screen recording contains the dot is not known (the monitor stream is the whole
+  stage, so probably): then the extension is switched off and the tray dot stays. That
+  `gsettings set org.gnome.shell enabled-extensions` makes a running Shell load a new extension without
+  a login is not measured either (the notification says a login may be needed).
 - The area (0.1.5): measured with an ffmpeg 7.0 binary, on synthetic H.264 files: the picture of
   `-c copy -bsf:v h264_metadata=crop_*` is bit for bit the one the `crop` filter gives (mkv, mp4,
   extradata and in-band SPS), and an unaligned left edge is widened by ffmpeg (hence the 64 pixels).

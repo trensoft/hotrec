@@ -190,12 +190,12 @@ def test_install_data_puts_every_file_where_the_package_expects_it(tmp_path):
 EXTENSION = REPO / "gnome-shell" / "hotrec-dot@trensoft.github.io"
 
 
-def test_the_extension_metadata_is_what_gnome_shell_47_to_49_loads():
+def test_the_extension_metadata_is_what_gnome_shell_47_to_51_loads():
     import json
 
     meta = json.loads((EXTENSION / "metadata.json").read_text(encoding="utf-8"))
     assert meta["uuid"] == EXTENSION.name
-    assert meta["shell-version"] == ["47", "48", "49"]
+    assert meta["shell-version"] == ["47", "48", "49", "50", "51"]
     assert meta["version-name"] == __version__
     assert {"name", "description"} <= set(meta)
 
@@ -232,11 +232,15 @@ def test_the_extension_imports_only_what_the_shell_and_the_package_have():
             "gi://GLib",
             "gi://Meta",
             "resource:///org/gnome/shell/extensions/extension.js",
+            "resource:///org/gnome/shell/misc/config.js",
             "resource:///org/gnome/shell/ui/main.js",
             "./logic.js",
         ]
     )
-    assert "trackFullscreen: false" in text  # the point of it: above a fullscreen window
+    # above a fullscreen window: the parameters are in logic.js, as they depend on the Shell
+    assert "addTopChrome(this._dot, chromeParams(Config.PACKAGE_VERSION))" in text
+    logic = (EXTENSION / "logic.js").read_text(encoding="utf-8")
+    assert "trackFullscreen: false" in logic
 
 
 def test_the_spec_has_the_extension_subpackage_and_the_main_package_recommends_it():
