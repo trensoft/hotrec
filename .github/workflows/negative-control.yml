@@ -1,0 +1,31 @@
+name: Negative control of the start gate
+
+# Run by hand ("Run workflow"): the gate scripts of this ref against a copy of the same tree that is
+# broken on purpose (the start of the dot), on the image of epel-10. Green only when the gate FAILS
+# there, in the step "autostart" with the error of the break, after every step before it passed
+# (tools/start_gate/negative_control.sh). It is a file of its own so that the run by hand leaves no
+# check named "start gate (<chroot>)" on the commit: that name is what tools/start_gate/verify_checks.sh
+# counts before a COPR build of master, a skipped job included.
+on:
+  workflow_dispatch:
+
+# The job only reads the repository: no write scope for the token.
+permissions:
+  contents: read
+
+jobs:
+  negative-control:
+    name: negative control (the gate must fail on a broken tree)
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: The gate must fail on the broken tree on epel-10
+        env:
+          START_GATE_ENGINE: docker
+          START_GATE_CHROOT: epel-10
+        run: bash tools/start_gate/negative_control.sh quay.io/centos/centos:stream10 .
