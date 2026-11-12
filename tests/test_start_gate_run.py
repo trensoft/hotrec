@@ -13,6 +13,7 @@ are the ones that stage 1 made. A change that makes the gate soft fails one of t
 
 from __future__ import annotations
 
+import re
 import subprocess
 
 import pytest
@@ -543,6 +544,107 @@ def test_the_control_wants_every_line_of_stage_2_as_a_line_of_its_own(control, w
     lines[which] = prefix + lines[which]
     result = control({"check.sh": 1}, stage2(*lines))
     assert result.returncode == 1, result.stdout
+
+
+CHAIN = [RPM_1, RPM_2, *BEFORE, AUTOSTART_FAIL, RESULT_FAIL]
+CHAIN_IDS = ["rpm1", "rpm2", *[line.split()[1] for line in BEFORE], "autostart", "summary"]
+
+
+@pytest.mark.parametrize(
+    "first", range(len(CHAIN) - 1), ids=lambda i: f"{CHAIN_IDS[i]}-{CHAIN_IDS[i + 1]}"
+)
+def test_the_control_wants_the_lines_in_the_order_the_gate_prints_them(control, first):
+    """Every line is there and each one is a line of its own, but two that follow each other are
+    swapped: that is not the output of the gate on the broken tree (a step that ran first is not a
+    line that came later). Each of the ten pairs, in turn."""
+    lines = list(CHAIN)
+    lines[first], lines[first + 1] = lines[first + 1], lines[first]
+    result = control({"check.sh": 1}, stage2(*lines))
+    assert result.returncode == 1, result.stdout
+    assert "NEGATIVE-CONTROL PASS" not in result.stdout
+
+
+@pytest.mark.parametrize("which", ["main-twice", "extension-twice", "extension-missing"])
+def test_the_control_wants_the_rpm_line_of_hotrec_and_the_one_of_the_extension(control, which):
+    """Two rpm lines are not enough: one for hotrec and one for the extension, in that order."""
+    lines = {
+        "main-twice": [RPM_1, RPM_1, *CHAIN[2:]],
+        "extension-twice": [RPM_2, RPM_2, *CHAIN[2:]],
+        "extension-missing": [RPM_1, *CHAIN[2:]],
+    }[which]
+    result = control({"check.sh": 1}, stage2(*lines))
+    assert result.returncode == 1, result.stdout
+    assert "NEGATIVE-CONTROL PASS" not in result.stdout
+
+
+@pytest.mark.parametrize("name", ["reversed", "summary-first", "autostart-first"])
+def test_the_control_is_red_when_the_lines_come_in_another_order_altogether(control, name):
+    lines = {
+        "reversed": CHAIN[::-1],
+        "summary-first": [RESULT_FAIL, *CHAIN[:-1]],
+        "autostart-first": [AUTOSTART_FAIL, *CHAIN[:-2], RESULT_FAIL],
+    }[name]
+    result = control({"check.sh": 1}, stage2(*lines))
+    assert result.returncode == 1, result.stdout
+    assert "NEGATIVE-CONTROL PASS" not in result.stdout
+
+
+def test_the_control_says_which_line_is_not_where_it_should_be(control):
+    lines = list(CHAIN)
+    lines[2], lines[3] = (
+        lines[3],
+        lines[2],
+    )  # import before version: the version line is out of place
+    result = control({"check.sh": 1}, stage2(*lines))
+    assert result.returncode == 1
+    assert "is missing, or not in its place: import:" in result.stdout
+
+
+def test_the_rpm_lines_of_the_control_are_in_the_order_check_sh_prints_them(box, check):
+    """The control takes the order of the rpm lines from its patterns, ``check.sh`` from its loop,
+    and the other tests of the control give the control a stage 2 that is written out here, not the
+    output of ``check.sh``. Without this one, a harmless change of the order of the loop would turn
+    the control red on the next run by hand and no test would say so. It runs the real ``check.sh``
+    and holds its rpm lines against the rpm patterns of ``negative_control.sh``, one by one."""
+    control_sh = (GATE / "negative_control.sh").read_text(encoding="utf-8")
+    patterns = re.findall(r"^\s+'(\^START-GATE rpm PASS [^']*)'$", control_sh, re.MULTILINE)
+    assert len(patterns) == 2, patterns
+    result = check()
+    assert result.returncode == 0, result.stdout + result.stderr
+    printed = [line for line in result.stdout.splitlines() if line.startswith("START-GATE rpm ")]
+    assert len(printed) == len(patterns), printed
+    for pattern, line in zip(patterns, printed):
+        assert re.search(pattern, line), f"{line!r} does not match the control's {pattern!r}"
+
+
+@pytest.mark.parametrize("which", range(len(CHAIN)), ids=CHAIN_IDS)
+def test_the_control_does_not_count_the_lines_of_the_build_log(control, which):
+    """Only the output of stage 2 counts. The build log (stage 1) has all the lines, and stage 2
+    lacks one of them: the line is not taken from stage 1."""
+    stage2_lines = CHAIN[:which] + CHAIN[which + 1 :]
+    result = control({"check.sh": 1}, {"build.sh": "\n".join(CHAIN), **stage2(*stage2_lines)})
+    assert result.returncode == 1, result.stdout
+    assert "NEGATIVE-CONTROL FAIL" in result.stdout
+
+
+def test_the_control_is_red_when_all_the_lines_are_in_stage_1_and_stage_2_only_fails(control):
+    result = control({"check.sh": 1}, {"build.sh": "\n".join(CHAIN), **stage2(RESULT_FAIL)})
+    assert result.returncode == 1, result.stdout
+    assert "NEGATIVE-CONTROL PASS" not in result.stdout
+
+
+def test_the_control_is_red_when_stage_1_fails_and_its_log_has_all_the_lines(control):
+    """Stage 1 ends with 1: stage 2 is not started (the gate stops), and the log of the build has
+    the lines of a failed gate. There is no stage 2 to read them from."""
+    result = control({"build.sh": 1}, {"build.sh": "\n".join(CHAIN)})
+    assert result.returncode == 1, result.stdout
+    assert "NEGATIVE-CONTROL PASS" not in result.stdout
+
+
+def test_the_control_passes_with_the_lines_of_stage_2_even_if_stage_1_printed_one_of_them(control):
+    """A line of the build log that repeats a line of stage 2 does no harm to a real proof."""
+    result = control({"check.sh": 1}, {"build.sh": RPM_1, **FAIL_AUTOSTART})
+    assert result.returncode == 0, result.stdout
 
 
 def test_the_control_fails_when_the_line_to_break_is_not_there(box, control):

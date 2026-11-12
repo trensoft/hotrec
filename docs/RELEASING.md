@@ -123,9 +123,10 @@ without the rights of an admin [H].
 A gate that cannot fail is not a gate. `tools/start_gate/negative_control.sh IMAGE TREE` copies the
 tree, breaks the start of the dot in the copy (`AppIndicator.IndicatorStatus.ACTIVE` becomes
 `ACTIVEX`: the module imports and the program dies at the dot, the kind of break an import check does
-not see), runs the gate on it, and is green only when the output of stage 2 shows the break and nothing
-else, each as a line of its own: `START-GATE rpm PASS` twice and `version`, `import`, `cli`, `catalog`,
-`tools`, `shell` and `loaded` PASS (every step before the dot), `START-GATE autostart FAIL ...
+not see), runs the gate on it, and is green only when the output of stage 2 (the build log of stage 1
+is cut off) shows the break and nothing else, each as a line of its own and in the order the gate
+prints them: `START-GATE rpm PASS` for `hotrec` and for the extension, and `version`, `import`, `cli`,
+`catalog`, `tools`, `shell` and `loaded` PASS (every step before the dot), `START-GATE autostart FAIL ...
 AttributeError: ... ACTIVEX` (the step `autostart` fails with the error that the break made), and
 `START-GATE RESULT FAIL`. A gate that passes is soft; a gate that fails for another reason (no network,
 a build error, a step before the dot, an `autostart` that fails with another error) proves nothing, and
