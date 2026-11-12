@@ -93,7 +93,7 @@ replaced by the Hotrec ones; any other custom shortcut stays. To switch the auto
 `Hidden=true`.
 
 The dot over a fullscreen video: the top bar, and the dot in it, are out of sight when a video plays
-fullscreen. The subpackage `hotrec-gnome-shell-extension` (GNOME Shell 47-49; `hotrec` recommends it,
+fullscreen. The subpackage `hotrec-gnome-shell-extension` (GNOME Shell 47-51; `hotrec` recommends it,
 so `dnf` installs it with it) has a Shell extension that draws a blinking red dot in the top right
 corner, above everything, while Hotrec records (a steady yellow one while paused). It reads only the
 state file Hotrec keeps while it records, and runs no timer otherwise. `hotrec autostart` switches it

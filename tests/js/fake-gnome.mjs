@@ -8,6 +8,9 @@
 import {registerHooks} from 'node:module';
 
 const PREFIX = 'fake-gnome:';
+// config.js is a constant of the real Shell. Which version it has is chosen by the importer: the
+// test imports a copy of extension.js with `?shell=<version>` and that copy gets that version.
+const CONFIG = 'resource:///org/gnome/shell/misc/config.js';
 const MODULES = {
     'gi://St': {default: 'St'},
     'gi://Gio': {default: 'Gio'},
@@ -19,6 +22,10 @@ const MODULES = {
 
 registerHooks({
     resolve(specifier, context, nextResolve) {
+        if (specifier === CONFIG) {
+            const version = new URL(context.parentURL).searchParams.get('shell') ?? '49.8';
+            return {url: `${PREFIX}${CONFIG}?shell=${encodeURIComponent(version)}`, shortCircuit: true};
+        }
         if (specifier in MODULES)
             return {url: PREFIX + specifier, shortCircuit: true};
         if (specifier.startsWith('gi://') || specifier.startsWith('resource://'))
@@ -28,6 +35,10 @@ registerHooks({
     load(url, context, nextLoad) {
         if (!url.startsWith(PREFIX))
             return nextLoad(url, context);
+        if (url.startsWith(PREFIX + CONFIG)) {
+            const version = new URL(url.slice(PREFIX.length)).searchParams.get('shell');
+            return {format: 'module', source: `export const PACKAGE_VERSION = ${JSON.stringify(version)};`, shortCircuit: true};
+        }
         const spec = MODULES[url.slice(PREFIX.length)];
         const key = JSON.stringify(url.slice(PREFIX.length));
         const source = spec.default

@@ -62,7 +62,7 @@ through the screen cast portal, with the hardware encoder of the GPU.
 Summary:        GNOME Shell extension for Hotrec: the recording dot above a fullscreen video
 BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
-# Extensions 47, 48 and 49 are declared in its metadata.json; EL10 has GNOME Shell 47
+# Extensions 47 to 51 are declared in its metadata.json; EL10 has GNOME Shell 47
 Requires:       gnome-shell >= 47
 
 %description gnome-shell-extension

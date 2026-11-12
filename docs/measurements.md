@@ -33,7 +33,14 @@
   fullscreen video, blinks, goes when the recording ends. Tested: `logic.js` and `extension.js` under
   node (`tests/js`) against a fake desktop that has the Shell, Gio and GLib calls the extension makes;
   the real signatures of `addTopChrome`, `Gio.FileMonitor` and `St.Widget` were not compared with the
-  GNOME Shell 47 sources. Whether a portal screen recording contains the dot is not known (the monitor
+  GNOME Shell 47 sources. The `addTopChrome` parameters were read out of `layout.js` of GNOME Shell 49.8,
+  50.6 and 51 (the resources of the Fedora packages): `affectsInputRegion` is there in 49 and gone in 50
+  and 51, where `Params.parse` throws on it; this is why `chromeParams` leaves it out from Shell 50 on.
+  With the packages built from the tree, the extension was run in a headless `gnome-shell` (49.10, 50.6,
+  51.1: ENABLED, the dot 20x20 in the corner, its red and yellow read back from a stage pixel, the blink,
+  gone at the end, nothing in the Shell log); a build with the 50 metadata and the old code goes to ERROR
+  `Unrecognized parameter "affectsInputRegion"`. That probe is not in the repository. A real display, the
+  dot above a playing fullscreen video and GNOME 47 and 48 were not measured by it. Whether a portal screen recording contains the dot is not known (the monitor
   stream is the whole stage, so probably): then the extension is switched off and the tray dot stays.
   That `gsettings set org.gnome.shell enabled-extensions` makes a running Shell load a new extension
   without a login is not measured either (the notification says a login may be needed).

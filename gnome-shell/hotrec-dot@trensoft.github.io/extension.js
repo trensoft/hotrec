@@ -13,6 +13,7 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Meta from 'gi://Meta';
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+import * as Config from 'resource:///org/gnome/shell/misc/config.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 import {
@@ -21,6 +22,7 @@ import {
     RECORDING,
     STATE_DIR,
     STATE_FILE,
+    chromeParams,
     dotFor,
     parseProcStat,
     parseState,
@@ -43,11 +45,7 @@ export default class HotrecDot extends Extension {
             track_hover: false,
             visible: false,
         });
-        Main.layoutManager.addTopChrome(this._dot, {
-            affectsInputRegion: false,
-            affectsStruts: false,
-            trackFullscreen: false,
-        });
+        Main.layoutManager.addTopChrome(this._dot, chromeParams(Config.PACKAGE_VERSION));
         this._place();
         this._monitorsId = Main.layoutManager.connect('monitors-changed', () => this._place());
 

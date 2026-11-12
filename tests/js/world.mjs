@@ -78,7 +78,19 @@ globalThis.fakeModules = {
     'resource:///org/gnome/shell/ui/main.js': {
         layoutManager: {
             get primaryMonitor() { return W().primaryMonitor; },
-            addTopChrome(actor, params) { W().chrome.push({actor, params}); },
+            // LayoutManager._trackActor: Params.parse(params, defaultParams) throws on a name the
+            // defaults do not have. The defaults are measured from layout.js of GNOME Shell 49.8
+            // (affectsInputRegion in) and 50.6 (out; mutter 51 / Shell 51 the same as 50).
+            addTopChrome(actor, params) {
+                const known = W().shellMajor < 50
+                    ? ['trackFullscreen', 'affectsStruts', 'affectsInputRegion']
+                    : ['trackFullscreen', 'affectsStruts'];
+                for (const name of Object.keys(params)) {
+                    if (!known.includes(name))
+                        throw new Error(`Unrecognized parameter '${name}'`);
+                }
+                W().chrome.push({actor, params});
+            },
             removeChrome(actor) { W().chrome = W().chrome.filter(c => c.actor !== actor); },
             connect(name, fn) { W().layoutHandlers.set(name, fn); return 7; },
             disconnect() { W().layoutHandlers.clear(); },
@@ -91,6 +103,7 @@ export function makeWorld({
     runtimeDir = '/run/user/1000',
     monitor = {x: 0, y: 0, width: 1920, height: 1080},
     api = 'compositor', // 'compositor': GNOME 48 and later; 'display': GNOME 47
+    shellVersion = '49.8', // what extension.js was imported with (?shell=), see extension.test.mjs
     unredirectThrows = false,
 } = {}) {
     // mutter keeps a count: every disable needs its enable, an enable without one only warns
@@ -129,6 +142,8 @@ export function makeWorld({
 
     const world = {
         unredirect,
+        shellVersion,
+        shellMajor: Number.parseInt(shellVersion, 10),
         env: runtimeDir === null ? {} : {XDG_RUNTIME_DIR: runtimeDir},
         files: new Map(),
         dirs: new Set(['/', '/run', '/run/user', runtimeDir].filter(Boolean)),
