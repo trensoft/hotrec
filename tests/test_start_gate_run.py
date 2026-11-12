@@ -86,10 +86,17 @@ def test_check_puts_the_copr_repository_of_the_chroot_before_the_install(box, ch
     assert calls[3].startswith("dnf install")
 
 
-def test_check_takes_the_language_filter_of_the_image_off_right_before_the_install(box, check):
-    # the images keep one language: without this the .mo files of the package are not installed
-    check()
+@pytest.mark.parametrize("chroot", ["epel-10", "fedora-43"])
+def test_check_takes_the_language_filter_of_the_image_off_right_before_the_install(
+    box, check, chroot
+):
+    # the images keep one language: without this the .mo files of the package are not installed.
+    # On the image of EL10 (CentOS Stream) as on the one of Fedora: a step left out on one of them
+    # leaves the catalogs of the package out of the install there
+    result = check(START_GATE_CHROOT=chroot)
+    assert result.returncode == 0, result.stdout + result.stderr
     calls = box.calls()
+    assert calls[:2] == ["gate_repos", f"gate_copr_repo {chroot}"]
     assert calls[2] == "gate_all_languages"
     assert calls[3].startswith("dnf install")
     assert calls.count("gate_all_languages") == 1
@@ -760,12 +767,25 @@ def test_dnf_is_run_without_questions(box, common):
 LANG_FILTER = "macros.image-language-conf"
 
 
-@pytest.mark.parametrize("value", ["%_install_langs en_US\n", "%_install_langs C.UTF-8\n"])
-def test_the_language_filter_of_the_image_is_removed_and_nothing_else(box, common, value):
-    # Fedora images say en_US, CentOS Stream says C.UTF-8: either leaves out the .mo files
+@pytest.mark.parametrize(
+    "os_release, value",
+    [
+        # Fedora images say en_US, CentOS Stream says C.UTF-8: either leaves out the .mo files.
+        # The CentOS image is the one that says C.UTF-8; the other two pairs make sure the step does
+        # not depend on which of the two is on which image
+        (FEDORA, "%_install_langs en_US\n"),
+        (CENTOS, "%_install_langs C.UTF-8\n"),
+        (FEDORA, "%_install_langs C.UTF-8\n"),
+        (CENTOS, "%_install_langs en_US\n"),
+    ],
+    ids=["fedora-en_US", "centos-C.UTF-8", "fedora-C.UTF-8", "centos-en_US"],
+)
+def test_the_language_filter_of_the_image_is_removed_and_nothing_else(
+    box, common, os_release, value
+):
     (common.rpm_etc / LANG_FILTER).write_text(value, encoding="utf-8")
     (common.rpm_etc / "macros.dist").write_text("%dist .fc43\n", encoding="utf-8")
-    result = common("gate_all_languages", FEDORA)
+    result = common("gate_all_languages", os_release)
     assert result.returncode == 0, result.stderr
     assert sorted(path.name for path in common.rpm_etc.iterdir()) == ["macros.dist"]
     assert "filter of the image" in result.stdout and "is off" in result.stdout
