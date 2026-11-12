@@ -18,7 +18,7 @@ a sound-only recording. Folders: where videos and where sound recordings are sav
 Every control writes its value into ``~/.config/hotrec.conf`` (``config.set_values``) the moment it
 changes, so there is no Save button; "Reset to defaults" asks, then removes every setting from the
 file and puts the six default keys back; "Close" closes. At the bottom right the version and the
-maker ("0.1.7 by TrenSoft"), as in the settings window of Slideshow Lock.
+maker ("0.1.8 by TrenSoft"), as in the settings window of Slideshow Lock.
 
 The window shows the keys the entries have now; shortcuts that are not installed yet show the
 default keys (Ctrl+Shift+F7 to F12), which is what the next change of a key would set.

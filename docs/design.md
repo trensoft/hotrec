@@ -146,7 +146,7 @@ file) and the controls go back to what the file has, so the window never says wh
   choosing `FOLDER` again unsets the key.
 - *Reset to defaults*: asks "Reset every setting to its default value?", then removes every key
   from the file (so each has its default) and installs the six default keys.
-- At the bottom right: "0.1.7 by TrenSoft" (the version, not translated).
+- At the bottom right: "0.1.8 by TrenSoft" (the version, not translated).
 
 **An area recording is always H.264** (`video_command(..., area=True)`, with a log warning when the
 file says otherwise): the area is cut out by rewriting H.264 headers (`h264_metadata`). The HEVC
