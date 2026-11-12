@@ -215,6 +215,11 @@ def build(box):
         '    mkdir -p "$STUB_OUT/build/RPMS/noarch"\n'
         f'    : > "$STUB_OUT/build/RPMS/noarch/{NEVRA}.rpm"\n'
         f'    : > "$STUB_OUT/build/RPMS/noarch/{EXT_NEVRA}.rpm"\n'
+        # code 11: rpmbuild has written the source RPM that names the build requirements; with the
+        # file there the glob of build.sh expands (a quoted glob would reach dnf as it is)
+        'elif [ "$rc" -eq 11 ]; then\n'
+        '    mkdir -p "$STUB_OUT/build/SRPMS"\n'
+        '    : > "$STUB_OUT/build/SRPMS/hotrec-1.2.3-1.buildreqs.nosrc.rpm"\n'
         "fi\n"
         'exit "$rc"\n',
     )
@@ -232,6 +237,25 @@ def test_build_makes_both_rpms_and_copies_them_out(box, build):
     calls = box.calls()
     assert any(call.startswith("make -f") and " srpm outdir=" in call for call in calls)
     assert any(call.startswith("dnf builddep") and call.endswith(".src.rpm") for call in calls)
+    # one round: builddep of the source RPM and one rpmbuild, no other builddep call
+    assert _build_steps(box, calls) == _expected_steps(box, 1)
+
+
+def _build_steps(box, calls):
+    """The builddep and rpmbuild calls of build.sh, in order, the output directory shown as OUT."""
+    return [
+        c.replace(str(box.out), "OUT") for c in calls if c.startswith(("dnf builddep", "rpmbuild"))
+    ]
+
+
+def _expected_steps(box, rounds):
+    """builddep of the source RPM, then rpmbuild; after every code 11 the builddep of the exact
+    file ``/out/build/SRPMS/*.buildreqs.nosrc.rpm`` (the stand-in rpmbuild writes it on code 11, so
+    the glob has expanded to its name) and rpmbuild again. No other builddep call."""
+    srpm = "OUT/srpm/hotrec-1.2.3-1.src.rpm"
+    build = f"rpmbuild --rebuild --define _topdir OUT/build {srpm}"
+    again = "dnf builddep OUT/build/SRPMS/hotrec-1.2.3-1.buildreqs.nosrc.rpm"
+    return [f"dnf builddep {srpm}", build] + [again, build] * (rounds - 1)
 
 
 def test_build_installs_the_second_round_of_build_requirements_on_code_11(box, build):
@@ -240,6 +264,7 @@ def test_build_installs_the_second_round_of_build_requirements_on_code_11(box, b
     calls = box.calls()
     assert len([c for c in calls if c.startswith("rpmbuild")]) == 2
     assert any("buildreqs.nosrc.rpm" in c and c.startswith("dnf builddep") for c in calls)
+    assert _build_steps(box, calls) == _expected_steps(box, 2)
 
 
 @pytest.mark.parametrize("codes, rounds", [("11 11 0", 3), ("11 11 11 0", 4), ("11 11 11 11 0", 5)])
@@ -249,9 +274,8 @@ def test_build_goes_on_while_rpmbuild_asks_for_build_requirements(box, build, co
     assert result.returncode == 0, result.stdout + result.stderr
     calls = box.calls()
     assert len([c for c in calls if c.startswith("rpmbuild")]) == rounds
-    # builddep of the build requirements once after every code 11
-    nosrc = [c for c in calls if c.startswith("dnf builddep") and "buildreqs.nosrc.rpm" in c]
-    assert len(nosrc) == rounds - 1
+    # builddep of the build requirements once after every code 11, on the exact file rpmbuild wrote
+    assert _build_steps(box, calls) == _expected_steps(box, rounds)
     assert sorted(p.name for p in (box.out / "rpm").iterdir()) == sorted(
         [f"{NEVRA}.rpm", f"{EXT_NEVRA}.rpm"]
     )
@@ -266,8 +290,7 @@ def test_build_fails_loudly_when_rpmbuild_still_asks_after_the_last_round(box, b
     assert result.returncode == 11
     assert "still asks for build requirements after 5 rounds" in result.stderr
     calls = box.calls()
-    assert len([c for c in calls if c.startswith("rpmbuild")]) == 5
-    assert len([c for c in calls if c.startswith("dnf builddep") and "buildreqs" in c]) == 4
+    assert _build_steps(box, calls) == _expected_steps(box, 5)
     assert not list((box.out / "rpm").iterdir())
 
 
