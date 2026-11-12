@@ -19,9 +19,11 @@ REPO = Path(__file__).resolve().parent.parent
 
 FAKE_RECORDER = """#!%(python)s
 # stand-in for %(name)s: records its arguments, writes the file on SIGINT, notes SIGUSR2.
-# It waits in signal.pause() and has no child process (a bash loop around `sleep` could be left
-# for good with SIGINT blocked under load). The ready file is written after the handlers are set,
-# and a test must wait for it before it sends the first signal.
+# SIGINT and SIGUSR2 are blocked and taken with signal.sigwait(), so a signal that comes while it
+# is not waiting stays pending (signal.pause() could miss one that came just before it), and it
+# has no child process (a bash loop around `sleep` could be left for good with SIGINT blocked
+# under load). The ready file is written after the signals are blocked, and a test must wait for
+# it before it sends the first signal.
 import os
 import signal
 import sys
@@ -37,23 +39,15 @@ def note(event):
         events.write(event + "\\n")
 
 
-def on_usr2(signum, frame):
-    note("usr2")
-
-
-def on_int(signum, frame):
-    with open(out, "w") as data:
-        data.write("data\\n")
-    note("int")
-    os._exit(0)
-
-
-signal.signal(signal.SIGUSR2, on_usr2)
-signal.signal(signal.SIGINT, on_int)
+signals = {signal.SIGINT, signal.SIGUSR2}
+signal.pthread_sigmask(signal.SIG_BLOCK, signals)
 with open(os.path.join(fake, "%(name)s.ready"), "w") as ready:
     ready.write("ready\\n")
-while True:
-    signal.pause()
+while signal.sigwait(signals) == signal.SIGUSR2:
+    note("usr2")
+with open(out, "w") as data:
+    data.write("data\\n")
+note("int")
 """
 
 
@@ -107,7 +101,7 @@ def wait_for(predicate, seconds=10):
 
 
 def wait_ready(fake, name):
-    """The stand-in has set its signal handlers: before that a signal would kill it."""
+    """The stand-in has blocked its signals: before that a signal would kill it."""
     assert wait_for((fake / (name + ".ready")).exists, seconds=30), name + " is not ready"
 
 
