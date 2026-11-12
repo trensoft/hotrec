@@ -16,7 +16,9 @@ import json
 import shutil
 import subprocess
 import threading
+import urllib.request
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import parse_qs, urlsplit
 
 import pytest
 from start_gate_helpers import GATE
@@ -54,13 +56,20 @@ def all_green():
 class Server:
     def __init__(self):
         self.answers = {}
+        # what the API answers when the query does not have filter=latest: GitHub then lists every
+        # check run of the commit, the old runs of a re-run job too
+        self.unfiltered = {}
         self.requests = []
         owner = self
 
         class Handler(BaseHTTPRequestHandler):
             def do_GET(self):  # noqa: N802
                 owner.requests.append(self.path)
-                status, body = owner.answers.get(self.path.split("?")[0], (404, {}))
+                path, _, query = self.path.partition("?")
+                answers = owner.answers
+                if "latest" not in parse_qs(query).get("filter", []):
+                    answers = {**answers, **owner.unfiltered}
+                status, body = answers.get(path, (404, {}))
                 data = json.dumps(body).encode()
                 self.send_response(status)
                 self.send_header("Content-Type", "application/json")
@@ -285,3 +294,41 @@ def test_it_asks_for_the_copr_project_hotrec_of_trensoft_and_the_repository_hotr
     assert f"{COPR_PATH}?ownername=trensoft&projectname=hotrec" in api.requests
     assert HEAD_PATH in api.requests
     assert any(path.startswith(CHECKS_PATH) for path in api.requests)
+
+
+# ---- only the latest run of a check counts (a re-run job leaves its old run behind) -----------
+
+
+def test_the_check_runs_are_asked_for_with_filter_latest_and_a_full_page(api):
+    """Without ``filter=latest`` GitHub lists the old runs of a re-run job as well, a red run that
+    was fixed by the re-run among them: the gate would be red for ever (or, with the filter on a
+    page that is too small, a leg would be missing)."""
+    assert verify(api).returncode == 0
+    asked = [urlsplit(path) for path in api.requests if urlsplit(path).path == CHECKS_PATH]
+    assert len(asked) == 1
+    query = parse_qs(asked[0].query)
+    assert query["filter"] == ["latest"]
+    assert query["per_page"] == ["100"]
+
+
+def test_a_re_run_leg_is_read_as_its_latest_run(api):
+    """The leg of fedora-43 failed and was re-run green. GitHub lists both runs unless it is asked
+    for the latest: the script must ask, and so see one check for the leg."""
+    stale = run_of("fedora-43", conclusion="failure")
+    api.unfiltered[CHECKS_PATH] = (200, checks_answer(all_green()["check_runs"] + [stale]))
+    result = verify(api)
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert result.stdout.strip().splitlines()[-1].startswith(f"VERIFY-CHECKS PASS {SHA}")
+
+
+@pytest.mark.parametrize("filter_", ["all", ""])
+def test_the_stand_in_lists_the_old_runs_when_the_filter_is_not_latest(api, filter_):
+    """The control of the test above: asked without ``filter=latest`` the stand-in answers with two
+    checks for the leg, so the test above cannot pass for another reason."""
+    stale = run_of("fedora-43", conclusion="failure")
+    api.unfiltered[CHECKS_PATH] = (200, checks_answer(all_green()["check_runs"] + [stale]))
+    # ask by hand the way a script without the filter would
+    url = f"{api.url}{CHECKS_PATH}?filter={filter_}&per_page=100"
+    body = json.load(urllib.request.urlopen(url, timeout=10))  # noqa: S310
+    names = [run["name"] for run in body["check_runs"]]
+    assert names.count("start gate (fedora-43)") == 2
