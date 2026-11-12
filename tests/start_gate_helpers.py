@@ -74,6 +74,7 @@ class Box:
         (self.gate / "common.sh").write_text(
             'gate_repos() { echo "gate_repos" >> "$STUB_LOG"; }\n'
             'gate_copr_repo() { echo "gate_copr_repo $1" >> "$STUB_LOG"; }\n'
+            'gate_all_languages() { echo "gate_all_languages" >> "$STUB_LOG"; }\n'
             'gate_dnf() { echo "dnf $*" >> "$STUB_LOG"; [ "${STUB_DNF_RC:-0}" -eq 0 ]; }\n',
             encoding="utf-8",
         )

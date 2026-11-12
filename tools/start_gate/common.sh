@@ -20,6 +20,17 @@ gate_repos() {
     esac
 }
 
+# The images of Fedora and CentOS keep the .mo files of one language only: /etc/rpm/macros.image-language-conf
+# says `%_install_langs en_US` (CentOS: `C.UTF-8`), and rpm leaves every other file under
+# /usr/share/locale out of an install. The catalogs of the package under test would not be in the
+# container, and the "catalog" step would fail for a reason that is not the package's. A desktop has
+# all the languages, so the gate takes the filter off before the install (measured: with it on, the
+# RPM of 0.1.7 installs 0 of its 40 catalogs in registry.fedoraproject.org/fedora:43, with it off all 40).
+gate_all_languages() {
+    rm -f /etc/rpm/macros.image-language-conf
+    echo "gate: the one-language filter of the image (macros.image-language-conf) is off"
+}
+
 # The COPR project trensoft/hotrec, for ONE package: gpu-screen-recorder, which Hotrec requires and
 # which only that project has. Hotrec itself is not taken from there (includepkgs): the package under
 # test is the one built from the tree in stage 1. $1 is the COPR chroot without the architecture

@@ -82,7 +82,16 @@ def test_check_puts_the_copr_repository_of_the_chroot_before_the_install(box, ch
     check()
     calls = box.calls()
     assert calls[:2] == ["gate_repos", f"gate_copr_repo {CHROOT}"]
-    assert calls[2].startswith("dnf install")
+    assert calls[3].startswith("dnf install")
+
+
+def test_check_takes_the_language_filter_of_the_image_off_right_before_the_install(box, check):
+    # the images keep one language: without this the .mo files of the package are not installed
+    check()
+    calls = box.calls()
+    assert calls[2] == "gate_all_languages"
+    assert calls[3].startswith("dnf install")
+    assert calls.count("gate_all_languages") == 1
 
 
 def test_check_needs_the_chroot(box, check):
@@ -560,16 +569,20 @@ def common(box):
     stub(box.bin / "dnf", 'echo "dnf $*" >> "$STUB_LOG"\n')
     release = box.root / "os-release"
 
+    rpm_etc = box.root / "etc-rpm"
+    rpm_etc.mkdir()
+
     def call(function, os_release="", *args):
         release.write_text(os_release, encoding="utf-8")
         text = point_paths(
             (GATE / "common.sh").read_text(encoding="utf-8"),
-            {"/etc/os-release": release, "/etc/yum.repos.d": repos},
+            {"/etc/os-release": release, "/etc/yum.repos.d": repos, "/etc/rpm": rpm_etc},
         )
         (box.gate / "common_real.sh").write_text(text, encoding="utf-8")
         return box.run_function(box.gate / "common_real.sh", function, *args)
 
     call.repos = repos
+    call.rpm_etc = rpm_etc
     return call
 
 
@@ -617,3 +630,23 @@ def test_the_copr_repository_needs_the_chroot(box, common):
 def test_dnf_is_run_without_questions(box, common):
     common("gate_dnf", FEDORA, "install", "x")
     assert box.calls() == ["dnf -y install x"]
+
+
+LANG_FILTER = "macros.image-language-conf"
+
+
+@pytest.mark.parametrize("value", ["%_install_langs en_US\n", "%_install_langs C.UTF-8\n"])
+def test_the_language_filter_of_the_image_is_removed_and_nothing_else(box, common, value):
+    # Fedora images say en_US, CentOS Stream says C.UTF-8: either leaves out the .mo files
+    (common.rpm_etc / LANG_FILTER).write_text(value, encoding="utf-8")
+    (common.rpm_etc / "macros.dist").write_text("%dist .fc43\n", encoding="utf-8")
+    result = common("gate_all_languages", FEDORA)
+    assert result.returncode == 0, result.stderr
+    assert sorted(path.name for path in common.rpm_etc.iterdir()) == ["macros.dist"]
+    assert "filter of the image" in result.stdout and "is off" in result.stdout
+
+
+def test_an_image_without_the_language_filter_is_not_an_error(box, common):
+    result = common("gate_all_languages", FEDORA)
+    assert result.returncode == 0, result.stderr
+    assert list(common.rpm_etc.iterdir()) == []

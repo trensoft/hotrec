@@ -19,6 +19,7 @@ set -euo pipefail
 chroot=${START_GATE_CHROOT:?START_GATE_CHROOT is not set}
 gate_repos
 gate_copr_repo "$chroot"
+gate_all_languages
 shopt -s nullglob
 mains=(/out/rpm/hotrec-[0-9]*.noarch.rpm)
 exts=(/out/rpm/hotrec-gnome-shell-extension-[0-9]*.noarch.rpm)
