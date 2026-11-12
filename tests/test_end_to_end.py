@@ -17,13 +17,43 @@ import pytest
 
 REPO = Path(__file__).resolve().parent.parent
 
-FAKE_RECORDER = """#!/bin/bash
-# stand-in for %(name)s: records its arguments, writes the file on SIGINT, notes SIGUSR2
-out="${@: -1}"
-echo "$@" > "$FAKE_DIR/%(name)s.args"
-trap 'echo usr2 >> "$FAKE_DIR/%(name)s.events"' USR2
-trap 'echo data > "$out"; echo int >> "$FAKE_DIR/%(name)s.events"; exit 0' INT
-while true; do sleep 0.05; done
+FAKE_RECORDER = """#!%(python)s
+# stand-in for %(name)s: records its arguments, writes the file on SIGINT, notes SIGUSR2.
+# It waits in signal.pause() and has no child process (a bash loop around `sleep` could be left
+# for good with SIGINT blocked under load). The ready file is written after the handlers are set,
+# and a test must wait for it before it sends the first signal.
+import os
+import signal
+import sys
+
+fake = os.environ["FAKE_DIR"]
+out = sys.argv[-1]
+with open(os.path.join(fake, "%(name)s.args"), "w") as args:
+    args.write(" ".join(sys.argv[1:]) + "\\n")
+
+
+def note(event):
+    with open(os.path.join(fake, "%(name)s.events"), "a") as events:
+        events.write(event + "\\n")
+
+
+def on_usr2(signum, frame):
+    note("usr2")
+
+
+def on_int(signum, frame):
+    with open(out, "w") as data:
+        data.write("data\\n")
+    note("int")
+    os._exit(0)
+
+
+signal.signal(signal.SIGUSR2, on_usr2)
+signal.signal(signal.SIGINT, on_int)
+with open(os.path.join(fake, "%(name)s.ready"), "w") as ready:
+    ready.write("ready\\n")
+while True:
+    signal.pause()
 """
 
 
@@ -34,7 +64,7 @@ def machine(tmp_path, env, monkeypatch):
     bin_dir.mkdir(parents=True)
     for name in ("gpu-screen-recorder", "ffmpeg"):
         script = bin_dir / name
-        script.write_text(FAKE_RECORDER % {"name": name})
+        script.write_text(FAKE_RECORDER % {"name": name, "python": sys.executable})
         script.chmod(0o755)
     (bin_dir / "pactl").write_text("#!/bin/sh\necho fake_sink\n")
     (bin_dir / "notify-send").write_text('#!/bin/sh\necho "$@" >> "$FAKE_DIR/notify.log"\n')
@@ -76,10 +106,16 @@ def wait_for(predicate, seconds=10):
     return False
 
 
+def wait_ready(fake, name):
+    """The stand-in has set its signal handlers: before that a signal would kill it."""
+    assert wait_for((fake / (name + ".ready")).exists, seconds=30), name + " is not ready"
+
+
 def test_screen_and_sound_start_pause_resume_stop(machine, env):
     fake, base = machine
     started = hotrec(base, "video-audio")
     assert started.returncode == 0, started.stderr
+    wait_ready(fake, "gpu-screen-recorder")
     status = hotrec(base, "status")
     assert status.returncode == 0 and status.stdout.startswith("video-audio ")
     path = Path(status.stdout.split()[1])
@@ -108,6 +144,7 @@ def test_screen_and_sound_start_pause_resume_stop(machine, env):
 def test_sound_only_pause_is_a_real_stop_and_continue(machine, env):
     fake, base = machine
     assert hotrec(base, "audio").returncode == 0
+    wait_ready(fake, "ffmpeg")
     status = hotrec(base, "status").stdout.split()
     path = Path(status[1])
     assert path.suffix == ".mp3"
@@ -162,6 +199,7 @@ def test_the_first_start_writes_the_settings_file(machine, env):
     hotrec(base, "video")
     conf = Path(env["XDG_CONFIG_HOME"]) / "hotrec.conf"
     assert conf.is_file()
+    wait_ready(fake, "gpu-screen-recorder")
     hotrec(base, "video")
 
 
@@ -185,6 +223,7 @@ def test_run_sh_runs_from_a_checkout_with_translated_notifications(machine, env,
         check=False,
     )
     assert run.returncode == 0, run.stderr
+    wait_ready(fake, "gpu-screen-recorder")
     stop = subprocess.run(
         [str(REPO / "run.sh"), "stop"],
         env=base,
